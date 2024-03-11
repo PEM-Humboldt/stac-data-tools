@@ -16,15 +16,15 @@ Este paquete corresponde a la estrcutura inicial de un proyecto para python.
 
 ## Uso
 
-1. Crear un archivo .env replica de env.sample y actualizar el valor de la variable existente para probar la lectura de variables de ambiente.
+1. Crear un archivo .env réplica de env.sample y actualizar el valor de la variable existente para probar la lectura de variables de ambiente.
 1. Ejecutar el script incluyendo los siguientes argumentos:
-    - message(m) # Valor obligatorio para el mensaje inicial a mostrat
+    - message(m) # Valor obligatorio para el mensaje inicial a mostrar
     - complement(c) # Valor opcional para un mensaje complementario
 
 ```
 python3 src/main.py -m "Hola mundo" -c "Información Adicional"
 ```
-La salida de la ejecución mostrara los valores de las variables entregadas como argumentos, asi como el valor de la variable de ammbiente definida en el archivo .env.
+La salida de la ejecución mostrara los valores de las variables entregadas como argumentos, asi como el valor de la variable de ambiente definida en el archivo .env.
 
 ## Licencia
 
