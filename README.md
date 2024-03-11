@@ -1,6 +1,6 @@
 # STAC DATA TOOLS
 
-Este paquete permite cargar una colección de capas al STAC alojado en un servidor del instituto. Realiza la lectura del archivo de metadatos, la conversión de las capas a formato COG, la carga de estas capas a un Storage de Azure, y finalmente la creación de la colección en el STAC con sus respectivos items.
+Este paquete corresponde a la estrcutura inicial de un proyecto para python.
 
 ## Requisitos
 
@@ -16,16 +16,15 @@ Este paquete permite cargar una colección de capas al STAC alojado en un servid
 
 ## Uso
 
-1. Crear un archivo .env replica de env.sample y actualizar el valor de la cadena de conexión para Azure Blob Storage.1. En el directorio input crear una carpeta con el archivo de especificación de la colección junto con las capas en formato tif.
+1. Crear un archivo .env replica de env.sample y actualizar el valor de la variable existente para probar la lectura de variables de ambiente.
 1. Ejecutar el script incluyendo los siguientes argumentos:
-    - app_host(H) # Servidor donde se encuentra desplegado el STAC
-    - catalog_folder(d) # Nombre de la carpeta dentro de input donde se encuentran las capas a cargar
-    - catalog_file(f) # Nombre del archivo json con especificaciones de la colección
-    - collection_name(c) # Nombre de la colección a crear dentro del STAC
+    - message(m) # Valor obligatorio para el mensaje inicial a mostrat
+    - complement(c) # Valor opcional para un mensaje complementario
 
 ```
 python3 src/main.py -m "Hola mundo" -c "Información Adicional"
 ```
+La salida de la ejecución mostrara los valores de las variables entregadas como argumentos, asi como el valor de la variable de ammbiente definida en el archivo .env.
 
 ## Licencia
 
