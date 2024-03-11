@@ -2,9 +2,5 @@ argparse
 python-dotenv
 flake8
 black
-pystac
-rasterio
-shapely
-azure-storage-blob
 
 

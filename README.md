@@ -24,10 +24,9 @@ Este paquete permite cargar una colección de capas al STAC alojado en un servid
     - collection_name(c) # Nombre de la colección a crear dentro del STAC
 
 ```
-python3 src/main.py -H "http://localhost:8082/" -d PyP -f catalog.json -c Colombia_PyP_test
+python3 src/main.py -m "Hola mundo" -c "Información Adicional"
 ```
 
 ## Licencia
 
 Licencia MIT (MIT) 2024 - [Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://humboldt.org.co). Vea el archivo [LICENSE](LICENSE) para mas información.
-
