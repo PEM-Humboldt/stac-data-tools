@@ -39,7 +39,7 @@ def main():
     if args.complement:
         print("Complement: " + args.complement)
 
-    if os.getenv("ABS_STRING"):
+    if os.getenv("STRING"):
         connection_string = os.getenv("STRING")
         print("Connection string: " + connection_string)
 
