@@ -29,31 +29,24 @@ La salida de la ejecución mostrará los valores de las variables entregadas com
 
 ## Revisión y formato de estilos para el código
 
-La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
+Para hacer configurar el formato de estilos para la revisión con flake8 se configura el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
 ```
-flake8 <archivo_python>
+flake8 src
 ```
 
-Para hacer formateo de estilos atuomático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo configuradas en el archivo .pyproject
+Para hacer formateo de estilos atuomático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo configuradas en el archivo [pyproject.toml](pyproject.toml).
 ```
-black <archivo_python>
+black src
 
 ```
 
 ## Generar documentación
 
-La documentación se genera con ayuda del paquete pydoc, ya incluido en la instalación de python. Este genera documentación en pantalla o como archivo HTML.
-
-Salida en pantalla:
-```
-pydoc <archivo_python>
-
-```
+La documentación se genera con ayuda del paquete pdoc que lee los docstrings presentes en los scripts para describir las clases y funciones. Pdoc genera documentación en formatos como Markdown o HTML y permite especificar el directorio de salida.
 
 Salida como HTML:
 ```
-pydoc -w <archivo_python>
-
+pdoc --html --output-dir docs src
 ```
 
 
