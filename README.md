@@ -11,8 +11,8 @@ Este paquete corresponde a la estructura inicial de un proyecto para python.
 
 1. Clona este repositorio: `git clone git@github.com:PEM-Humboldt/stac-data-tools.git`
 1. Ir al directorio del proyecto: `cd stac-data-tools`
-1. Crear un entorno de ejecución para python con Conda: conda create --name <nombre_del_entorno>
-1. Activar el entorno de ejecución: conda activate <nombre_del_entorno>
+1. Crear un entorno de ejecución para python con Conda: `conda create --name <nombre_del_entorno>`
+1. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
 1. Instala las dependencias: `pip install -r requirements.txt`
 
 ## Uso
