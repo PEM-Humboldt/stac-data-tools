@@ -1,0 +1,7 @@
+argparse
+python-dotenv
+flake8
+black
+pdoc3
+
+
