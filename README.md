@@ -1,6 +1,6 @@
 # STAC DATA TOOLS
 
-Este paquete corresponde a la estructura inicial de un proyecto para python.
+Este paquete corresponde a la herramienta que cargar, editar y eliminar colecciones e items del stac.
 
 ## Requisitos
 
@@ -14,6 +14,21 @@ Este paquete corresponde a la estructura inicial de un proyecto para python.
 1. Crear un entorno de ejecución para python con Conda: `conda create --name <nombre_del_entorno>`
 1. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
 1. Instala las dependencias: `pip install -r requirements.txt`
+
+## Preparación de los insumos
+
+Para usar correctamente la herramienta se deben preparar los insumos, a continuación se describen los usos disponibles.
+
+<details>
+<summary>Cargar una colección</summary>
+
+Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
+
+1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection_spec.md](collection_spec.md).
+    
+    El archivo [collection.example.json](collection.example.json) sirve como ejemplo y como punto de partida.
+
+</details>
 
 ## Uso
 
