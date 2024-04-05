@@ -25,7 +25,7 @@ Para usar correctamente la herramienta se deben preparar los insumos, a continua
 Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
 
 1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection_spec.md](collection_spec.md).
-    
+
     El archivo [collection.example.json](collection.example.json) sirve como ejemplo y como punto de partida.
 
 </details>
@@ -55,7 +55,7 @@ black src
 
 ```
 
-## Generar documentación
+## Documentación
 
 La documentación se genera con ayuda del paquete pdoc que lee los docstrings presentes en los scripts para describir las clases y funciones. Pdoc genera documentación en formatos como Markdown o HTML y permite especificar el directorio de salida.
 
@@ -64,6 +64,7 @@ Salida como HTML:
 pdoc --html --output-dir docs src
 ```
 
+La documentación de la versión actual se puede consultar [aquí](https://pem-humboldt.github.io/stac-data-tools/src/).
 
 ## Licencia
 
