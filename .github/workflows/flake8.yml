@@ -1,24 +1,22 @@
-name: Flake8 Check
+name: Flake8 Lint
 
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   flake8:
     runs-on: ubuntu-latest
+    name: Lint
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.x
-
-      - name: Install dependencies
-        run: pip install flake8
-
-      - name: Run Flake8
-        run: flake8 src
+          python-version-file: "pyproject.toml"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          path: "src"
