@@ -1,10 +1,10 @@
 # STAC DATA TOOLS
 
-Este paquete corresponde a la herramienta que cargar, editar y eliminar colecciones e items del stac.
+Este paquete corresponde a la herramienta para cargar, editar y eliminar colecciones e items del stac.
 
 ## Requisitos
 
-- Python (3.8)
+- Python (3.10)
 - [Conda](https://conda.io/projects/conda/en/latest/index.html)
 
 ## Instalación
