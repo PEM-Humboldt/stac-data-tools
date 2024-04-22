@@ -59,7 +59,8 @@ class CheckCollection:
             and "collection.json" in os.listdir(self.folder)
         ):
             print(
-                "El directorio no existe o no contiene el archivo collection.json."
+                "El directorio no existe o no contiene el archivo"
+                " collection.json"
             )
             sys.exit()
 
