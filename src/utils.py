@@ -1,11 +1,9 @@
-import tempfile
-import subprocess
 import os
-import logging
-import rasterio
-import requests
-from os import path
-from subprocess import check_call
+from tempfile import TemporaryDirectory
+from subprocess import check_call, CalledProcessError, STDOUT
+from logging import basicConfig, INFO
+from rasterio import open
+from requests import post, put
 from shapely import geometry
 from azure import storage
 from dotenv import load_dotenv
@@ -16,8 +14,8 @@ def run_command(command, work_dir):
     A simple utility to execute a subprocess command.
     """
     try:
-        check_call(command, stderr=subprocess.STDOUT, cwd=work_dir)
-    except subprocess.CalledProcessError as e:
+        check_call(command, stderr=STDOUT, cwd=work_dir)
+    except CalledProcessError as e:
         raise RuntimeError(
             "command '{}' return with error (code {}): {}".format(
                 e.cmd, e.returncode, e.output
@@ -30,7 +28,7 @@ def check_dir(fname):
     To check if the directory exists
     """
     file_name = fname.split("/")
-    rel_path = path.join(*file_name[-2:])
+    rel_path = os.path.join(*file_name[-2:])
     return rel_path
 
 
@@ -40,10 +38,10 @@ def get_filename(fname, outdir):
     and create a file name just as source but without '.TIF' extension
     """
     rel_path = check_dir(fname)
-    out_fname = path.join(outdir, rel_path)
+    out_fname = os.path.join(outdir, rel_path)
 
-    if not path.exists(path.dirname(out_fname)):
-        os.makedirs(path.dirname(out_fname))
+    if not os.path.exists(os.path.dirname(out_fname)):
+        os.makedirs(os.path.dirname(out_fname))
     return out_fname
 
 
@@ -66,14 +64,14 @@ def _write_cogtiff(fname, out_fname, outdir):
     3=floating point prediction)
     PROFILE <string-select>: possible values: GDALGeoTIFF,GeoTIFF,BASELINE,
     """
-    with tempfile.TemporaryDirectory() as tmpdir:
-        temp_fname = path.join(tmpdir, path.basename(fname))
+    with TemporaryDirectory() as tmpdir:
+        temp_fname = os.path.join(tmpdir, os.path.basename(fname))
 
         env = [
             "GDAL_DISABLE_READDIR_ON_OPEN=YES",
             "CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif",
         ]
-        subprocess.check_call(env, shell=True)
+        check_call(env, shell=True)
 
         # copy to a tempfolder
         to_cogtif = ["gdal_translate", fname, temp_fname]
@@ -130,8 +128,8 @@ def tif_to_cog(tif_fle, output_file, output_dir):
     """
     Read and convert a TIF file to a COG file
     """
-    logging.basicConfig(
-        format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO
+    basicConfig(
+        format="%(asctime)s %(levelname)s %(message)s", level=INFO
     )
     output_dir = os.path.abspath(output_dir)
     f_name = os.path.join(os.getcwd(), tif_fle)
@@ -143,10 +141,10 @@ def post_or_put(url: str, data: dict):
     """
     Post or put data to url.
     """
-    r = requests.post(url, json=data)
+    r = post(url, json=data)
     if r.status_code == 409:
         # Exists, so update
-        r = requests.put(url, json=data)
+        r = put(url, json=data)
         # Unchanged may throw a 404
         if not r.status_code == 404:
             r.raise_for_status()
@@ -158,7 +156,7 @@ def get_tif_metadata(file_name):
     """
     Extract TIF metadata such as bbox, footprint, crs, pixel_size_x and dtype
     """
-    with rasterio.open(file_name) as r:
+    with open(file_name) as r:
         bounds = r.bounds
         bbox = [bounds.left, bounds.bottom, bounds.right, bounds.top]
         footprint = geometry.Polygon(
