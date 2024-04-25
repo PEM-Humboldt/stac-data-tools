@@ -30,19 +30,14 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
 
 1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en el paso anterior que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
 
-</details>
-
-<details>
-<summary>Validar una colección</summary>
-
-1. Asegurarse de copiar la carpeta de la colección dentro del directorio `input`, y luego ejecutar el script de validación con los siguientes parámetros:
+1. Asegurarse de copiar la carpeta de la colección dentro del directorio `input`, y luego ejecutar el script de validación y carga de la colección con los siguientes parámetros:
 
     - -f --folder # Directorio dentro de input que contiene el archivo .json que describe la colección y los archivos correspondientes a las capas
-    - -s --server # URL del servidor del STAC
     - -c --collection # Nombre de la colección (opcional)
-```
+    - -v --validation # Si esta activo unicamente se valida la colección pero no se carga
+    ```
     python3 src/check_collection.py -f folder_name -s stac_server -c collection_name
-```
+    ```
 
 
 </details>
@@ -61,12 +56,12 @@ La salida de la ejecución mostrará los valores de las variables entregadas com
 
 ## Revisión y formato de estilos para el código
 
-Para configurar el formato de estilos para la revisión con flake8 se configura el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
+El formato de estilos para la revisión con flake8 se define en el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
 ```
 flake8 src
 ```
 
-Para hacer formateo de estilos atuomático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo configuradas en el archivo [pyproject.toml](pyproject.toml).
+Para hacer formateo de estilos atuomático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo definidas en el archivo [pyproject.toml](pyproject.toml).
 ```
 black src
 
