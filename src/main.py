@@ -1,47 +1,53 @@
-import argparse
-import os
-from dotenv import load_dotenv
+from argparse import ArgumentParser
+from spec_validator import SpecValidator
+from collection_validator import CollectionValidator
 
 
 def main():
     """
-    Permite generar un mensaje de salida a partir de parámetros de entrada
-    definidos como argumentos o variables de entorno.
-
-    Entrada:
-        Argumentos de ejecución:
-          -m --message
-          -c --complement
-
-        Variable de ambiente:
-          STRING
+    Read arguments and start data validation.
     """
-    load_dotenv()
-    parser = argparse.ArgumentParser()
+
+    parser = ArgumentParser()
     parser.add_argument(
-        "-m",
-        "--message",
-        dest="message",
-        help="Message to display",
+        "-f",
+        "--folder",
+        dest="folder",
+        help="Collection folder",
         required=True,
     )
+
     parser.add_argument(
         "-c",
-        "--complement",
-        dest="complement",
-        help="Aditional information",
+        "--collection",
+        dest="collection",
+        help="Collection name",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-v",
+        "--validation",
+        dest="validation",
+        help="Only validation",
+        required=False,
     )
 
     args = parser.parse_args()
+    folder = "input/" + args.folder
+    collection_name = args.collection
 
-    print("Message: " + args.message)
+    spec_validator = SpecValidator(folder, collection_name)
+    collection_data, items = spec_validator.load_data()
+    spec_validator.validate_format()
+    spec_validator.validate_layers()
 
-    if args.complement:
-        print("Complement: " + args.complement)
-
-    if os.getenv("STRING"):
-        connection_string = os.getenv("STRING")
-        print("Connection string: " + connection_string)
+    coleccion_validator = CollectionValidator(
+        folder, collection_data, collection_name, items
+    )
+    coleccion_validator.load_items()
+    coleccion_validator.create_collection()
+    coleccion_validator.create_items()
 
 
 if __name__ == "__main__":
