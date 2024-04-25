@@ -56,7 +56,7 @@ class CollectionValidator:
         self.collection_id = (
             self.collection_name
             if self.collection_name is not None
-            else self.data["id"]
+            else self.collection_data["id"]
         )
 
         bboxes = [
