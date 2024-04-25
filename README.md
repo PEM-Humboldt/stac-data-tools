@@ -34,9 +34,9 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
 
     - -f --folder # Directorio dentro de input que contiene el archivo .json que describe la colección y los archivos correspondientes a las capas
     - -c --collection # Nombre de la colección (opcional)
-    - -v --validation # Si esta activo unicamente se valida la colección pero no se carga
+    - -v --validation # Si es verdadero unicamente se valida la colección pero no se carga (opcional)
     ```
-    python3 src/check_collection.py -f folder_name -s stac_server -c collection_name
+    python3 src/main.py -f folder_name -c collection_name
     ```
 
 
