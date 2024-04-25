@@ -1,0 +1,98 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "classes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "values",
+            "classes"
+          ]
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "year": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "classes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "values",
+              "classes"
+            ]
+          },
+          "assets": {
+            "type": "object",
+            "properties": {
+              "input_file": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "input_file"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "year",
+          "assets"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "description",
+    "metadata",
+    "items"
+  ]
+}
