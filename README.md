@@ -24,9 +24,9 @@ Para usar correctamente la herramienta se deben preparar los insumos, a continua
 
 Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
 
-1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection_spec.md](collection_spec.md).
+1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection.md](spec/collection.md).
 
-    El archivo [collection.example.json](collection.example.json) sirve como ejemplo y como punto de partida.
+    El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
 
 1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en el paso anterior que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
 
