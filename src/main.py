@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
-from spec_validator import SpecValidator
-from collection_validator import CollectionValidator
+from utils import spec
+from collection import Collection
+from json import load
+from sys import exit as sysexit
 
 
 def main():
@@ -29,6 +31,7 @@ def main():
         "-v",
         "--validation",
         dest="validation",
+        action="store_true",
         help="Only validation",
         required=False,
     )
@@ -36,18 +39,24 @@ def main():
     args = parser.parse_args()
     folder = "input/" + args.folder
     collection_name = args.collection
+    validation = args.validation
 
-    spec_validator = SpecValidator(folder, collection_name)
-    collection_data, items = spec_validator.load_data()
-    spec_validator.validate_format()
-    spec_validator.validate_layers()
+    spec.collection_exists(folder)
 
-    coleccion_validator = CollectionValidator(
-        folder, collection_data, collection_name, items
-    )
-    coleccion_validator.load_items()
-    coleccion_validator.create_collection()
-    coleccion_validator.create_items()
+    with open("{}/collection.json".format(folder), "r") as f:
+        data = load(f)
+        raw_items = [item for item in data["items"]]
+
+    spec.validate_format(data)
+    spec.validate_layers(folder, raw_items)
+
+    collection = Collection()
+    collection.load_items(folder, raw_items)
+    collection.create_collection(collection_name, data)
+    collection.create_items()
+
+    if validation:
+        sysexit("Successful validation.")
 
 
 if __name__ == "__main__":
