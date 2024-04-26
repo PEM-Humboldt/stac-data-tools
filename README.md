@@ -28,31 +28,22 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
 
     El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
 
-1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en el paso anterior que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
-
-1. Asegurarse de copiar la carpeta de la colección dentro del directorio `input`, y luego ejecutar el script de validación y carga de la colección con los siguientes parámetros:
-
-    - -f --folder # Directorio dentro de input que contiene el archivo .json que describe la colección y los archivos correspondientes a las capas
-    - -c --collection # Nombre de la colección (opcional)
-    - -v --validation # Si es verdadero unicamente se valida la colección pero no se carga (opcional)
-    ```
-    python3 src/main.py -f folder_name -c collection_name
-    ```
-
-
 </details>
 
 ## Uso
 
-1. Crear un archivo .env réplica de env.sample y actualizar el valor de la variable existente para probar la lectura de variables de ambiente.
-1. Ejecutar el script incluyendo los siguientes argumentos:
-    - message(m) # Valor obligatorio para el mensaje inicial a mostrar
-    - complement(c) # Valor opcional para un mensaje complementario
+1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
 
-```
-python3 src/main.py -m "Hola mundo" -c "Información Adicional"
-```
-La salida de la ejecución mostrará los valores de las variables entregadas como argumentos, así como el valor de la variable de ambiente definida en el archivo .env.
+1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en la sección [Preparación de los insumos](#preparacion-de-los-insumos) que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
+
+1. Ejecutar el script de validación y carga de la colección con los siguientes parámetros:
+
+    - -f --folder # Directorio dentro de input que contiene el archivo .json que describe la colección y los archivos correspondientes a las capas
+    - -c --collection # Nombre de la colección (opcional)
+    - -v --validation # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
+    ```
+    python3 src/main.py -f folder_name -c collection_name
+    ```
 
 ## Revisión y formato de estilos para el código
 
