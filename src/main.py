@@ -41,7 +41,7 @@ def main():
     collection_name = args.collection
     validation = args.validation
 
-    spec.collection_exists(folder)
+    spec.validate_input_folder(folder)
 
     with open("{}/collection.json".format(folder), "r") as f:
         data = load(f)

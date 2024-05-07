@@ -3,7 +3,7 @@ from json import load
 from jsonschema import validate, FormatError
 
 
-def collection_exists(folder):
+def validate_input_folder(folder):
     """
     Check if the collection folder exists and contains the collection file.
     """
@@ -37,10 +37,6 @@ def validate_layers(folder, raw_items):
     Check if the layer files exist
     """
     for item in raw_items:
-        file_path = "{}/{}".format(
-            folder, item["assets"]["input_file"]
-        )
+        file_path = "{}/{}".format(folder, item["assets"]["input_file"])
         if not path.exists(file_path):
-            raise FileNotFoundError(
-                f"The file '{file_path}' does not exist."
-              )
+            raise FileNotFoundError(f"The file '{file_path}' does not exist.")
