@@ -32,7 +32,8 @@ def validate_format(data):
         ]
         if not len(set(metadata_properties_lengths)) == 1:
             raise FormatError(
-                "Los elementos de la propiedad metadata properties no tienen la misma longitud."
+                "Los elementos de la propiedad metadata properties no tienen "
+                "la misma longitud."
             )
     except Exception as e:
         raise FormatError(
