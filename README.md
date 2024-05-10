@@ -1,10 +1,10 @@
 # STAC DATA TOOLS
 
-Este paquete corresponde a la herramienta que cargar, editar y eliminar colecciones e items del stac.
+Este paquete corresponde a la herramienta para cargar, editar y eliminar colecciones e items del stac.
 
 ## Requisitos
 
-- Python (3.8)
+- Python (3.10)
 - [Conda](https://conda.io/projects/conda/en/latest/index.html)
 
 ## Instalación
@@ -24,32 +24,38 @@ Para usar correctamente la herramienta se deben preparar los insumos, a continua
 
 Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
 
-1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection_spec.md](collection_spec.md).
+1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection.md](spec/collection.md).
 
-    El archivo [collection.example.json](collection.example.json) sirve como ejemplo y como punto de partida.
+    El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
 
 </details>
 
 ## Uso
 
-1. Crear un archivo .env réplica de env.sample y actualizar el valor de la variable existente para probar la lectura de variables de ambiente.
-1. Ejecutar el script incluyendo los siguientes argumentos:
-    - message(m) # Valor obligatorio para el mensaje inicial a mostrar
-    - complement(c) # Valor opcional para un mensaje complementario
+1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
+```
+    STAC_URL="" # URL del servidor del STAC
+```
 
-```
-python3 src/main.py -m "Hola mundo" -c "Información Adicional"
-```
-La salida de la ejecución mostrará los valores de las variables entregadas como argumentos, así como el valor de la variable de ambiente definida en el archivo .env.
+1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en la sección [Preparación de los insumos](#preparacion-de-los-insumos) que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
+
+1. Ejecutar el script de validación y carga de la colección con los siguientes parámetros:
+
+    - -f --folder # Directorio dentro de input que contiene el archivo collection.json que describe la colección y los archivos correspondientes a las capas
+    - -c --collection # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json (opcional)
+    - -v --validate-only # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
+    ```
+    python3 src/main.py -f folder_name -c collection_name
+    ```
 
 ## Revisión y formato de estilos para el código
 
-Para hacer configurar el formato de estilos para la revisión con flake8 se configura el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
+El formato de estilos para la revisión con flake8 se define en el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
 ```
 flake8 src
 ```
 
-Para hacer formateo de estilos atuomático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo configuradas en el archivo [pyproject.toml](pyproject.toml).
+Para hacer formateo de estilos automático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo definidas en el archivo [pyproject.toml](pyproject.toml).
 ```
 black src
 

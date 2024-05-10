@@ -1,47 +1,62 @@
-import argparse
-import os
-from dotenv import load_dotenv
+from argparse import ArgumentParser
+from utils import spec
+from collection import Collection
+from json import load
+from sys import exit as sysexit
 
 
 def main():
     """
-    Permite generar un mensaje de salida a partir de parámetros de entrada
-    definidos como argumentos o variables de entorno.
-
-    Entrada:
-        Argumentos de ejecución:
-          -m --message
-          -c --complement
-
-        Variable de ambiente:
-          STRING
+    Read arguments and start data validation.
     """
-    load_dotenv()
-    parser = argparse.ArgumentParser()
+
+    parser = ArgumentParser()
     parser.add_argument(
-        "-m",
-        "--message",
-        dest="message",
-        help="Message to display",
+        "-f",
+        "--folder",
+        dest="folder",
+        help="Collection folder",
         required=True,
     )
+
     parser.add_argument(
         "-c",
-        "--complement",
-        dest="complement",
-        help="Aditional information",
+        "--collection",
+        dest="collection",
+        help="Collection name",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-v",
+        "--validate-only",
+        dest="validation",
+        action="store_true",
+        help="Only validation",
+        required=False,
     )
 
     args = parser.parse_args()
+    folder = "input/" + args.folder
+    collection_name = args.collection
+    validation = args.validation
 
-    print("Message: " + args.message)
+    spec.validate_input_folder(folder)
 
-    if args.complement:
-        print("Complement: " + args.complement)
+    with open("{}/collection.json".format(folder), "r") as f:
+        data = load(f)
+        raw_items = [item for item in data["items"]]
 
-    if os.getenv("STRING"):
-        connection_string = os.getenv("STRING")
-        print("Connection string: " + connection_string)
+    spec.validate_format(data)
+    spec.validate_layers(folder, raw_items)
+
+    collection = Collection()
+    collection.load_items(folder, raw_items)
+    collection.create_collection(collection_name, data)
+    collection.create_items()
+
+    if validation:
+        sysexit("Successful validation.")
 
 
 if __name__ == "__main__":
