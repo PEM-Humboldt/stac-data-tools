@@ -33,14 +33,17 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
 ## Uso
 
 1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
+```
+    STAC_URL="" # URL del servidor del STAC
+```
 
 1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en la sección [Preparación de los insumos](#preparacion-de-los-insumos) que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
 
 1. Ejecutar el script de validación y carga de la colección con los siguientes parámetros:
 
-    - -f --folder # Directorio dentro de input que contiene el archivo .json que describe la colección y los archivos correspondientes a las capas
-    - -c --collection # Nombre de la colección (opcional)
-    - -v --validation # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
+    - -f --folder # Directorio dentro de input que contiene el archivo collection.json que describe la colección y los archivos correspondientes a las capas
+    - -c --collection # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json (opcional)
+    - -v --validate-only # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
     ```
     python3 src/main.py -f folder_name -c collection_name
     ```
@@ -52,7 +55,7 @@ El formato de estilos para la revisión con flake8 se define en el archivo [.fla
 flake8 src
 ```
 
-Para hacer formateo de estilos atuomático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo definidas en el archivo [pyproject.toml](pyproject.toml).
+Para hacer formateo de estilos automático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo definidas en el archivo [pyproject.toml](pyproject.toml).
 ```
 black src
 

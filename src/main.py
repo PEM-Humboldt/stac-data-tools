@@ -29,7 +29,7 @@ def main():
 
     parser.add_argument(
         "-v",
-        "--validation",
+        "--validate-only",
         dest="validation",
         action="store_true",
         help="Only validation",
