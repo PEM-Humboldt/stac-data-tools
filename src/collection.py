@@ -3,6 +3,7 @@ from utils import raster, storage, stac_rest
 from datetime import datetime, timedelta
 from sys import exit as sysexit
 from urllib import parse
+from os import remove, rmdir, path
 
 
 class Collection:
@@ -109,15 +110,6 @@ class Collection:
                 if item.validate():
                     self.items_collection.append(item)
 
-    def convert_layers(self, input_dir, output_dir):
-        """
-        Convert items layers format
-        """
-        for i, item in enumerate(self.items):
-            self.items[i]["final_file"] = raster.tif_to_cog(
-                item["input_file"], input_dir, output_dir
-            )
-
     def check_collection(self, overwrite):
         """
         Check if the collection exists and if going to be overwriter
@@ -130,9 +122,9 @@ class Collection:
             if overwrite is False:
                 sysexit(
                     f"La colección {self.collection_id} ya existe.\n"
-                    "Si desea reemplazarla ejecute el programa nuevamente"
+                    "Si desea reemplazarla ejecute el programa nuevamente "
                     "con el parámetro -o.\n"
-                    "Para más ayuda ejecute el script con el parámetro -h."
+                    "Para más ayuda ejecute el programa con el parámetro -h."
                 )
         else:
             collection_exist = False
@@ -144,25 +136,6 @@ class Collection:
         """
         url = f"{self.stac_url}/collections/{self.collection_id}"
         stac_rest.delete(url)
-
-    def upload_layers(self, abs_config, output_folder):
-        """
-        Upload items layers to storage
-        """
-        if self.items:
-            for i, item in enumerate(self.items):
-                final_url = storage.upload_file(
-                    abs_config, output_folder, item["input_file"]
-                )
-
-                self.items_collection[i].add_asset(
-                    key=item["id"],
-                    asset=pystac.Asset(
-                        href=final_url,
-                        media_type=pystac.MediaType.COG,
-                    ),
-                )
-                self.items_collection[i].set_self_href(final_url)
 
     def upload_collection(self):
         """
@@ -184,3 +157,43 @@ class Collection:
                 )
         except Exception as e:
             raise RuntimeError("Error al cargar la colección: {}".format(e))
+
+    def convert_layers(self, input_dir, output_dir):
+        """
+        Convert items layers format
+        """
+        for i, item in enumerate(self.items):
+            self.items[i]["final_file"] = raster.tif_to_cog(
+                item["input_file"], input_dir, output_dir
+            )
+
+    def upload_layers(self, abs_config, output_folder):
+        """
+        Upload items layers to storage
+        """
+        if self.items:
+            for i, item in enumerate(self.items):
+                final_url = storage.upload_file(
+                    abs_config, output_folder, item["input_file"]
+                )
+
+                if final_url:
+                    remove(path.join(output_folder, item["input_file"]))
+
+                self.items_collection[i].add_asset(
+                    key=item["id"],
+                    asset=pystac.Asset(
+                        href=final_url,
+                        media_type=pystac.MediaType.COG,
+                    ),
+                )
+                self.items_collection[i].set_self_href(final_url)
+
+        try:
+            rmdir(output_folder)
+        except Exception as e:
+            raise RuntimeError("Error al eliminar el directorio: {}".format(e))
+
+
+
+
