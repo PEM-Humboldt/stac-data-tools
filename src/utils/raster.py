@@ -1,6 +1,7 @@
 from rasterio import open
 from shapely import geometry
 from osgeo import gdal
+import os
 
 
 def get_tif_metadata(file_name):
@@ -36,7 +37,7 @@ def get_tif_metadata(file_name):
 
 def tif_to_cog(input_file, input_dir, output_dir):
     """
-    Convert TIF to COG
+    Convert layer from TIF to COG format
     """
     cog_options = [
         "COMPRESS=DEFLATE",
@@ -51,13 +52,16 @@ def tif_to_cog(input_file, input_dir, output_dir):
         raise RuntimeError("Error al leer el archivo: {}".format(input_file))
 
     try:
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
         gdal.Translate(
             output_path, layer, format="COG", creationOptions=cog_options
         )
         return output_path
     except Exception as e:
         raise RuntimeError(
-            "Erro al convertir el archivo: {}. Detalle: {}".format(
+            "Error al convertir el archivo: {}. Detalle: {}".format(
                 input_file, e
             )
         )
