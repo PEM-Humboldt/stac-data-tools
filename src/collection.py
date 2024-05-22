@@ -130,8 +130,9 @@ class Collection:
             if overwrite is False:
                 sysexit(
                     f"La colección {self.collection_id} ya existe.\n"
-                    "Si desea reemplazarla ejecute el programa nuevamente con el parámetro -o.\n"
-                    "Para obtener más ayuda ejecute el comando python src/main.py -h"
+                    "Si desea reemplazarla ejecute el programa nuevamente"
+                    "con el parámetro -o.\n"
+                    "Para más ayuda ejecute el script con el parámetro -h."
                 )
         else:
             collection_exist = False
