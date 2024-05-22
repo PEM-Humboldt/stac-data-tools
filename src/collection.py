@@ -1,15 +1,27 @@
 import pystac
-from utils import raster
+from utils import raster, storage, stac_rest
 from datetime import datetime, timedelta
+from sys import exit as sysexit
+from urllib import parse
 
 
 class Collection:
 
-    def __init__(self):
+    def __init__(self, stac_url, collection_name, collection_data):
         self.items = []
         self.dates = []
         self.longs = []
         self.lats = []
+        self.collection = []
+        self.collection_id = []
+        self.items_collection = []
+        self.stac_url = stac_url
+
+        self.collection_id = (
+            collection_name
+            if collection_name is not None
+            else collection_data["id"]
+        )
 
     def load_items(self, folder, raw_items):
         """
@@ -50,11 +62,6 @@ class Collection:
         """
         Set the parameters and create an initial collection
         """
-        collection_id = (
-            collection_name
-            if collection_name is not None
-            else collection_data["id"]
-        )
 
         bboxes = [
             min(self.longs),
@@ -73,8 +80,8 @@ class Collection:
             ]
         )
 
-        collection = pystac.Collection(
-            id=collection_id,
+        self.collection = pystac.Collection(
+            id=self.collection_id,
             title=collection_data["title"],
             description=collection_data["description"],
             extent=pystac.Extent(
@@ -83,7 +90,7 @@ class Collection:
             ),
         )
 
-        collection.validate()
+        self.collection.validate()
 
     def create_items(self):
         """
@@ -99,5 +106,80 @@ class Collection:
                     datetime=item_data["datetime"],
                     properties=item_data["properties"],
                 )
+                if item.validate():
+                    self.items_collection.append(item)
 
-                item.validate()
+    def convert_layers(self, input_dir, output_dir):
+        """
+        Convert items layers format
+        """
+        for i, item in enumerate(self.items):
+            self.items[i]["final_file"] = raster.tif_to_cog(
+                item["input_file"], input_dir, output_dir
+            )
+
+    def check_collection(self, overwrite):
+        """
+        Check if the collection exists and if going to be overwriter
+        """
+
+        url = f"{self.stac_url}/collections/{self.collection_id}"
+        exist = stac_rest.get(url)
+        if exist:
+            collection_exist = True
+            if overwrite is False:
+                sysexit(
+                    f"La colección {self.collection_id} ya existe.\n"
+                    "Si desea reemplazarla ejecute el programa nuevamente con el parámetro -o.\n"
+                    "Para obtener más ayuda ejecute el comando python src/main.py -h"
+                )
+        else:
+            collection_exist = False
+        return collection_exist
+
+    def remove_collection(self):
+        """
+        Call to remove collection from STAC server
+        """
+        url = f"{self.stac_url}/collections/{self.collection_id}"
+        stac_rest.delete(url)
+
+    def upload_layers(self, abs_config, output_folder):
+        """
+        Upload items layers to storage
+        """
+        if self.items:
+            for i, item in enumerate(self.items):
+                final_url = storage.upload_file(
+                    abs_config, output_folder, item["input_file"]
+                )
+
+                self.items_collection[i].add_asset(
+                    key=item["id"],
+                    asset=pystac.Asset(
+                        href=final_url,
+                        media_type=pystac.MediaType.COG,
+                    ),
+                )
+                self.items_collection[i].set_self_href(final_url)
+
+    def upload_collection(self):
+        """
+        Upload the colection and items to the STAC server
+        """
+        try:
+            stac_rest.post_or_put(
+                parse.urljoin(self.stac_url, "/collections"),
+                self.collection.to_dict(),
+            )
+
+            for item in self.items_collection:
+                stac_rest.post_or_put(
+                    parse.urljoin(
+                        self.stac_url,
+                        f"/collections/{self.collection_id}/items",
+                    ),
+                    item.to_dict(),
+                )
+        except Exception as e:
+            raise RuntimeError("Error al cargar la colección: {}".format(e))
