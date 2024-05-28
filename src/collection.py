@@ -192,4 +192,3 @@ class Collection:
             rmdir(output_folder)
         except Exception as e:
             raise RuntimeError("Error al eliminar el directorio: {}".format(e))
-
