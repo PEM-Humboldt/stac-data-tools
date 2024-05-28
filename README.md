@@ -46,7 +46,7 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     - -f --folder # Directorio dentro de input que contiene el archivo collection.json que describe la colección y los archivos correspondientes a las capas
     - -c --collection # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json (opcional)
     - -v --validate-only # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
-    - -o --overwrite # Actualiza una colección ya existente (opcional)
+    - -o --overwrite # Sobrescribe una colección ya existente (opcional)
 
     ```
     python3 src/main.py -f folder_name -c collection_name
