@@ -7,10 +7,10 @@ def upload_file(abs_config, folder_path, file_name):
     Upload a blob to Azure Blob Storage
     """
     blob_service = BlobServiceClient.from_connection_string(
-        abs_config["string"]
+        abs_config.abs_string
     )
     container_client = blob_service.get_container_client(
-        abs_config["container"]
+        abs_config.abs_container
     )
 
     file_path = path.join(folder_path, file_name)

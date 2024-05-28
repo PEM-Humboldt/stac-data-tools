@@ -8,21 +8,14 @@ from os import remove, rmdir, path
 
 class Collection:
 
-    def __init__(self, stac_url, collection_name, collection_data):
+    def __init__(self, settings):
         self.items = []
         self.dates = []
         self.longs = []
         self.lats = []
-        self.collection = []
-        self.collection_id = []
-        self.items_collection = []
-        self.stac_url = stac_url
-
-        self.collection_id = (
-            collection_name
-            if collection_name is not None
-            else collection_data["id"]
-        )
+        self.stac_collection = []
+        self.stac_items = []
+        self.settings = settings
 
     def load_items(self, folder, raw_items):
         """
@@ -81,8 +74,14 @@ class Collection:
             ]
         )
 
-        self.collection = pystac.Collection(
-            id=self.collection_id,
+        collection_id = (
+            collection_name
+            if collection_name is not None
+            else collection_data["id"]
+        )
+
+        self.stac_collection = pystac.Collection(
+            id=collection_id,
             title=collection_data["title"],
             description=collection_data["description"],
             extent=pystac.Extent(
@@ -91,7 +90,7 @@ class Collection:
             ),
         )
 
-        self.collection.validate()
+        self.stac_collection.validate()
 
     def create_items(self):
         """
@@ -108,20 +107,20 @@ class Collection:
                     properties=item_data["properties"],
                 )
                 if item.validate():
-                    self.items_collection.append(item)
+                    self.stac_items.append(item)
 
-    def check_collection(self, overwrite):
+    def check_collection(self, overwritten):
         """
         Check if the collection exists and if going to be overwriter
         """
 
-        url = f"{self.stac_url}/collections/{self.collection_id}"
+        url = f"{self.settings.stac_url}/collections/{self.stac_collection.id}"
         exist = stac_rest.get(url)
         if exist:
             collection_exist = True
-            if overwrite is False:
+            if overwritten is False:
                 sysexit(
-                    f"La colección {self.collection_id} ya existe.\n"
+                    f"La colección {self.stac_collection.id} ya existe.\n"
                     "Si desea reemplazarla ejecute el programa nuevamente "
                     "con el parámetro -o.\n"
                     "Para más ayuda ejecute el programa con el parámetro -h."
@@ -134,7 +133,7 @@ class Collection:
         """
         Call to remove collection from STAC server
         """
-        url = f"{self.stac_url}/collections/{self.collection_id}"
+        url = f"{self.settings.stac_url}/collections/{self.stac_collection.id}"
         stac_rest.delete(url)
 
     def upload_collection(self):
@@ -143,15 +142,15 @@ class Collection:
         """
         try:
             stac_rest.post_or_put(
-                parse.urljoin(self.stac_url, "/collections"),
-                self.collection.to_dict(),
+                parse.urljoin(self.settings.stac_url, "/collections"),
+                self.stac_collection.to_dict(),
             )
 
-            for item in self.items_collection:
+            for item in self.stac_items:
                 stac_rest.post_or_put(
                     parse.urljoin(
-                        self.stac_url,
-                        f"/collections/{self.collection_id}/items",
+                        self.settings.stac_url,
+                        f"/collections/{self.stac_collection.id}/items",
                     ),
                     item.to_dict(),
                 )
@@ -167,29 +166,30 @@ class Collection:
                 item["input_file"], input_dir, output_dir
             )
 
-    def upload_layers(self, abs_config, output_folder):
+    def upload_layers(self, output_folder):
         """
         Upload items layers to storage
         """
         if self.items:
             for i, item in enumerate(self.items):
                 final_url = storage.upload_file(
-                    abs_config, output_folder, item["input_file"]
+                    self.settings, output_folder, item["input_file"]
                 )
 
                 if final_url:
                     remove(path.join(output_folder, item["input_file"]))
 
-                self.items_collection[i].add_asset(
+                self.stac_items[i].add_asset(
                     key=item["id"],
                     asset=pystac.Asset(
                         href=final_url,
                         media_type=pystac.MediaType.COG,
                     ),
                 )
-                self.items_collection[i].set_self_href(final_url)
+                self.stac_items[i].set_self_href(final_url)
 
         try:
             rmdir(output_folder)
         except Exception as e:
             raise RuntimeError("Error al eliminar el directorio: {}".format(e))
+

@@ -3,14 +3,15 @@ from utils import spec
 from collection import Collection
 from json import load
 from sys import exit as sysexit
-from dotenv import load_dotenv
-from os import getenv
+from config import get_settings
 
 
 def main():
     """
     Read arguments and start data validation.
     """
+
+    settings = get_settings()
 
     parser = ArgumentParser()
     parser.add_argument(
@@ -53,17 +54,6 @@ def main():
     validation = args.validation
     overwrite = args.overwrite
 
-    load_dotenv()
-    if getenv("STAC_URL"):
-        stac_url = getenv("STAC_URL")
-
-    abs_config = {}
-    if getenv("ABS_STRING"):
-        abs_config["string"] = getenv("ABS_STRING")
-
-    if getenv("ABS_STRING"):
-        abs_config["container"] = getenv("ABS_CONTAINER")
-
     spec.validate_input_folder(folder)
 
     with open("{}/collection.json".format(folder), "r") as f:
@@ -73,7 +63,7 @@ def main():
     spec.validate_format(data)
     spec.validate_layers(folder, raw_items)
 
-    collection = Collection(stac_url, collection_name, data)
+    collection = Collection(settings)
     collection.load_items(folder, raw_items)
     collection.create_collection(collection_name, data)
     collection.create_items()
@@ -86,7 +76,7 @@ def main():
 
     output_dir = f"output/{collection_name}"
     collection.convert_layers(folder, output_dir)
-    collection.upload_layers(abs_config, output_dir)
+    collection.upload_layers(output_dir)
     collection.upload_collection()
 
 
