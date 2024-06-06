@@ -106,8 +106,8 @@ class Collection:
                     datetime=item_data["datetime"],
                     properties=item_data["properties"],
                 )
-                if item.validate():
-                    self.stac_items.append(item)
+                item.validate()
+                self.stac_items.append(item)
 
     def check_collection(self, overwritten):
         """
