@@ -4,18 +4,19 @@ from datetime import datetime, timedelta
 from sys import exit as sysexit
 from urllib import parse
 from os import remove, rmdir, path
+from config import get_settings
 
 
 class Collection:
 
-    def __init__(self, settings):
+    def __init__(self):
         self.items = []
         self.dates = []
         self.longs = []
         self.lats = []
         self.stac_collection = []
         self.stac_items = []
-        self.settings = settings
+        self.stac_url = get_settings().stac_url
 
     def load_items(self, folder, raw_items):
         """
@@ -92,6 +93,8 @@ class Collection:
 
         self.stac_collection.validate()
 
+        return collection_id
+
     def create_items(self):
         """
         Validate items creation
@@ -111,11 +114,11 @@ class Collection:
 
     def check_collection(self, overwritten):
         """
-        Check if the collection exists and if going to be overwriter
+        Check if the collection exists and if it's going to be overwritten
         """
 
-        url = f"{self.settings.stac_url}/collections/{self.stac_collection.id}"
-        exist = stac_rest.get(url)
+        url = f"{self.stac_url}/collections/{self.stac_collection.id}"
+        exist = stac_rest.check_resource(url)
         if exist:
             collection_exist = True
             if overwritten is False:
@@ -131,10 +134,29 @@ class Collection:
 
     def remove_collection(self):
         """
-        Call to remove collection from STAC server
+        Call to remove collection from STAC server and Azure Blob Storage
         """
-        url = f"{self.settings.stac_url}/collections/{self.stac_collection.id}"
-        stac_rest.delete(url)
+
+        collection_url = (
+            f"{self.stac_url}/collections/{self.stac_collection.id}"
+        )
+
+        try:
+            items_collection = stac_rest.get(f"{collection_url}/items").json()
+            for item in items_collection["features"]:
+                for asset_key, asset_value in item["assets"].items():
+                    parsed_url = parse.urlparse(asset_value["href"])
+                    blob_url = parsed_url.path.split('/')[-1]
+                    storage.remove_file(blob_url)
+
+            stac_rest.delete(collection_url)
+
+        except Exception as e:
+            raise RuntimeError(
+                "Error al eliminar la colección del servidor: {}".format(
+                    e
+                )
+            )
 
     def upload_collection(self):
         """
@@ -142,14 +164,14 @@ class Collection:
         """
         try:
             stac_rest.post_or_put(
-                parse.urljoin(self.settings.stac_url, "/collections"),
+                parse.urljoin(self.stac_url, "/collections"),
                 self.stac_collection.to_dict(),
             )
 
             for item in self.stac_items:
                 stac_rest.post_or_put(
                     parse.urljoin(
-                        self.settings.stac_url,
+                        self.stac_url,
                         f"/collections/{self.stac_collection.id}/items",
                     ),
                     item.to_dict(),
@@ -162,9 +184,7 @@ class Collection:
         Convert items layers format
         """
         for i, item in enumerate(self.items):
-            self.items[i]["final_file"] = raster.tif_to_cog(
-                item["input_file"], input_dir, output_dir
-            )
+            raster.tif_to_cog(item["input_file"], input_dir, output_dir)
 
     def upload_layers(self, output_folder):
         """
@@ -172,12 +192,11 @@ class Collection:
         """
         if self.items:
             for i, item in enumerate(self.items):
-                final_url = storage.upload_file(
-                    self.settings, output_folder, item["input_file"]
-                )
+                file_path = path.join(output_folder, item["input_file"])
+                final_url = storage.upload_file(item["input_file"], file_path)
 
                 if final_url:
-                    remove(path.join(output_folder, item["input_file"]))
+                    remove(file_path)
 
                 self.stac_items[i].add_asset(
                     key=item["id"],

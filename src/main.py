@@ -3,15 +3,13 @@ from utils import spec
 from collection import Collection
 from json import load
 from sys import exit as sysexit
-from config import get_settings
+from os import getcwd
 
 
 def main():
     """
     Read arguments and start data validation.
     """
-
-    settings = get_settings()
 
     parser = ArgumentParser()
     parser.add_argument(
@@ -63,9 +61,9 @@ def main():
     spec.validate_format(data)
     spec.validate_layers(folder, raw_items)
 
-    collection = Collection(settings)
+    collection = Collection()
     collection.load_items(folder, raw_items)
-    collection.create_collection(collection_name, data)
+    collection_id = collection.create_collection(collection_name, data)
     collection.create_items()
 
     if validation:
@@ -74,7 +72,7 @@ def main():
     if collection.check_collection(overwrite):
         collection.remove_collection()
 
-    output_dir = f"output/{collection_name}"
+    output_dir = f"{getcwd()}/output/{collection_id}"
     collection.convert_layers(folder, output_dir)
     collection.upload_layers(output_dir)
     collection.upload_collection()

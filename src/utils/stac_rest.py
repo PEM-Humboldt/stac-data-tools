@@ -5,6 +5,7 @@ def post_or_put(url: str, data: dict):
     """
     Post or put data to url
     """
+
     response = requests.post(url, json=data)
     if response.status_code == 409:
         response = requests.put(url, json=data)
@@ -17,6 +18,15 @@ def post_or_put(url: str, data: dict):
 def get(url: str):
     """
     Get request
+    """
+    response = requests.get(url)
+    response.raise_for_status()
+    return response
+
+
+def check_resource(url: str):
+    """
+    Check if an URL for a resource exists. e.g. items, collections, catalogues
     """
     response = requests.get(url)
     if response.status_code == 200:
