@@ -58,6 +58,13 @@ def tif_to_cog(input_file, input_dir, output_dir):
         gdal.Translate(
             output_path, layer, format="COG", creationOptions=cog_options
         )
+
+        # This check exists because if the conversion fails no error is shown.
+        if not os.path.exists(output_path):
+            raise RuntimeError(
+                "No fue posible convertir el archivo a formato COG."
+            )
+
         return output_path
     except Exception as e:
         raise RuntimeError(
