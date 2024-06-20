@@ -17,6 +17,7 @@ class Collection:
         self.stac_collection = []
         self.stac_items = []
         self.stac_url = get_settings().stac_url
+        self.storage = storage.Storage()
 
     def load_items(self, folder, raw_items):
         """
@@ -146,16 +147,14 @@ class Collection:
             for item in items_collection["features"]:
                 for asset_key, asset_value in item["assets"].items():
                     parsed_url = parse.urlparse(asset_value["href"])
-                    blob_url = parsed_url.path.split('/')[-1]
-                    storage.remove_file(blob_url)
+                    blob_url = parsed_url.path.split("/")[-1]
+                    self.storage.remove_file(blob_url)
 
             stac_rest.delete(collection_url)
 
         except Exception as e:
             raise RuntimeError(
-                "Error al eliminar la colección del servidor: {}".format(
-                    e
-                )
+                "Error al eliminar la colección del servidor: {}".format(e)
             )
 
     def upload_collection(self):
@@ -193,7 +192,9 @@ class Collection:
         if self.items:
             for i, item in enumerate(self.items):
                 file_path = path.join(output_folder, item["input_file"])
-                final_url = storage.upload_file(item["input_file"], file_path)
+                final_url = self.storage.upload_file(
+                    item["input_file"], file_path
+                )
 
                 if final_url:
                     remove(file_path)
