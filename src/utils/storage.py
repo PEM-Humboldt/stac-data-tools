@@ -29,5 +29,5 @@ class Storage:
         Remove a blob from Azure Blob Storage
         """
         blob_client = self.container_client.get_blob_client(file_path)
-        if blob_client:
+        if blob_client.exists():
             blob_client.delete_blob()
