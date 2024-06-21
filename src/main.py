@@ -3,6 +3,7 @@ from utils import spec
 from collection import Collection
 from json import load
 from sys import exit as sysexit
+from os import getcwd
 
 
 def main():
@@ -36,10 +37,20 @@ def main():
         required=False,
     )
 
+    parser.add_argument(
+        "-o",
+        "--overwrite",
+        dest="overwrite",
+        action="store_true",
+        help="Overwrite existing collection",
+        required=False,
+    )
+
     args = parser.parse_args()
     folder = "input/" + args.folder
     collection_name = args.collection
     validation = args.validation
+    overwrite = args.overwrite
 
     spec.validate_input_folder(folder)
 
@@ -52,11 +63,19 @@ def main():
 
     collection = Collection()
     collection.load_items(folder, raw_items)
-    collection.create_collection(collection_name, data)
+    collection_id = collection.create_collection(collection_name, data)
     collection.create_items()
 
     if validation:
         sysexit("Successful validation.")
+
+    if collection.check_collection(overwrite):
+        collection.remove_collection()
+
+    output_dir = f"{getcwd()}/output/{collection_id}"
+    collection.convert_layers(folder, output_dir)
+    collection.upload_layers(output_dir)
+    collection.upload_collection()
 
 
 if __name__ == "__main__":
