@@ -12,8 +12,12 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
 1. Clona este repositorio: `git clone git@github.com:PEM-Humboldt/stac-data-tools.git`
 1. Ir al directorio del proyecto: `cd stac-data-tools`
 1. Crear un entorno de ejecución para python con Conda: `conda create --name <nombre_del_entorno>`
+* (Es posible que para Windows no reconozca la version de python , por lo tanto es recomendable asignarla en el comando: conda create --name <nombre_del_entorno> python=3.10)
+* (Es necesario instalar gdal "biblioteca de software para la lectura y escritura de formatos de datos geoespaciales", con el siguiente comando conda install -c conda-forge gdal)
+* (Si aparece error instalando la libreria gdal, es necesario instalar el siguiente paquete: pip install GDAL-3.7.3-cp310-cp310-win_amd64.whl)
 1. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
 1. Instala las dependencias: `pip install -r requirements.txt`
+* (Si el archivo anterior presenta error en su instalacion, es recomendable instalarlo con conda: conda install --file requirements.txt)
 
 ## Preparación de los insumos
 
@@ -38,7 +42,7 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     ABS_STRING="" # Cadena de conexión a Azure Blob Storage
     ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
     ```
-
+* (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
 1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en la sección [Preparación de los insumos](#preparacion-de-los-insumos) que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
 
 1. Ejecutar el script de validación y carga de la colección con los siguientes parámetros:
