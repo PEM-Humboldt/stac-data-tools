@@ -1,9 +1,11 @@
 import pystac
+
+from src.utils.logging_config import logger
 from utils import raster, storage, stac_rest
 from datetime import datetime, timedelta
 from sys import exit as sysexit
 from urllib import parse
-from os import remove, rmdir, path
+from os import remove, rmdir, path, makedirs
 from config import get_settings
 
 
@@ -23,10 +25,13 @@ class Collection:
         """
         Prepare items data and get attributes for collection creation.
         """
+        logger.info(f"Cargando items de {folder}")
 
         for item in raw_items:
             item_data = {}
             file_path = "{}/{}".format(folder, item["assets"]["input_file"])
+            logger.info(f"Obteniendo metadatos del archivo: {file_path}")
+
             (
                 item_data["bbox"],
                 item_data["footprint"],
@@ -35,13 +40,12 @@ class Collection:
                 item_data["dtype"],
             ) = raster.get_tif_metadata(file_path)
 
+            # Preparación de los datos del item
             item_data["year"] = item["year"]
             item_data["id"] = item["id"]
             item_data["input_file"] = item["assets"]["input_file"]
             item_data["datetime"] = datetime(
-                int(item["year"]) + 1,
-                1,
-                1,
+                int(item["year"]) + 1, 1, 1,
             ) - timedelta(days=1)
             item_data["properties"] = (
                 item["properties"] if "properties" in item else {}
@@ -54,10 +58,13 @@ class Collection:
             self.lats.append(item_data["bbox"][1])
             self.lats.append(item_data["bbox"][3])
 
+        logger.info("Items cargados correctamente")
+
     def create_collection(self, collection_name, collection_data):
         """
-        Set the parameters and create an initial collection
+        Set the parameters and create an initial collection.
         """
+        logger.info(f"Creando colección {collection_name or collection_data['id']}")
 
         bboxes = [
             min(self.longs),
@@ -93,6 +100,7 @@ class Collection:
         )
 
         self.stac_collection.validate()
+        logger.info(f"Validación de colección {collection_id} exitosa")
 
         return collection_id
 
@@ -135,27 +143,28 @@ class Collection:
 
     def remove_collection(self):
         """
-        Call to remove collection from STAC server and Azure Blob Storage
+        Call to remove collection from STAC server and Azure Blob Storage.
         """
-
-        collection_url = (
-            f"{self.stac_url}/collections/{self.stac_collection.id}"
-        )
+        collection_url = f"{self.stac_url}/collections/{self.stac_collection.id}"
+        logger.info(f"Intentando eliminar la colección {self.stac_collection.id}")
 
         try:
+            # Obtener los elementos de la colección para eliminar sus recursos
             items_collection = stac_rest.get(f"{collection_url}/items").json()
             for item in items_collection["features"]:
                 for asset_key, asset_value in item["assets"].items():
                     parsed_url = parse.urlparse(asset_value["href"])
                     blob_url = parsed_url.path.split("/")[-1]
+                    logger.info(f"Eliminando archivo: {blob_url} de Azure Blob Storage")
                     self.storage.remove_file(blob_url)
 
+            # Eliminar la colección del servidor STAC
             stac_rest.delete(collection_url)
+            logger.info(f"Se eliminó la colección {self.stac_collection.id} correctamente")
 
         except Exception as e:
-            raise RuntimeError(
-                "Error al eliminar la colección del servidor: {}".format(e)
-            )
+            logger.error(f"Error al eliminar la colección del servidor: {e}")
+            raise RuntimeError(f"Error al eliminar la colección del servidor: {e}")
 
     def upload_collection(self):
         """
@@ -180,20 +189,30 @@ class Collection:
 
     def convert_layers(self, input_dir, output_dir):
         """
-        Convert items layers format
+        Convert items layers format and ensure the output directory exists.
         """
-        for i, item in enumerate(self.items):
-            raster.tif_to_cog(item["input_file"], input_dir, output_dir)
+        if not path.exists(output_dir):
+            makedirs(output_dir)
+            logger.info(f"Carpeta creada: {output_dir}")
 
-    def upload_layers(self, output_folder):
+        for i, item in enumerate(self.items):
+            logger.info(f"Convirtiendo {item['input_file']} a COG")
+            raster.tif_to_cog(item["input_file"], input_dir, output_dir)
+            logger.info(f"Conversión de {item['input_file']} completada")
+
+    def upload_layers(self,output_folder):
         """
         Upload items layers to storage
         """
         if self.items:
             for i, item in enumerate(self.items):
                 file_path = path.join(output_folder, item["input_file"])
+
+                collection_name = self.stac_collection.id
+
                 final_url = self.storage.upload_file(
-                    item["input_file"], file_path
+                    f"{collection_name}/{item['input_file']}",
+                    file_path
                 )
 
                 if final_url:
@@ -208,7 +227,7 @@ class Collection:
                 )
                 self.stac_items[i].set_self_href(final_url)
 
-        try:
-            rmdir(output_folder)
-        except Exception as e:
-            raise RuntimeError("Error al eliminar el directorio: {}".format(e))
+            try:
+                rmdir(output_folder)
+            except Exception as e:
+                raise RuntimeError("Error al eliminar el directorio: {}".format(e))

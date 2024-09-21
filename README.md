@@ -34,7 +34,7 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
 
 </details>
 
-## Uso
+## Crear coleccion
 
 1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
     ```
@@ -55,6 +55,15 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     ```
     python3 src/main.py -f folder_name -c collection_name
     ```
+## Eliminar coleccion
+
+1. Ejecutar el script de eliminacion de la coleccion
+
+   - -r --remove # Comando para remover la coleccion del azure
+
+   ```
+   python3 src/main.py -r collection_name
+   ```
 
 ## Revisión y formato de estilos para el código
 

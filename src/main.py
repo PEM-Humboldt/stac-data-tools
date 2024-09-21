@@ -77,6 +77,11 @@ def main():
     collection.upload_layers(output_dir)
     collection.upload_collection()
 
+    if args.remove_collection:
+        collection = Collection()
+        collection.stac_collection.id = args.remove_collection
+        collection.remove_collection()
+        sysexit("Colección eliminada correctamente.")
 
 if __name__ == "__main__":
     main()
