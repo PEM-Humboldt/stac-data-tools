@@ -1,4 +1,4 @@
-name: sdt-conda-env-310
+name: sdt-conda-env
 channels:
   - conda-forge
 dependencies:
