@@ -9,15 +9,27 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
 
 ## Instalación
 
-1. Clona este repositorio: `git clone git@github.com:PEM-Humboldt/stac-data-tools.git`
-1. Ir al directorio del proyecto: `cd stac-data-tools`
-1. Crear un entorno de ejecución para python con Conda: `conda create --name <nombre_del_entorno>`
-* (Es posible que para Windows no reconozca la version de python , por lo tanto es recomendable asignarla en el comando: conda create --name <nombre_del_entorno> python=3.10)
-* (Es necesario instalar gdal "biblioteca de software para la lectura y escritura de formatos de datos geoespaciales", con el siguiente comando conda install -c conda-forge gdal)
-* (Si aparece error instalando la libreria gdal, es necesario instalar el siguiente paquete: pip install GDAL-3.7.3-cp310-cp310-win_amd64.whl)
-1. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
-1. Instala las dependencias: `pip install -r requirements.txt`
-* (Si el archivo anterior presenta error en su instalacion, es recomendable instalarlo con conda: conda install --file requirements.txt)
+1. Clonar el repositorio: 
+   
+   ```
+   git clone git@github.com:PEM-Humboldt/stac-data-tools.git
+   ```
+   
+2. Ir al directorio del proyecto: 
+   
+   ```
+   cd stac-data-tools
+   ```
+
+3. Crear el entorno de ejecución para python con Conda e instalar dependencias: 
+    
+    ```
+    conda env create -f environment.yml
+    ```
+    
+    El nombre del entorno de ejecución será el que se configure en el archivo `environment.yml`, el cual se encuentra en la raiz del proyecto. Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
+
+4. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
 
 ## Preparación de los insumos
 
@@ -28,9 +40,9 @@ Para usar correctamente la herramienta se deben preparar los insumos, a continua
 
 Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
 
-1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection.md](spec/collection.md).
-
-    El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
+1. Crear una carpeta, sin importar su nombre o ubicación, donde se va a almacenar todos los archivos necesarios para cargar la colección al STAC.
+1. Agregar en la carpeta un archivo llamado `collection.json` donde describa toda la información que se desea cargar a la nueva colección. Para esto, debe seguir la especificación dada en el archivo [collection.md](spec/collection.md). El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
+1. Agregar en la carpeta todos los archivos (.tif) con las capas que desea subir como items de la colección.
 
 </details>
 
@@ -42,15 +54,16 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     ABS_STRING="" # Cadena de conexión a Azure Blob Storage
     ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
     ```
-* (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
-1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en la sección [Preparación de los insumos](#preparacion-de-los-insumos) que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
+    Nota: Es posible que la variable de STAC_URL no reconozca la ruta: `localhost:8082`, entonces se recomienda dejar la siguiente: `STAC_URL="http://localhost:8082"`
+  
+2. Cargar en el directorio `input` la carpeta que se pre-alistó en la sección de [Preparación de los insumos](#preparacion-de-los-insumos). Debe contar con los archivos correpondientes a las capas (.tif) y el archivo `collection.json`.
 
-1. Ejecutar el script de validación y carga de la colección con los siguientes parámetros:
+3. Para ejecutar el script de validación y carga de la colección puede usar los siguientes parámetros:
 
-    - -f --folder # Directorio dentro de input que contiene el archivo collection.json que describe la colección y los archivos correspondientes a las capas
-    - -c --collection # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json (opcional)
-    - -v --validate-only # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
-    - -o --overwrite # Sobrescribe una colección ya existente (opcional)
+    - **`-f --folder`**: Nombre de la carpeta, dentro del directorio input, que contiene el archivo `collection.json` que describe la colección y los archivos correspondientes a las capas.
+    - **`-c --collection`**: Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json *(opcional)*
+    - **`-v --validate-only`**: Si es verdadero únicamente se valida la colección pero no se carga *(opcional)*
+    - **`-o --overwrite`**: Sobrescribe una colección ya existente *(opcional)*
 
     ```
     python3 src/main.py -f folder_name -c collection_name
