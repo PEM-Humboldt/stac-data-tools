@@ -38,6 +38,7 @@ Para usar correctamente la herramienta se deben preparar los insumos, a continua
 <details>
 <summary>Cargar una colección</summary>
 
+<br>
 Para cargar una nueva colección (incluyendo los items de la misma) se deben seguir los siguientes pasos:
 
 1. Crear una carpeta, sin importar su nombre o ubicación, donde se van a almacenar todos los archivos necesarios para cargar la colección al STAC.
@@ -65,6 +66,7 @@ Para cargar una nueva colección (incluyendo los items de la misma) se deben seg
     - **`-v --validate-only`**: Si es verdadero únicamente se valida la colección pero no se carga *(opcional)*
     - **`-o --overwrite`**: Sobrescribe una colección ya existente *(opcional)*
 
+    
     ```
     python3 src/main.py -f folder_name -c collection_name
     ```
