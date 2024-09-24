@@ -38,9 +38,9 @@ Para usar correctamente la herramienta se deben preparar los insumos, a continua
 <details>
 <summary>Cargar una colección</summary>
 
-Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
+Para cargar una nueva colección (incluyendo los items de la misma) se deben seguir los siguientes pasos:
 
-1. Crear una carpeta, sin importar su nombre o ubicación, donde se va a almacenar todos los archivos necesarios para cargar la colección al STAC.
+1. Crear una carpeta, sin importar su nombre o ubicación, donde se van a almacenar todos los archivos necesarios para cargar la colección al STAC.
 1. Agregar en la carpeta un archivo llamado `collection.json` donde describa toda la información que se desea cargar a la nueva colección. Para esto, debe seguir la especificación dada en el archivo [collection.md](spec/collection.md). El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
 1. Agregar en la carpeta todos los archivos (.tif) con las capas que desea subir como items de la colección.
 
