@@ -1,4 +1,6 @@
 from argparse import ArgumentParser
+
+from src.utils.logging_config import logger
 from utils import spec
 from collection import Collection
 from json import load
@@ -17,7 +19,7 @@ def main():
         "--folder",
         dest="folder",
         help="Collection folder",
-        required=True,
+        required=False,
     )
 
     parser.add_argument(
@@ -46,42 +48,70 @@ def main():
         required=False,
     )
 
+    parser.add_argument(
+        "-r",
+        "--remove-collection-by-name",
+        dest="remove_collection_by_name",
+        help="Name of the collection to remove",
+        required=False,
+    )
+
     args = parser.parse_args()
-    folder = "input/" + args.folder
-    collection_name = args.collection
-    validation = args.validation
-    overwrite = args.overwrite
 
-    spec.validate_input_folder(folder)
-
-    with open("{}/collection.json".format(folder), "r") as f:
-        data = load(f)
-        raw_items = [item for item in data["items"]]
-
-    spec.validate_format(data)
-    spec.validate_layers(folder, raw_items)
-
-    collection = Collection()
-    collection.load_items(folder, raw_items)
-    collection_id = collection.create_collection(collection_name, data)
-    collection.create_items()
-
-    if validation:
-        sysexit("Successful validation.")
-
-    if collection.check_collection(overwrite):
-        collection.remove_collection()
-
-    output_dir = f"{getcwd()}/output/{collection_id}"
-    collection.convert_layers(folder, output_dir)
-    collection.upload_layers(output_dir)
-    collection.upload_collection()
-
-    if args.remove_collection:
+    if args.remove_collection_by_name:
+        collection_id = args.remove_collection_by_name
         collection = Collection()
-        collection.stac_collection.id = args.remove_collection
-        collection.remove_collection()
-        sysexit("Colección eliminada correctamente.")
+        collection.remove_collection_by_name(collection_id)
+        sysexit("Collection successfully removed.")
+    else:
+        if not args.folder:
+            sysexit(
+                "The --folder argument is required if a collection is not being removed."
+            )
+
+        folder = "input/" + args.folder
+        collection_name = args.collection
+        validation = args.validation
+        overwrite = args.overwrite
+
+        spec.validate_input_folder(folder)
+
+        with open(f"{folder}/collection.json", "r") as f:
+            data = load(f)
+            raw_items = [item for item in data["items"]]
+
+        spec.validate_format(data)
+        spec.validate_layers(folder, raw_items)
+
+        collection = Collection()
+
+        collection.load_items(folder, raw_items)
+
+        collection.create_collection(collection_name, data)
+        logger.info("Collection created successfully.")
+
+        collection.create_items()
+        logger.info("Items created successfully.")
+
+        if validation:
+            sysexit("Validation successful.")
+
+        if collection.check_collection(overwrite):
+            collection.remove_collection()
+            sysexit("Previous collection removed successfully.")
+
+        output_dir = f"{getcwd()}/output/{args.folder}"
+        collection.convert_layers(folder, output_dir)
+        logger.info("Layers converted successfully.")
+
+        collection.upload_layers(output_dir)
+        logger.info("Layers uploaded successfully.")
+
+        collection.upload_collection()
+        logger.info("Collection uploaded successfully.")
+
+        sysexit("Process completed successfully.")
+
 
 if __name__ == "__main__":
     main()

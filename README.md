@@ -53,16 +53,17 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     - -o --overwrite # Sobrescribe una colección ya existente (opcional)
 
     ```
-    python3 src/main.py -f folder_name -c collection_name
+    c folder_name -c collection_name
     ```
 ## Eliminar coleccion
 
 1. Ejecutar el script de eliminacion de la coleccion
 
-   - -r --remove # Comando para remover la coleccion del azure
+   - --remove-collection # Comando para remover la coleccion del azure
 
    ```
-   python3 src/main.py -r collection_name
+   python src/main.py --remove-collection LossPersistance
+
    ```
 
 ## Revisión y formato de estilos para el código

@@ -1,17 +1,24 @@
-from rasterio import open
-from shapely import geometry
-from osgeo import gdal
+import rasterio
 import os
+
+try:
+    from shapely.geometry import Polygon, mapping
+    from osgeo import gdal
+except ImportError:
+    geometry = None
+    print(
+        "Shapely no está disponible. Algunas funcionalidades no estarán habilitadas."
+    )
 
 
 def get_tif_metadata(file_name):
     """
     Extract TIF metadata such as bbox, footprint, crs, pixel_size_x and dtype
     """
-    with open(file_name) as r:
+    with rasterio.open(file_name) as r:
         bounds = r.bounds
         bbox = [bounds.left, bounds.bottom, bounds.right, bounds.top]
-        footprint = geometry.Polygon(
+        footprint = Polygon(
             [
                 [bounds.left, bounds.bottom],
                 [bounds.left, bounds.top],
@@ -28,7 +35,7 @@ def get_tif_metadata(file_name):
         pixel_size_x, _ = r.res
         return (
             bbox,
-            geometry.mapping(footprint),
+            mapping(footprint),
             crs,
             pixel_size_x,
             r.meta["dtype"],

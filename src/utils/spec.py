@@ -7,10 +7,7 @@ def validate_input_folder(folder):
     """
     Check if the collection folder exists and contains the collection file.
     """
-    if not (
-        path.exists(folder)
-        and "collection.json" in listdir(folder)
-    ):
+    if not (path.exists(folder) and "collection.json" in listdir(folder)):
         raise FileNotFoundError(
             f"El directorio {folder} no existe o "
             "no contiene el archivo collection.json."
