@@ -7,3 +7,4 @@ shapely>=2.0.3,<2.0.4
 azure-storage-blob>=12.19.1,<12.20.0
 gdal>=3.8.5,<3.9.0
 pydantic-settings>=2.2.1,<2.3.0
+
