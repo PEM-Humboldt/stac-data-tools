@@ -53,7 +53,7 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     - -o --overwrite # Sobrescribe una colección ya existente (opcional)
 
     ```
-    c folder_name -c collection_name
+    python src/main.py -f folder_name -c collection_name
     ```
 ## Eliminar coleccion
 

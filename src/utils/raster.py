@@ -1,14 +1,8 @@
 import rasterio
 import os
+from shapely.geometry import Polygon, mapping
+from osgeo import gdal
 
-try:
-    from shapely.geometry import Polygon, mapping
-    from osgeo import gdal
-except ImportError:
-    geometry = None
-    print(
-        "Shapely no está disponible. Algunas funcionalidades no estarán habilitadas."
-    )
 
 
 def get_tif_metadata(file_name):

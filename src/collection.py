@@ -25,12 +25,12 @@ class Collection:
         """
         Prepare items data and get attributes for collection creation.
         """
-        logger.info(f"Cargando items de {folder}")
+        logger.info(f"Loading items from {folder}")
 
         for item in raw_items:
             item_data = {}
             file_path = "{}/{}".format(folder, item["assets"]["input_file"])
-            logger.info(f"Obteniendo metadatos del archivo: {file_path}")
+            logger.info(f"Retrieving metadata from file: {file_path}")
 
             (
                 item_data["bbox"],
@@ -40,7 +40,7 @@ class Collection:
                 item_data["dtype"],
             ) = raster.get_tif_metadata(file_path)
 
-            # Preparación de los datos del item
+            # Preparing item data
             item_data["year"] = item["year"]
             item_data["id"] = item["id"]
             item_data["input_file"] = item["assets"]["input_file"]
@@ -60,14 +60,14 @@ class Collection:
             self.lats.append(item_data["bbox"][1])
             self.lats.append(item_data["bbox"][3])
 
-        logger.info("Items cargados correctamente")
+        logger.info("Items loaded successfully")
 
     def create_collection(self, collection_name, collection_data):
         """
         Set the parameters and create an initial collection.
         """
         logger.info(
-            f"Creando colección {collection_name or collection_data['id']}"
+            f"Creating collection {collection_name or collection_data['id']}"
         )
 
         bboxes = [
@@ -104,15 +104,14 @@ class Collection:
         )
 
         self.stac_collection.validate()
-        logger.info(f"Validación de colección {collection_id} exitosa")
+        logger.info(f"Collection {collection_id} validated successfully")
 
         return collection_id
 
     def create_items(self):
         """
-        Validate items creation
+        Validate item creation.
         """
-
         if self.items:
             for item_data in self.items:
                 item = pystac.Item(
@@ -127,19 +126,17 @@ class Collection:
 
     def check_collection(self, overwritten):
         """
-        Check if the collection exists and if it's going to be overwritten
+        Check if the collection exists and if it's going to be overwritten.
         """
-
         url = f"{self.stac_url}/collections/{self.stac_collection.id}"
         exist = stac_rest.check_resource(url)
         if exist:
             collection_exist = True
-            if overwritten is False:
+            if not overwritten:
                 sysexit(
-                    f"La colección {self.stac_collection.id} ya existe.\n"
-                    "Si desea reemplazarla ejecute el programa nuevamente "
-                    "con el parámetro -o.\n"
-                    "Para más ayuda ejecute el programa con el parámetro -h."
+                    f"Collection {self.stac_collection.id} already exists.\n"
+                    "To overwrite it, rerun the program with the -o parameter.\n"
+                    "For more help, use the -h parameter."
                 )
         else:
             collection_exist = False
@@ -147,73 +144,55 @@ class Collection:
 
     def remove_collection(self):
         """
-        Call to remove collection from STAC server and Azure Blob Storage.
+        Remove collection from STAC server and Azure Blob Storage.
         """
-        collection_url = (
-            f"{self.stac_url}/collections/{self.stac_collection.id}"
-        )
-        logger.info(
-            f"Intentando eliminar la colección {self.stac_collection.id}"
-        )
+        collection_url = f"{self.stac_url}/collections/{self.stac_collection.id}"
+        logger.info(f"Attempting to remove collection {self.stac_collection.id}")
 
         try:
-            # Obtener los elementos de la colección para eliminar sus recursos
+            # Retrieve collection items to remove their resources
             items_collection = stac_rest.get(f"{collection_url}/items").json()
             for item in items_collection["features"]:
                 for asset_key, asset_value in item["assets"].items():
                     parsed_url = parse.urlparse(asset_value["href"])
                     blob_url = parsed_url.path.split("/")[-1]
-                    logger.info(
-                        f"Eliminando archivo: {blob_url} de Azure Blob Storage"
-                    )
+                    logger.info(f"Deleting file: {blob_url} from Azure Blob Storage")
                     self.storage.remove_file(blob_url)
 
-            # Eliminar la colección del servidor STAC
+            # Remove the collection from the STAC server
             stac_rest.delete(collection_url)
-            logger.info(
-                f"Se eliminó la colección {self.stac_collection.id} correctamente"
-            )
+            logger.info(f"Collection {self.stac_collection.id} removed successfully")
 
         except Exception as e:
-            logger.error(f"Error al eliminar la colección del servidor: {e}")
-            raise RuntimeError(
-                f"Error al eliminar la colección del servidor: {e}"
-            )
+            logger.error(f"Error removing collection from server: {e}")
+            raise RuntimeError(f"Error removing collection from server: {e}")
 
     def remove_collection_by_name(self, collection_id):
         """
-        Call to remove collection from STAC server and Azure Blob Storage.
+        Remove collection by name from STAC server and Azure Blob Storage.
         """
         collection_url = f"{self.stac_url}/collections/{collection_id}"
-        logger.info(f"Intentando eliminar la colección {collection_id}")
+        logger.info(f"Attempting to remove collection {collection_id}")
 
         try:
-            # Obtener los elementos de la colección para eliminar sus recursos
             items_collection = stac_rest.get(f"{collection_url}/items").json()
             for item in items_collection["features"]:
                 for asset_key, asset_value in item["assets"].items():
                     parsed_url = parse.urlparse(asset_value["href"])
                     blob_url = parsed_url.path.split("/")[-1]
-                    logger.info(
-                        f"Eliminando archivo: {blob_url} de Azure Blob Storage"
-                    )
+                    logger.info(f"Deleting file: {blob_url} from Azure Blob Storage")
                     self.storage.remove_file(blob_url)
 
-            # Eliminar la colección del servidor STAC
             stac_rest.delete(collection_url)
-            logger.info(
-                f"Se eliminó la colección {collection_id} correctamente"
-            )
+            logger.info(f"Collection {collection_id} removed successfully")
 
         except Exception as e:
-            logger.error(f"Error al eliminar la colección del servidor: {e}")
-            raise RuntimeError(
-                f"Error al eliminar la colección del servidor: {e}"
-            )
+            logger.error(f"Error removing collection from server: {e}")
+            raise RuntimeError(f"Error removing collection from server: {e}")
 
     def upload_collection(self):
         """
-        Upload the colection and items to the STAC server
+        Upload the collection and items to the STAC server.
         """
         try:
             stac_rest.post_or_put(
@@ -230,24 +209,24 @@ class Collection:
                     item.to_dict(),
                 )
         except Exception as e:
-            raise RuntimeError("Error al cargar la colección: {}".format(e))
+            raise RuntimeError(f"Error uploading collection: {e}")
 
     def convert_layers(self, input_dir, output_dir):
         """
-        Convert items layers format and ensure the output directory exists.
+        Convert item layers format and ensure the output directory exists.
         """
         if not path.exists(output_dir):
             makedirs(output_dir)
-            logger.info(f"Carpeta creada: {output_dir}")
+            logger.info(f"Directory created: {output_dir}")
 
         for i, item in enumerate(self.items):
-            logger.info(f"Convirtiendo {item['input_file']} a COG")
+            logger.info(f"Converting {item['input_file']} to COG")
             raster.tif_to_cog(item["input_file"], input_dir, output_dir)
-            logger.info(f"Conversión de {item['input_file']} completada")
+            logger.info(f"Conversion of {item['input_file']} completed")
 
     def upload_layers(self, output_folder):
         """
-        Upload items layers to storage
+        Upload item layers to storage.
         """
         if self.items:
             for i, item in enumerate(self.items):
@@ -274,6 +253,4 @@ class Collection:
             try:
                 rmdir(output_folder)
             except Exception as e:
-                raise RuntimeError(
-                    "Error al eliminar el directorio: {}".format(e)
-                )
+                raise RuntimeError(f"Error removing directory: {e}")

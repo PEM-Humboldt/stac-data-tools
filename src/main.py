@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from src.utils.logging_config import logger
+from utils.logging_config import logger
 from utils import spec
 from collection import Collection
 from json import load
