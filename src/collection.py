@@ -29,7 +29,7 @@ class Collection:
 
         for item in raw_items:
             item_data = {}
-            file_path = "{}/{}".format(folder, item["assets"]["input_file"])
+            file_path = f"{folder}/{item['assets']['input_file']}"
             logger.info(f"Retrieving metadata from file: {file_path}")
 
             (
@@ -45,9 +45,7 @@ class Collection:
             item_data["id"] = item["id"]
             item_data["input_file"] = item["assets"]["input_file"]
             item_data["datetime"] = datetime(
-                int(item["year"]) + 1,
-                1,
-                1,
+                int(item["year"]) + 1, 1, 1
             ) - timedelta(days=1)
             item_data["properties"] = (
                 item["properties"] if "properties" in item else {}
@@ -55,10 +53,8 @@ class Collection:
 
             self.items.append(item_data)
             self.dates.append(item["year"])
-            self.longs.append(item_data["bbox"][0])
-            self.longs.append(item_data["bbox"][2])
-            self.lats.append(item_data["bbox"][1])
-            self.lats.append(item_data["bbox"][3])
+            self.longs.extend([item_data["bbox"][0], item_data["bbox"][2]])
+            self.lats.extend([item_data["bbox"][1], item_data["bbox"][3]])
 
         logger.info("Items loaded successfully")
 
@@ -98,8 +94,7 @@ class Collection:
             title=collection_data["title"],
             description=collection_data["description"],
             extent=pystac.Extent(
-                spatial=spatial_extent,
-                temporal=temporal_extent,
+                spatial=spatial_extent, temporal=temporal_extent
             ),
         )
 
@@ -135,7 +130,8 @@ class Collection:
             if not overwritten:
                 sysexit(
                     f"Collection {self.stac_collection.id} already exists.\n"
-                    "To overwrite it, rerun the program with the -o parameter.\n"
+                    "To overwrite it, rerun the program \n"
+                    "with the -o parameter.\n"
                     "For more help, use the -h parameter."
                 )
         else:
@@ -146,8 +142,12 @@ class Collection:
         """
         Remove collection from STAC server and Azure Blob Storage.
         """
-        collection_url = f"{self.stac_url}/collections/{self.stac_collection.id}"
-        logger.info(f"Attempting to remove collection {self.stac_collection.id}")
+        collection_url = (
+            f"{self.stac_url}/collections/{self.stac_collection.id}"
+        )
+        logger.info(
+            f"Attempting to remove collection {self.stac_collection.id}"
+        )
 
         try:
             # Retrieve collection items to remove their resources
@@ -156,12 +156,16 @@ class Collection:
                 for asset_key, asset_value in item["assets"].items():
                     parsed_url = parse.urlparse(asset_value["href"])
                     blob_url = parsed_url.path.split("/")[-1]
-                    logger.info(f"Deleting file: {blob_url} from Azure Blob Storage")
+                    logger.info(
+                        f"Deleting file: {blob_url} from Azure Blob Storage"
+                    )
                     self.storage.remove_file(blob_url)
 
             # Remove the collection from the STAC server
             stac_rest.delete(collection_url)
-            logger.info(f"Collection {self.stac_collection.id} removed successfully")
+            logger.info(
+                f"Collection {self.stac_collection.id} removed successfully"
+            )
 
         except Exception as e:
             logger.error(f"Error removing collection from server: {e}")
@@ -180,7 +184,9 @@ class Collection:
                 for asset_key, asset_value in item["assets"].items():
                     parsed_url = parse.urlparse(asset_value["href"])
                     blob_url = parsed_url.path.split("/")[-1]
-                    logger.info(f"Deleting file: {blob_url} from Azure Blob Storage")
+                    logger.info(
+                        f"Deleting file: {blob_url} from Azure Blob Storage"
+                    )
                     self.storage.remove_file(blob_url)
 
             stac_rest.delete(collection_url)

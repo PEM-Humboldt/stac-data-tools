@@ -66,7 +66,8 @@ def main():
     else:
         if not args.folder:
             sysexit(
-                "The --folder argument is required if a collection is not being removed."
+                "The --folder argument is required if \n"
+                "a collection is not being removed."
             )
 
         folder = "input/" + args.folder

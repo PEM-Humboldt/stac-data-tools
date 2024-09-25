@@ -4,7 +4,6 @@ from shapely.geometry import Polygon, mapping
 from osgeo import gdal
 
 
-
 def get_tif_metadata(file_name):
     """
     Extract TIF metadata such as bbox, footprint, crs, pixel_size_x and dtype
