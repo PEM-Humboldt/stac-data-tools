@@ -138,43 +138,19 @@ class Collection:
             collection_exist = False
         return collection_exist
 
-    def remove_collection(self):
+    def remove_collection(self, collection_name=None):
         """
         Remove collection from STAC server and Azure Blob Storage.
         """
-        collection_url = (
-            f"{self.stac_url}/collections/{self.stac_collection.id}"
-        )
-        logger.info(
-            f"Attempting to remove collection {self.stac_collection.id}"
-        )
+        collection_id = collection_name
+        if (
+            hasattr(self, "stac_collection")
+            and self.stac_collection.id is not None
+        ):
+            collection_id = self.stac_collection.id
+        if collection_id is None:
+            raise RuntimeError(f"Missing collection id to remove")
 
-        try:
-            # Retrieve collection items to remove their resources
-            items_collection = stac_rest.get(f"{collection_url}/items").json()
-            for item in items_collection["features"]:
-                for asset_key, asset_value in item["assets"].items():
-                    parsed_url = parse.urlparse(asset_value["href"])
-                    blob_url = parsed_url.path.split("/")[-1]
-                    logger.info(
-                        f"Deleting file: {blob_url} from Azure Blob Storage"
-                    )
-                    self.storage.remove_file(blob_url)
-
-            # Remove the collection from the STAC server
-            stac_rest.delete(collection_url)
-            logger.info(
-                f"Collection {self.stac_collection.id} removed successfully"
-            )
-
-        except Exception as e:
-            logger.error(f"Error removing collection from server: {e}")
-            raise RuntimeError(f"Error removing collection from server: {e}")
-
-    def remove_collection_by_name(self, collection_id):
-        """
-        Remove collection by name from STAC server and Azure Blob Storage.
-        """
         collection_url = f"{self.stac_url}/collections/{collection_id}"
         logger.info(f"Attempting to remove collection {collection_id}")
 
