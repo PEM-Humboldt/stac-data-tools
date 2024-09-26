@@ -16,7 +16,7 @@ class Collection:
         self.dates = []
         self.longs = []
         self.lats = []
-        self.stac_collection = []
+        self.stac_collection: pystac.Collection
         self.stac_items = []
         self.stac_url = get_settings().stac_url
         self.storage = storage.Storage()
@@ -40,7 +40,6 @@ class Collection:
                 item_data["dtype"],
             ) = raster.get_tif_metadata(file_path)
 
-            # Preparing item data
             item_data["year"] = item["year"]
             item_data["id"] = item["id"]
             item_data["input_file"] = item["assets"]["input_file"]
@@ -130,8 +129,7 @@ class Collection:
             if not overwritten:
                 sysexit(
                     f"Collection {self.stac_collection.id} already exists.\n"
-                    "To overwrite it, rerun the program \n"
-                    "with the -o parameter.\n"
+                    "To overwrite it, rerun the program with the -o parameter.\n"
                     "For more help, use the -h parameter."
                 )
         else:
@@ -212,6 +210,7 @@ class Collection:
         """
         if self.items:
             for i, item in enumerate(self.items):
+                logger.info(f"Uploading {item['input_file']}")
                 file_path = path.join(output_folder, item["input_file"])
 
                 collection_name = self.stac_collection.id
