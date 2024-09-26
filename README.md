@@ -19,22 +19,9 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
 1. Instala las dependencias: `pip install -r requirements.txt`
 * (Si el archivo anterior presenta error en su instalacion, es recomendable instalarlo con conda: conda install --file requirements.txt)
 
-## Preparación de los insumos
+## Configuración
 
-Para usar correctamente la herramienta se deben preparar los insumos, a continuación se describen los usos disponibles.
-
-<details>
-<summary>Cargar una colección</summary>
-
-Para cargar una nueva colección (incluyendo los items de la misma) se debe seguir los siguientes pasos:
-
-1.  Lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection.md](spec/collection.md).
-
-    El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
-
-</details>
-
-## Crear coleccion
+Antes de usar la herramienta segurese de realizar lo siguiente:
 
 1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
     ```
@@ -42,29 +29,41 @@ Para cargar una nueva colección (incluyendo los items de la misma) se debe segu
     ABS_STRING="" # Cadena de conexión a Azure Blob Storage
     ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
     ```
-* (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
-1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado en la sección [Preparación de los insumos](#preparacion-de-los-insumos) que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
+    (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
 
-1. Ejecutar el script de validación y carga de la colección con los siguientes parámetros:
 
-    - -f --folder # Directorio dentro de input que contiene el archivo collection.json que describe la colección y los archivos correspondientes a las capas
-    - -c --collection # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json (opcional)
-    - -v --validate-only # Si es verdadero únicamente se valida la colección pero no se carga (opcional)
-    - -o --overwrite # Sobrescribe una colección ya existente (opcional)
+## Uso
+### Crear colección
 
+<details>
+<summary>Preparación de los insumos</summary>
+
+Para cargar una nueva colección (incluyendo los items de la misma), lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection.md](spec/collection.md).
+
+El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
+</details>
+
+Para crear una colección siga los siguientes pasos:
+
+1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado previamente en la sección `Preparación de los insumos` que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
+
+1. Ejecutar el script de carga de la siguiente forma:
     ```
     python src/main.py -f folder_name -c collection_name
     ```
-## Eliminar coleccion
+    Tenga en cuenta los siguientes parámetros:
+    - -f, --folder # Directorio dentro de input que contiene el archivo collection.json y los archivos correspondientes a las capas
+    - -c, --collection (opcional) # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json 
+    - -v, --validate-only (opcional) # Si es verdadero únicamente se valida la colección pero no se carga 
+    - -o, --overwrite (opcional) # Sobrescribe una colección ya existente 
+### Eliminar coleccion
 
 1. Ejecutar el script de eliminacion de la coleccion
-
-   - --remove-collection # Comando para remover la coleccion del azure
-
    ```
    python src/main.py --remove-collection LossPersistance
-
    ```
+   Tenga en cuenta los siguientes parámetros
+   - --remove-collection # Comando para remover la coleccion del azure
 
 ## Revisión y formato de estilos para el código
 
