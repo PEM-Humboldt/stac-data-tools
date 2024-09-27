@@ -1,9 +1,30 @@
 from argparse import ArgumentParser
+
+from utils.logging_config import logger
 from utils import spec
 from collection import Collection
 from json import load
 from sys import exit as sysexit
 from os import getcwd
+
+
+def create_collection_local(collection, input_folder, collection_name):
+    spec.validate_input_folder(input_folder)
+
+    with open(f"{input_folder}/collection.json", "r") as f:
+        data = load(f)
+        raw_items = [item for item in data["items"]]
+
+    spec.validate_format(data)
+    spec.validate_layers(input_folder, raw_items)
+
+    collection.load_items(input_folder, raw_items)
+
+    collection.create_collection(collection_name, data)
+    logger.info("Collection created successfully.")
+
+    collection.create_items()
+    logger.info("Items created successfully.")
 
 
 def main():
@@ -12,32 +33,26 @@ def main():
     """
 
     parser = ArgumentParser()
-    parser.add_argument(
+    sub_parsers = parser.add_subparsers(dest="command")
+
+    create_parser = sub_parsers.add_parser(
+        "create", help="Create a new collection"
+    )
+    create_parser.add_argument(
         "-f",
         "--folder",
         dest="folder",
         help="Collection folder",
         required=True,
     )
-
-    parser.add_argument(
+    create_parser.add_argument(
         "-c",
         "--collection",
         dest="collection",
         help="Collection name",
         required=False,
     )
-
-    parser.add_argument(
-        "-v",
-        "--validate-only",
-        dest="validation",
-        action="store_true",
-        help="Only validation",
-        required=False,
-    )
-
-    parser.add_argument(
+    create_parser.add_argument(
         "-o",
         "--overwrite",
         dest="overwrite",
@@ -46,36 +61,72 @@ def main():
         required=False,
     )
 
+    validate_parser = sub_parsers.add_parser(
+        "validate", help="Validate collection specification"
+    )
+    validate_parser.add_argument(
+        "-f",
+        "--folder",
+        dest="folder",
+        help="Collection folder",
+        required=True,
+    )
+    validate_parser.add_argument(
+        "-c",
+        "--collection",
+        dest="collection",
+        help="Collection name",
+        required=False,
+    )
+
+    remove_parser = sub_parsers.add_parser(
+        "remove", help="Remove indicated collection"
+    )
+    remove_parser.add_argument(
+        "-c",
+        "--collection",
+        dest="collection",
+        help="Collection name",
+        required=True,
+    )
+
     args = parser.parse_args()
-    folder = "input/" + args.folder
-    collection_name = args.collection
-    validation = args.validation
-    overwrite = args.overwrite
 
-    spec.validate_input_folder(folder)
+    if args.command == "create":
+        collection = Collection()
+        input_folder = f"input/{args.folder}"
+        create_collection_local(collection, input_folder, args.collection)
 
-    with open("{}/collection.json".format(folder), "r") as f:
-        data = load(f)
-        raw_items = [item for item in data["items"]]
+        if collection.check_collection(args.overwrite):
+            collection.remove_collection()
+            sysexit("Previous collection removed successfully.")
 
-    spec.validate_format(data)
-    spec.validate_layers(folder, raw_items)
+        output_dir = f"{getcwd()}/output/{args.folder}"
+        collection.convert_layers(input_folder, output_dir)
+        logger.info("Layers converted successfully.")
 
-    collection = Collection()
-    collection.load_items(folder, raw_items)
-    collection_id = collection.create_collection(collection_name, data)
-    collection.create_items()
+        collection.upload_layers(output_dir)
+        logger.info("Layers uploaded successfully.")
 
-    if validation:
-        sysexit("Successful validation.")
+        collection.upload_collection()
+        logger.info("Collection uploaded successfully.")
 
-    if collection.check_collection(overwrite):
-        collection.remove_collection()
+        sysexit("Process completed successfully.")
 
-    output_dir = f"{getcwd()}/output/{collection_id}"
-    collection.convert_layers(folder, output_dir)
-    collection.upload_layers(output_dir)
-    collection.upload_collection()
+    elif args.command == "validate":
+        collection = Collection()
+        create_collection_local(
+            collection, f"input/{args.folder}", args.collection
+        )
+        sysexit("Validation successful.")
+
+    elif args.command == "remove":
+        collection = Collection()
+        collection.remove_collection(args.collection)
+        sysexit("Collection successfully removed.")
+
+    else:
+        sysexit("No command used. Type -h for help")
 
 
 if __name__ == "__main__":
