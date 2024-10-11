@@ -156,12 +156,11 @@ class Collection:
             items_collection = stac_rest.get(f"{collection_url}/items").json()
             for item in items_collection["features"]:
                 for asset_key, asset_value in item["assets"].items():
-                    parsed_url = parse.urlparse(asset_value["href"])
-                    blob_url = parsed_url.path.split("/")[-1]
+                    url = asset_value["href"]
                     logger.info(
-                        f"Deleting file: {blob_url} from Azure Blob Storage"
+                        f"Deleting file: {url} from Azure Blob Storage"
                     )
-                    self.storage.remove_file(blob_url)
+                    self.storage.remove_file(url)
 
             stac_rest.delete(collection_url)
             logger.info(f"Collection {collection_id} removed successfully")
@@ -175,20 +174,32 @@ class Collection:
         Upload the collection and items to the STAC server.
         """
         try:
+            logger.info(
+                f"Uploading collection: {self.stac_collection.to_dict()}"
+            )
+
             stac_rest.post_or_put(
                 parse.urljoin(self.stac_url, "/collections"),
                 self.stac_collection.to_dict(),
             )
+            logger.info(
+                f"Collection {self.stac_collection.id} uploaded successfully"
+            )
 
             for item in self.stac_items:
-                stac_rest.post_or_put(
+                item_dict = item.to_dict()
+                item_response = stac_rest.post_or_put(
                     parse.urljoin(
                         self.stac_url,
                         f"/collections/{self.stac_collection.id}/items",
                     ),
-                    item.to_dict(),
+                    item_dict,
+                )
+                logger.info(
+                    f"Item upload response: {item_response.status_code}"
                 )
         except Exception as e:
+            logger.error(f"Error uploading collection: {e}")
             raise RuntimeError(f"Error uploading collection: {e}")
 
     def convert_layers(self, input_dir, output_dir):
