@@ -14,12 +14,11 @@ def post_or_put(url: str, data: dict):
             response = requests.put(url, json=data)
 
         response.raise_for_status()
-
+        return response
     except requests.exceptions.RequestException as e:
         logger.error(f"Error during post or put: {e}")
-        return None
+        raise e
 
-    return response
 
 
 def get(url: str):

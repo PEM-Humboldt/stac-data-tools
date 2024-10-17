@@ -72,24 +72,34 @@ Para cargar una colección de capas, ejecuta el siguiente comando:
 python src/main.py create -f folder_name [-c collection_name] [-v] [-o]
 ```
 
-### Parámetros:
-
-- `-f`, `--folder` (obligatorio): Especifica el directorio dentro de la carpeta `input` que contiene el archivo `collection.json` y los archivos correspondientes a las capas.
-  
-- `-c`, `--collection` (opcional): Define el nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
-  
-- `-v`, `--validate-only` (opcional): Si se incluye, solo se validará la colección sin cargarla.
-
-- `-o`, `--overwrite` (opcional): Sobrescribe una colección existente si ya ha sido cargada previamente.
+# Parámetros:
+- `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
+- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el id del archivo collection.json.
 
 ### Ejemplo:
 
+* Especificando un nombre de colección
 ```
 python src/main.py create -f my_folder -c MyCollection
+
+o
+
+python src/main.py create --folder my_folder --collection MyCollection
+
 ```
 
 Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`
 
+* Usando el id del archivo collection.json:
+
+```
+python src/main.py create -f my_folder
+
+o
+
+python src/main.py create --folder my_folder
+
+```
 ---
 
 ## Validar una Colección
@@ -100,10 +110,19 @@ Si solo deseas validar una colección sin cargarla, puedes ejecutar:
 python src/main.py validate -f folder_name [-c collection_name]
 ```
 
+# Parámetros:
+- `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
+- `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el id del archivo collection.json.
+
 ### Ejemplo:
 
 ```
 python src/main.py validate -f my_folder
+
+o
+
+python src/main.py validate --folder my_folder
+
 ```
 
 Este comando validará los archivos de la colección en el directorio `input/my_folder` sin cargarlos.
@@ -112,7 +131,7 @@ Este comando validará los archivos de la colección en el directorio `input/my_
 
 ## Eliminar una Colección
 
-Para eliminar una colección existente de Azure, ejecuta el siguiente comando:
+Para eliminar una colección de STAC y de Azure, ejecuta el siguiente comando:
 
 ```
 python src/main.py remove --collection collection_name
@@ -120,12 +139,17 @@ python src/main.py remove --collection collection_name
 
 ### Parámetros:
 
-- `--collection` (obligatorio): Nombre de la colección a eliminar.
+- `-c, --collection` (obligatorio): Nombre de la colección a eliminar.
 
 ### Ejemplo:
 
 ```
+python src/main.py remove -c my_collection
+
+o
+
 python src/main.py remove --collection my_collection
+
 ```
 
 Este comando eliminará la colección `my_collection` del sistema.
