@@ -20,7 +20,6 @@ def post_or_put(url: str, data: dict):
         raise e
 
 
-
 def get(url: str):
     """
     Get request
