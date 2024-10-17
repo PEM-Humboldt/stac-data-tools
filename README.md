@@ -69,7 +69,7 @@ Para crear una colección siga los siguientes pasos:
 Para cargar una colección de capas, ejecuta el siguiente comando:
 
 ```
-python src/main.py create -f folder_name [-c collection_name] [-v] [-o]
+python src/main.py create -f folder_name [-c collection_name] [-o]
 ```
 
 # Parámetros:
