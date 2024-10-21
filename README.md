@@ -45,7 +45,7 @@ Antes de usar la herramienta segurese de realizar lo siguiente:
 
 ## Uso
 
-### Crear colección
+### Preparacion
 
 <details>
 <summary>Preparación de los insumos</summary>
@@ -60,24 +60,101 @@ Para crear una colección siga los siguientes pasos:
 
 1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado previamente en la sección `Preparación de los insumos` que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
 
-1. Ejecutar el script de carga de la siguiente forma:
-   ```
-   python src/main.py -f folder_name -c collection_name
-   ```
-   Tenga en cuenta los siguientes parámetros:
-   - -f, --folder # Directorio dentro de input que contiene el archivo collection.json y los archivos correspondientes a las capas
-   - -c, --collection (opcional) # Nombre de la colección, si no se establece se toma como nombre el id definido en el archivo collection.json
-   - -v, --validate-only (opcional) # Si es verdadero únicamente se valida la colección pero no se carga
-   - -o, --overwrite (opcional) # Sobrescribe una colección ya existente
+---
 
-### Eliminar coleccion
+# Instrucciones de Uso
 
-1. Ejecutar el script de eliminacion de la coleccion
-   ```
-   python src/main.py --remove-collection LossPersistance
-   ```
-   Tenga en cuenta los siguientes parámetros
-   - --remove-collection # Comando para remover la coleccion del azure
+## Cargar una Colección
+
+Para cargar una colección de capas, ejecuta el siguiente comando:
+
+```
+python src/main.py create -f folder_name [-c collection_name] [-o]
+```
+
+### Parámetros:
+- `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
+- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el id del archivo collection.json.
+
+### Ejemplo:
+
+* Especificando un nombre de colección
+```
+python src/main.py create -f my_folder -c MyCollection
+
+o
+
+python src/main.py create --folder my_folder --collection MyCollection
+
+```
+
+Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`
+
+* Usando el id del archivo collection.json:
+
+```
+python src/main.py create -f my_folder
+
+o
+
+python src/main.py create --folder my_folder
+
+```
+---
+
+## Validar una Colección
+
+Si solo deseas validar una colección sin cargarla, puedes ejecutar:
+
+```
+python src/main.py validate -f folder_name [-c collection_name]
+```
+
+### Parámetros:
+- `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
+- `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el id del archivo collection.json.
+
+### Ejemplo:
+
+```
+python src/main.py validate -f my_folder
+
+o
+
+python src/main.py validate --folder my_folder
+
+```
+
+Este comando validará los archivos de la colección en el directorio `input/my_folder` sin cargarlos.
+
+---
+
+## Eliminar una Colección
+
+Para eliminar una colección de STAC y de Azure, ejecuta el siguiente comando:
+
+```
+python src/main.py remove --collection collection_name
+```
+
+### Parámetros:
+
+- `-c, --collection` (obligatorio): Nombre de la colección a eliminar.
+
+### Ejemplo:
+
+```
+python src/main.py remove -c my_collection
+
+o
+
+python src/main.py remove --collection my_collection
+
+```
+
+Este comando eliminará la colección `my_collection` del sistema.
+
+---
 
 ## Revisión y formato de estilos para el código
 
