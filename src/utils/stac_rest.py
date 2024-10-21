@@ -1,18 +1,23 @@
 import requests
 
+from utils.logging_config import logger
+
 
 def post_or_put(url: str, data: dict):
     """
     Post or put data to url
     """
+    try:
+        response = requests.post(url, json=data)
 
-    response = requests.post(url, json=data)
-    if response.status_code == 409:
-        response = requests.put(url, json=data)
-        if not response.status_code == 404:
-            response.raise_for_status()
-    else:
+        if response.status_code == 409:
+            response = requests.put(url, json=data)
+
         response.raise_for_status()
+        return response
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error during post or put: {e}")
+        raise e
 
 
 def get(url: str):

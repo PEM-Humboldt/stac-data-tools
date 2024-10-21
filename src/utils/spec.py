@@ -20,18 +20,20 @@ def validate_format(data):
     """
     with open("spec/collection.json", "r") as f:
         schema = load(f)
-
     try:
         validate(instance=data, schema=schema)
-        metadata_properties_lengths = [
-            len(data["metadata"]["properties"][key])
-            for key in data["metadata"]["properties"]
-        ]
-        if not len(set(metadata_properties_lengths)) == 1:
-            raise FormatError(
-                "Los elementos de la propiedad metadata properties no tienen "
-                "la misma longitud."
-            )
+
+        if "metadata" in data and "properties" in data["metadata"]:
+            metadata_properties_lengths = [
+                len(data["metadata"]["properties"][key])
+                for key in data["metadata"]["properties"]
+            ]
+            if len(set(metadata_properties_lengths)) != 1:
+                raise FormatError(
+                    "Error en las propiedades de la colección: "
+                    "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
+                )
+
     except Exception as e:
         raise FormatError(
             f"El archivo no cumple con el formato JSON. Detalles: {e}"

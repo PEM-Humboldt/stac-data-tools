@@ -1,5 +1,5 @@
 {
-  "id": "colombia_pp",
+  "id": "LossPersistence",
   "title": "Time series of the binary presence of forests in Colombia",
   "description": "Time series of the binary presence of forests in Colombia. Bosque/Non Bosque. With 1 indicating the presence of forests.",
   "metadata": {
@@ -11,31 +11,31 @@
   },
   "items": [
     {
-      "id": "Colombia_pp_2000-2005",
+      "id": "2000-2005",
       "year": "2005",
       "assets": {
-        "input_file": "Colombia_pp_2000-2005.tif"
+        "input_file": "2000-2005.tif"
       }
     },
     {
-      "id": "Colombia_pp_2006-2010",
+      "id": "2006-2010",
       "year": "2010",
       "assets": {
-        "input_file": "Colombia_pp_2006-2010.tif"
+        "input_file": "2006-2010.tif"
       }
     },
     {
-      "id": "Colombia_pp_2011-2015",
+      "id": "2011-2015",
       "year": "2015",
       "assets": {
-        "input_file": "Colombia_pp_2011-2015.tif"
+        "input_file": "2011-2015.tif"
       }
     },
     {
-      "id": "Colombia_pp_2016-2021",
-      "year": "2010",
+      "id": "2016-2021",
+      "year": "2021",
       "assets": {
-        "input_file": "Colombia_pp_2016-2021.tif"
+        "input_file": "2016-2021.tif"
       }
     }
   ]
