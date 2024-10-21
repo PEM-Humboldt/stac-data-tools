@@ -18,20 +18,44 @@ def validate_format(data):
     """
     Check if the collection.json file has the defined format
     """
+    print("Cargando el esquema JSON de la colección...")
     with open("spec/collection.json", "r") as f:
         schema = load(f)
-
     try:
         validate(instance=data, schema=schema)
-        metadata_properties_lengths = [
-            len(data["metadata"]["properties"][key])
-            for key in data["metadata"]["properties"]
-        ]
-        if not len(set(metadata_properties_lengths)) == 1:
-            raise FormatError(
-                "Los elementos de la propiedad metadata properties no tienen "
-                "la misma longitud."
-            )
+
+        if "metadata" in data and "properties" in data["metadata"]:
+            metadata_properties_lengths = [
+                len(data["metadata"]["properties"][key])
+                for key in data["metadata"]["properties"]
+            ]
+            if len(set(metadata_properties_lengths)) != 1:
+                raise FormatError(
+                    "Error en las propiedades de la colección: "
+                    "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
+                )
+
+        for item in data.get("items", []):
+            if "properties" not in item:
+                raise FormatError(
+                    f"El item '{item['id']}' no contiene el campo 'properties'."
+                )
+
+            item_properties_lengths = []
+            for key in item["properties"]:
+                if not isinstance(item["properties"][key], list):
+                    raise FormatError(
+                        f"El item '{item['id']}' tiene 'properties.{key}' que no es una lista."
+                    )
+                length = len(item["properties"][key])
+                item_properties_lengths.append(length)
+
+            if len(set(item_properties_lengths)) != 1:
+                raise FormatError(
+                    f"Error en las propiedades del item '{item['id']}': "
+                    "Las propiedades no tienen la misma longitud."
+                )
+
     except Exception as e:
         raise FormatError(
             f"El archivo no cumple con el formato JSON. Detalles: {e}"
