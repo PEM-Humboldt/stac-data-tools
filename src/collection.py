@@ -95,7 +95,9 @@ class Collection:
             extent=pystac.Extent(
                 spatial=spatial_extent, temporal=temporal_extent
             ),
-            extra_fields=collection_data["metadata"]["properties"],
+            extra_fields={
+                "metadata": collection_data["metadata"]
+            },
         )
 
         self.stac_collection.validate()
