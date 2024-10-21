@@ -18,7 +18,6 @@ def validate_format(data):
     """
     Check if the collection.json file has the defined format
     """
-    print("Cargando el esquema JSON de la colección...")
     with open("spec/collection.json", "r") as f:
         schema = load(f)
     try:
@@ -33,27 +32,6 @@ def validate_format(data):
                 raise FormatError(
                     "Error en las propiedades de la colección: "
                     "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
-                )
-
-        for item in data.get("items", []):
-            if "properties" not in item:
-                raise FormatError(
-                    f"El item '{item['id']}' no contiene el campo 'properties'."
-                )
-
-            item_properties_lengths = []
-            for key in item["properties"]:
-                if not isinstance(item["properties"][key], list):
-                    raise FormatError(
-                        f"El item '{item['id']}' tiene 'properties.{key}' que no es una lista."
-                    )
-                length = len(item["properties"][key])
-                item_properties_lengths.append(length)
-
-            if len(set(item_properties_lengths)) != 1:
-                raise FormatError(
-                    f"Error en las propiedades del item '{item['id']}': "
-                    "Las propiedades no tienen la misma longitud."
                 )
 
     except Exception as e:

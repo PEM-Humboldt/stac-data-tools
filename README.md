@@ -72,7 +72,7 @@ Para cargar una colección de capas, ejecuta el siguiente comando:
 python src/main.py create -f folder_name [-c collection_name] [-o]
 ```
 
-# Parámetros:
+### Parámetros:
 - `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
 - `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el id del archivo collection.json.
 
@@ -110,7 +110,7 @@ Si solo deseas validar una colección sin cargarla, puedes ejecutar:
 python src/main.py validate -f folder_name [-c collection_name]
 ```
 
-# Parámetros:
+### Parámetros:
 - `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
 - `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el id del archivo collection.json.
 

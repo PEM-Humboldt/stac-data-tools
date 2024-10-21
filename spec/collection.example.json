@@ -13,11 +13,6 @@
     {
       "id": "2000-2005",
       "year": "2005",
-      "properties": {
-        "values": [0, 1, 2],
-        "colors": ["#c65453", "#92ab58", "#c5b599"],
-        "classes": ["Perdida", "Persistencia", "No Bosque"]
-      },
       "assets": {
         "input_file": "2000-2005.tif"
       }
@@ -25,11 +20,6 @@
     {
       "id": "2006-2010",
       "year": "2010",
-      "properties": {
-        "values": [0, 1, 2],
-        "colors": ["#c65453", "#92ab58", "#c5b599"],
-        "classes": ["Perdida", "Persistencia", "No Bosque"]
-      },
       "assets": {
         "input_file": "2006-2010.tif"
       }
@@ -37,11 +27,6 @@
     {
       "id": "2011-2015",
       "year": "2015",
-      "properties": {
-        "values": [0, 1, 2],
-        "colors": ["#c65453", "#92ab58", "#c5b599"],
-        "classes": ["Perdida", "Persistencia", "No Bosque"]
-      },
       "assets": {
         "input_file": "2011-2015.tif"
       }
@@ -49,11 +34,6 @@
     {
       "id": "2016-2021",
       "year": "2021",
-      "properties": {
-        "values": [0, 1, 2],
-        "colors": ["#c65453", "#92ab58", "#c5b599"],
-        "classes": ["Perdida", "Persistencia", "No Bosque"]
-      },
       "assets": {
         "input_file": "2016-2021.tif"
       }

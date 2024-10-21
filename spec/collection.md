@@ -18,7 +18,6 @@ La descripción de las colecciones a cargar se debe hacer siguiendo la siguiente
 | _[item].properties_ | object | objeto que relaciona tuplas de información a los valores del item. | No | Todos los atributos de este objeto son arreglos y __deben tener la misma cantidad de elementos__ |
 | _[item].properties.values_ | array | tupla con los diferentes valores que pueden existir en el raster | Sí | Es requerido si existe el atributo _[item].properties_ |
 | _[item].properties.classes_ | array | tupla con los nombres de las clases correspondientes a los valores de _[item].properties.values_ | Sí | Es requerido si existe el atributo _[item].properties_ |
-| _[item].properties.colors_ | array | tupla con los colores asociados a los valores y clases del item | No | Se utiliza para representar visualmente cada valor; Ejemplo: ["#c65453", "#92ab58", "#c5b599"] |
 | _[item].properties.[otro]_ | array | tupla con [otro] datos para complementar la interpretación de los valores que pueden existir en el raster de cada item | No | |
 | _[item].assets_ |  object | Información de los assets del item | Sí | Hace referencia principalmente a los archivos asociados al item |
 | _[item].assets.input_file_ | string | nombre del archivo del raster correspondiente al item | Sí | |
