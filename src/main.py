@@ -1,11 +1,16 @@
 from argparse import ArgumentParser
 
 from utils.logging_config import logger
+from pypgstac.db import settings
 from utils import spec
+from utils.auth import authenticate
 from collection import Collection
 from json import load
 from sys import exit as sysexit
 from os import getcwd
+from config import get_settings
+
+settings = get_settings()
 
 
 def create_collection_local(collection, input_folder, collection_name):
@@ -20,6 +25,7 @@ def create_collection_local(collection, input_folder, collection_name):
 
     collection.load_items(input_folder, raw_items)
 
+
     collection.create_collection(collection_name, data)
     logger.info("Collection created successfully.")
 
@@ -28,105 +34,64 @@ def create_collection_local(collection, input_folder, collection_name):
 
 
 def main():
-    """
-    Read arguments and start data validation.
-    """
 
-    parser = ArgumentParser()
-    sub_parsers = parser.add_subparsers(dest="command")
+    parser = ArgumentParser(description="STAC Collection Manager")
+    parser.add_argument("-u", "--username", required=True, help="Username for authentication")
+    parser.add_argument("-p", "--password", required=True, help="Password for authentication")
+    subparsers = parser.add_subparsers(dest="command", help="Commands")
 
-    create_parser = sub_parsers.add_parser(
-        "create", help="Create a new collection"
-    )
-    create_parser.add_argument(
-        "-f",
-        "--folder",
-        dest="folder",
-        help="Collection folder",
-        required=True,
-    )
-    create_parser.add_argument(
-        "-c",
-        "--collection",
-        dest="collection",
-        help="Collection name",
-        required=False,
-    )
-    create_parser.add_argument(
-        "-o",
-        "--overwrite",
-        dest="overwrite",
-        action="store_true",
-        help="Overwrite existing collection",
-        required=False,
-    )
+    # Create Command
+    create_parser = subparsers.add_parser("create", help="Create a collection")
+    create_parser.add_argument("-f", "--folder", required=True, help="Input folder")
+    create_parser.add_argument("-c", "--collection", help="Collection name")
+    create_parser.add_argument("-o", "--overwrite", action="store_true", help="Overwrite")
 
-    validate_parser = sub_parsers.add_parser(
-        "validate", help="Validate collection specification"
-    )
-    validate_parser.add_argument(
-        "-f",
-        "--folder",
-        dest="folder",
-        help="Collection folder",
-        required=True,
-    )
-    validate_parser.add_argument(
-        "-c",
-        "--collection",
-        dest="collection",
-        help="Collection name",
-        required=False,
-    )
+    # Validate Command
+    validate_parser = subparsers.add_parser("validate", help="Validate a collection")
+    validate_parser.add_argument("-f", "--folder", required=True, help="Input folder")
+    validate_parser.add_argument("-c", "--collection", help="Collection name")
 
-    remove_parser = sub_parsers.add_parser(
-        "remove", help="Remove indicated collection"
-    )
-    remove_parser.add_argument(
-        "-c",
-        "--collection",
-        dest="collection",
-        help="Collection name",
-        required=True,
-    )
+    # Remove Command
+    remove_parser = subparsers.add_parser("remove", help="Remove a collection")
+    remove_parser.add_argument("-c", "--collection", required=True, help="Collection name")
 
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
 
-    if args.command == "create":
-        collection = Collection()
-        input_folder = f"input/{args.folder}"
-        create_collection_local(collection, input_folder, args.collection)
+        token = authenticate(args.username, args.password, settings.stac_url, settings.auth_url)
 
-        if collection.check_collection(args.overwrite):
-            collection.remove_collection()
-            sysexit("Previous collection removed successfully.")
+        collection = Collection(token)
 
-        output_dir = f"{getcwd()}/output/{args.folder}"
-        collection.convert_layers(input_folder, output_dir)
-        logger.info("Layers converted successfully.")
+        if args.command == "create":
+            input_folder = f"input/{args.folder}"
+            create_collection_local(collection, input_folder, args.collection)
 
-        collection.upload_layers(output_dir)
-        logger.info("Layers uploaded successfully.")
+            if collection.check_collection(args.overwrite):
+                collection.remove_collection()
+                logger.info("Previous collection removed.")
 
-        collection.upload_collection()
-        logger.info("Collection uploaded successfully.")
+            output_dir = f"{getcwd()}/output/{args.folder}"
+            collection.convert_layers(input_folder, output_dir)
+            logger.info("Layers converted successfully.")
 
-        sysexit("Process completed successfully.")
+            collection.upload_layers(output_dir)
+            collection.upload_collection()
+            logger.info("Collection uploaded successfully.")
 
-    elif args.command == "validate":
-        collection = Collection()
-        create_collection_local(
-            collection, f"input/{args.folder}", args.collection
-        )
-        sysexit("Validation successful.")
+        elif args.command == "validate":
+            input_folder = f"input/{args.folder}"
+            create_collection_local(collection, input_folder, args.collection)
+            logger.info("Validation successful.")
 
-    elif args.command == "remove":
-        collection = Collection()
-        collection.remove_collection(args.collection)
-        sysexit("Collection successfully removed.")
+        elif args.command == "remove":
+            collection.remove_collection(args.collection)
+            logger.info("Collection removed successfully.")
 
-    else:
-        sysexit("No command used. Type -h for help")
+        else:
+            sysexit("No command used. Type -h for help")
+
+    except SystemExit as e:
+        logger.info("Error en los argumentos:", e)
 
 
 if __name__ == "__main__":

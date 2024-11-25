@@ -64,12 +64,27 @@ Para crear una colección siga los siguientes pasos:
 
 # Instrucciones de Uso
 
+## Autenticación Obligatoria
+
+Todos los comandos requieren autenticación con las opciones `-u` y `-p` para proporcionar el nombre de usuario y la contraseña.
+
+### Parámetros Globales:
+- `-u, --username` (obligatorio): Nombre de usuario para autenticación.
+- `-p, --password` (obligatorio): Contraseña para autenticación.
+
+Ejemplo de autenticación:
+
+
+python src/main.py -u admin1 -p admin [subcomando] [opciones]
+
+---
+
 ## Cargar una Colección
 
 Para cargar una colección de capas, ejecuta el siguiente comando:
 
 ```
-python src/main.py create -f folder_name [-c collection_name] [-o]
+python src/main.py -u username -p password create -f folder_name [-c collection_name]
 ```
 
 ### Parámetros:
@@ -80,12 +95,11 @@ python src/main.py create -f folder_name [-c collection_name] [-o]
 
 * Especificando un nombre de colección
 ```
-python src/main.py create -f my_folder -c MyCollection
+python src/main.py -u username -p password create -f my_folder -c MyCollection
 
 o
 
-python src/main.py create --folder my_folder --collection MyCollection
-
+python src/main.py -u username -p password create --folder my_folder --collection MyCollection
 ```
 
 Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`
@@ -93,11 +107,11 @@ Este comando creará la colección `MyCollection` a partir de los archivos en el
 * Usando el id del archivo collection.json:
 
 ```
-python src/main.py create -f my_folder
+python src/main.py -u username -p password create -f my_folder
 
 o
 
-python src/main.py create --folder my_folder
+python src/main.py -u username -p password create --folder my_folder
 
 ```
 ---
@@ -107,7 +121,7 @@ python src/main.py create --folder my_folder
 Si solo deseas validar una colección sin cargarla, puedes ejecutar:
 
 ```
-python src/main.py validate -f folder_name [-c collection_name]
+python src/main.py -u username -p password validate -f folder_name [-c collection_name]
 ```
 
 ### Parámetros:
@@ -117,12 +131,11 @@ python src/main.py validate -f folder_name [-c collection_name]
 ### Ejemplo:
 
 ```
-python src/main.py validate -f my_folder
+python src/main.py -u username -p password validate -f my_folder
 
 o
 
-python src/main.py validate --folder my_folder
-
+python src/main.py -u username -p password validate --folder my_folder
 ```
 
 Este comando validará los archivos de la colección en el directorio `input/my_folder` sin cargarlos.
@@ -134,7 +147,7 @@ Este comando validará los archivos de la colección en el directorio `input/my_
 Para eliminar una colección de STAC y de Azure, ejecuta el siguiente comando:
 
 ```
-python src/main.py remove --collection collection_name
+python src/main.py -u username -p password remove --collection collection_name
 ```
 
 ### Parámetros:
@@ -144,12 +157,11 @@ python src/main.py remove --collection collection_name
 ### Ejemplo:
 
 ```
-python src/main.py remove -c my_collection
+python src/main.py -u username -p password remove -c my_collection
 
 o
 
-python src/main.py remove --collection my_collection
-
+python src/main.py -u username -p password remove --collection my_collection
 ```
 
 Este comando eliminará la colección `my_collection` del sistema.
@@ -168,7 +180,6 @@ Para hacer formateo de estilos automático se utiliza el paquete black. Al ejecu
 
 ```
 black src
-
 ```
 
 ## Documentación
