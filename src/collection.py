@@ -11,7 +11,7 @@ from config import get_settings
 
 class Collection:
 
-    def __init__(self,token: str):
+    def __init__(self, token: str):
         self.items = []
         self.dates = []
         self.longs = []
@@ -97,9 +97,7 @@ class Collection:
             extent=pystac.Extent(
                 spatial=spatial_extent, temporal=temporal_extent
             ),
-            extra_fields={
-                "metadata": collection_data["metadata"]
-            },
+            extra_fields={"metadata": collection_data["metadata"]},
         )
 
         self.stac_collection.validate()
@@ -128,7 +126,7 @@ class Collection:
         Check if the collection exists and if it's going to be overwritten.
         """
         url = f"{self.stac_url}/collections/{self.stac_collection.id}"
-        exist = stac_rest.check_resource(url,headers=self.headers)
+        exist = stac_rest.check_resource(url, headers=self.headers)
         if exist:
             collection_exist = True
             if not overwritten:
@@ -158,7 +156,9 @@ class Collection:
         logger.info(f"Attempting to remove collection {collection_id}")
 
         try:
-            items_response = stac_rest.get(f"{collection_url}/items", headers=self.headers)
+            items_response = stac_rest.get(
+                f"{collection_url}/items", headers=self.headers
+            )
             items = items_response.json().get("features", [])
 
             for item in items:
@@ -200,7 +200,7 @@ class Collection:
                         f"/collections/{self.stac_collection.id}/items",
                     ),
                     item_dict,
-                    headers=self.headers
+                    headers=self.headers,
                 )
                 logger.info(
                     f"Item upload response: {item_response.status_code}"
