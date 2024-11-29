@@ -91,7 +91,6 @@ def main():
         args = parser.parse_args()
 
         token = authenticate()
-        print("Este es el token:" + token)
 
         collection = Collection(token)
 
