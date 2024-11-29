@@ -1,13 +1,21 @@
 import requests
 from utils.logging_config import logger
 from sys import exit as sysexit
+from config import get_settings
+
+settings = get_settings()
 
 
-def authenticate(username, password, stac_url, auth_url):
+def authenticate():
     """
     Authenticate against the authentication service and retrieve a token.
     """
     try:
+        username = settings.username_auth
+        password = settings.password_auth
+        stac_url = settings.stac_url
+        auth_url = settings.auth_url
+
         auth_data = {"username": username, "password": password}
 
         response = requests.post(f"{stac_url}{auth_url}", data=auth_data)
