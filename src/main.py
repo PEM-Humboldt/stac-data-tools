@@ -8,7 +8,6 @@ from sys import exit as sysexit
 from os import getcwd
 
 
-
 def create_collection_local(collection, input_folder, collection_name):
     spec.validate_input_folder(input_folder)
 
@@ -90,7 +89,6 @@ def main():
 
     try:
         args = parser.parse_args()
-
 
         token = authenticate()
         print("Este es el token:" + token)
