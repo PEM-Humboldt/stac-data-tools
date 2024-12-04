@@ -111,7 +111,9 @@ def main():
         sysexit("Process completed successfully.")
 
     elif args.command == "validate":
-        create_collection_local(collection, f"input/{args.folder}", args.collection)
+        create_collection_local(
+            collection, f"input/{args.folder}", args.collection
+        )
         logger.info("Validation successful.")
 
     elif args.command == "remove":

@@ -21,7 +21,7 @@ def authenticate():
         auth_data = {"username": username, "password": password}
 
         url = build_url(stac_url, auth_url, args_dict={})
-        response =  requests.post(url, data=auth_data)
+        response = requests.post(url, data=auth_data)
         response.raise_for_status()
 
         token = response.json().get("access_token")
