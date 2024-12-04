@@ -28,7 +28,6 @@ def create_collection_local(collection, input_folder, collection_name):
 
 
 def main():
-
     parser = ArgumentParser(description="STAC Collection Manager")
     sub_parsers = parser.add_subparsers(dest="command", help="Commands")
 
@@ -87,43 +86,40 @@ def main():
         required=True,
     )
 
-    try:
-        args = parser.parse_args()
+    args = parser.parse_args()
 
-        token = authenticate()
+    token = authenticate()
 
-        collection = Collection(token)
+    collection = Collection(token)
 
-        if args.command == "create":
-            input_folder = f"input/{args.folder}"
-            create_collection_local(collection, input_folder, args.collection)
+    if args.command == "create":
+        input_folder = f"input/{args.folder}"
+        create_collection_local(collection, input_folder, args.collection)
 
-            if collection.check_collection(args.overwrite):
-                collection.remove_collection()
-                logger.info("Previous collection removed.")
+        if collection.check_collection(args.overwrite):
+            collection.remove_collection()
+            logger.info("Previous collection removed.")
 
-            output_dir = f"{getcwd()}/output/{args.folder}"
-            collection.convert_layers(input_folder, output_dir)
-            logger.info("Layers converted successfully.")
+        output_dir = f"{getcwd()}/output/{args.folder}"
+        collection.convert_layers(input_folder, output_dir)
+        logger.info("Layers converted successfully.")
 
-            collection.upload_layers(output_dir)
-            collection.upload_collection()
-            logger.info("Collection uploaded successfully.")
+        collection.upload_layers(output_dir)
+        collection.upload_collection()
+        logger.info("Collection uploaded successfully.")
 
-        elif args.command == "validate":
-            input_folder = f"input/{args.folder}"
-            create_collection_local(collection, input_folder, args.collection)
-            logger.info("Validation successful.")
+        sysexit("Process completed successfully.")
 
-        elif args.command == "remove":
-            collection.remove_collection(args.collection)
-            logger.info("Collection removed successfully.")
+    elif args.command == "validate":
+        create_collection_local(collection, f"input/{args.folder}", args.collection)
+        logger.info("Validation successful.")
 
-        else:
-            sysexit("No command used. Type -h for help")
+    elif args.command == "remove":
+        collection.remove_collection(args.collection)
+        logger.info("Collection removed successfully.")
 
-    except SystemExit as e:
-        sysexit(e)
+    else:
+        sysexit("No command used. Type -h for help")
 
 
 if __name__ == "__main__":

@@ -106,6 +106,46 @@ o
 
 python src/main.py create --folder my_folder
 ```
+---
+## Sobrescribir una Colección Existente
+
+Para sobrescribir una colección existente, ejecuta el siguiente comando:
+
+python src/main.py create -f folder_name [-c collection_name] [-o]
+
+
+### Parámetros:
+- `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
+- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
+- `-o, --overwrite` (obligatorio): Permite sobrescribir una colección existente si ya existe. Si no se proporciona, la colección no será sobrescrita.
+
+### Ejemplo:
+
+* Sobrescribiendo una colección existente:
+
+```
+python src/main.py create -f my_folder -o
+
+o
+
+python src/main.py create --folder my_folder --overwrite
+```
+
+
+Este comando sobrescribirá la colección existente (si ya existe) usando los archivos en el directorio `input/my_folder`.
+
+* Especificando un nombre de colección para sobrescribir:
+
+```
+python src/main.py create -f my_folder -c MyCollection -o
+
+o
+
+python src/main.py create --folder my_folder --collection MyCollection --overwrite
+```
+
+
+Este comando sobrescribirá la colección `MyCollection` si ya existe, usando los archivos en el directorio `input/my_folder`.
 
 ---
 

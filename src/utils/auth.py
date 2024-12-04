@@ -3,6 +3,8 @@ from utils.logging_config import logger
 from sys import exit as sysexit
 from config import get_settings
 
+from utils.url import build_url
+
 settings = get_settings()
 
 
@@ -18,7 +20,8 @@ def authenticate():
 
         auth_data = {"username": username, "password": password}
 
-        response = requests.post(f"{stac_url}{auth_url}", data=auth_data)
+        url = build_url(stac_url, auth_url, args_dict={})
+        response =  requests.post(url, data=auth_data)
         response.raise_for_status()
 
         token = response.json().get("access_token")
