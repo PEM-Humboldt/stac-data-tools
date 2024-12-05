@@ -105,6 +105,7 @@ def main():
         logger.info("Layers converted successfully.")
 
         collection.upload_layers(output_dir)
+        logger.info("Layers uploaded successfully.")
         collection.upload_collection()
         logger.info("Collection uploaded successfully.")
 
@@ -114,11 +115,11 @@ def main():
         create_collection_local(
             collection, f"input/{args.folder}", args.collection
         )
-        logger.info("Validation successful.")
+        sysexit("Validation successful.")
 
     elif args.command == "remove":
         collection.remove_collection(args.collection)
-        logger.info("Collection removed successfully.")
+        sysexit("Collection removed successfully.")
 
     else:
         sysexit("No command used. Type -h for help")
