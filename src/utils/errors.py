@@ -22,15 +22,11 @@ def handle_http_error(e, retry_callback, headers):
                 error_content.get("code") == "UnauthorizedError"
                 and "expired" in error_content.get("description", "").lower()
             ):
-                logger.warning("Token expired. Reauthenticating...")
-
-                token = get_new_token()  # Generate a new token
-                headers["Authorization"] = (
-                    f"Bearer {token}"  # Update headers with the new token
-                )
+                token = get_new_token()
+                headers["Authorization"] = f"Bearer {token}"
                 logger.info("Retrying operation with new token.")
 
-                retry_callback()  # Retry the operation
+                retry_callback()
                 return headers
 
         except ValueError:
