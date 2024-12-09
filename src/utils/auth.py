@@ -43,17 +43,29 @@ def authenticate():
             response is not None
             and response.headers.get("Content-Type") == "application/json"
         ):
-
             try:
-                error_detail = response.json().get("detail", str(http_err))
+                error_response = response.json()
+                code = error_response.get("code")
+                description = error_response.get(
+                    "description", "No description provided"
+                )
+
+                if code and description:
+                    logger.error(f"Error: {code} - {description}")
+                    sysexit(f"Authentication error: {code} - {description}")
+                else:
+                    error_detail = error_response.get("detail", str(http_err))
 
             except ValueError:
-
                 error_detail = str(http_err)
 
         error_message = f"HTTP {status_code}: {error_detail or str(http_err)}"
-
         sysexit(f"Authentication error: {error_message}")
 
     except requests.RequestException as req_err:
         sysexit(f"Request error: {req_err}")
+
+
+def get_new_token():
+    logger.info("Token expired. Reauthenticating...")
+    return authenticate()

@@ -41,8 +41,8 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
    ABS_STRING="" # Cadena de conexión a Azure Blob Storage
    ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
    AUTH_URL="" # Path de la ruta de la url para autenticar, la cual seria "/auth/token"
-   USERNAME:"" # Nombre de usuario para autenticación.
-   PASSWORD:"" # Contraseña para autenticación.
+   USERNAME_AUTH:"" # Nombre de usuario para autenticación.
+   PASSWORD_AUTH:"" # Contraseña para autenticación.
    ```
    (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
 

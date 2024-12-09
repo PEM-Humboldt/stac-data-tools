@@ -1,5 +1,6 @@
 import pystac
 
+from utils.errors import handle_http_error
 from utils.logging_config import logger
 from utils import raster, storage, stac_rest
 from datetime import datetime, timedelta
@@ -167,16 +168,26 @@ class Collection:
                     logger.info(f"Deleting file {url} from Azure Blob Storage")
                     self.storage.remove_file(url)
 
-            stac_rest.delete(collection_url)
+            stac_rest.delete(collection_url, headers=self.headers)
             logger.info(f"Collection {collection_id} removed successfully")
 
         except Exception as e:
-            logger.error(f"Error removing collection from server: {e}")
-            raise RuntimeError(f"Error removing collection from server: {e}")
+            try:
+                self.headers = handle_http_error(
+                    e=e,
+                    retry_callback=self.remove_collection(),
+                    headers=self.headers,
+                )
+
+            except Exception as final_exception:
+                logger.error(
+                    f"An unexpected error occurred: {str(final_exception)}"
+                )
+                raise final_exception
 
     def upload_collection(self):
         """
-        Upload the collection and items to the STAC server.
+        Upload the collection and items to the STAC server, handling token expiration.
         """
         try:
             logger.info(
@@ -205,9 +216,20 @@ class Collection:
                 logger.info(
                     f"Item upload response: {item_response.status_code}"
                 )
+
         except Exception as e:
-            logger.error(f"Error uploading collection: {e}")
-            raise RuntimeError(f"Error uploading collection: {e}")
+
+            try:
+                self.headers = handle_http_error(
+                    e=e,
+                    retry_callback=self.upload_collection,
+                    headers=self.headers,
+                )
+            except Exception as final_exception:
+                logger.error(
+                    f"An unexpected error occurred: {str(final_exception)}"
+                )
+                raise final_exception
 
     def convert_layers(self, input_dir, output_dir):
         """
