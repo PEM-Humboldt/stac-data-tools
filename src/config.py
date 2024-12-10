@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     auth_url: str = "/auth/token"
     username_auth: str = "admin"
     password_auth: str = "admin"
+    token: str = ""
 
     model_config = SettingsConfigDict(env_file=".env")
 

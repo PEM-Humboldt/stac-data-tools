@@ -1,6 +1,5 @@
 import pystac
 
-from utils.errors import handle_http_error
 from utils.logging_config import logger
 from utils import raster, storage, stac_rest
 from datetime import datetime, timedelta
@@ -127,7 +126,7 @@ class Collection:
         Check if the collection exists and if it's going to be overwritten.
         """
         url = f"{self.stac_url}/collections/{self.stac_collection.id}"
-        exist = stac_rest.check_resource(url, headers=self.headers)
+        exist = stac_rest.check_resource(url)
         if exist:
             collection_exist = True
             if not overwritten:
@@ -157,9 +156,7 @@ class Collection:
         logger.info(f"Attempting to remove collection {collection_id}")
 
         try:
-            items_response = stac_rest.get(
-                f"{collection_url}/items", headers=self.headers
-            )
+            items_response = stac_rest.get(f"{collection_url}/items")
             items = items_response.json().get("features", [])
 
             for item in items:
@@ -172,22 +169,12 @@ class Collection:
             logger.info(f"Collection {collection_id} removed successfully")
 
         except Exception as e:
-            try:
-                self.headers = handle_http_error(
-                    e=e,
-                    retry_callback=self.remove_collection(),
-                    headers=self.headers,
-                )
-
-            except Exception as final_exception:
-                logger.error(
-                    f"An unexpected error occurred: {str(final_exception)}"
-                )
-                raise final_exception
+            logger.error(f"Error removing collection from server: {e}")
+            raise RuntimeError(f"Error removing collection from server: {e}")
 
     def upload_collection(self):
         """
-        Upload the collection and items to the STAC server, handling token expiration.
+        Upload the collection and items to the STAC server.
         """
         try:
             logger.info(
@@ -218,18 +205,8 @@ class Collection:
                 )
 
         except Exception as e:
-
-            try:
-                self.headers = handle_http_error(
-                    e=e,
-                    retry_callback=self.upload_collection,
-                    headers=self.headers,
-                )
-            except Exception as final_exception:
-                logger.error(
-                    f"An unexpected error occurred: {str(final_exception)}"
-                )
-                raise final_exception
+            logger.error(f"Error uploading collection: {e}")
+            raise RuntimeError(f"Error uploading collection: {e}")
 
     def convert_layers(self, input_dir, output_dir):
         """

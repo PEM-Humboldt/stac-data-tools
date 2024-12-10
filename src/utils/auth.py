@@ -24,13 +24,14 @@ def authenticate():
         response = requests.post(url, data=auth_data)
         response.raise_for_status()
 
-        token = response.json().get("access_token")
+        new_token = response.json().get("access_token")
 
-        if not token:
+        if new_token:
+            settings.token = new_token
+            logger.info("Token updated successfully.")
+        else:
             logger.error("Authentication failed: No token received.")
             sysexit("Authentication failed: No token received.")
-
-        return token
 
     except requests.HTTPError as http_err:
         error_detail = None
@@ -55,8 +56,3 @@ def authenticate():
 
     except requests.RequestException as req_err:
         sysexit(f"Request error: {req_err}")
-
-
-def get_new_token():
-    logger.info("Token expired. Reauthenticating...")
-    return authenticate()
