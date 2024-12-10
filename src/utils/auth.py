@@ -45,16 +45,7 @@ def authenticate():
         ):
             try:
                 error_response = response.json()
-                code = error_response.get("code")
-                description = error_response.get(
-                    "description", "No description provided"
-                )
-
-                if code and description:
-                    logger.error(f"Error: {code} - {description}")
-                    sysexit(f"Authentication error: {code} - {description}")
-                else:
-                    error_detail = error_response.get("detail", str(http_err))
+                error_detail = error_response.get("description", str(http_err))
 
             except ValueError:
                 error_detail = str(http_err)
