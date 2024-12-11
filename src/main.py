@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 
-from utils.auth import settings
 from utils.logging_config import logger
 from utils import spec
 from utils.auth import authenticate
@@ -91,7 +90,7 @@ def main():
     args = parser.parse_args()
 
     authenticate()
-    collection = Collection(settings.token)
+    collection = Collection()
 
     if args.command == "create":
         input_folder = f"input/{args.folder}"

@@ -1,13 +1,23 @@
 import requests
 
-from utils.auth import authenticate, settings
+from utils.auth import authenticate
+from config import get_settings
 
 
-def post_or_put(url: str, data: dict, headers: dict = None):
+def get_headers():
+    """
+    Generate Authorization header dynamically using the current token.
+    """
+    settings = get_settings()
+    return {"Authorization": f"Bearer {settings.token}"}
+
+def post_or_put(url: str, data: dict):
     """
     Post or put data to URL
     """
+
     try:
+        headers = get_headers()
         response = requests.post(url, json=data, headers=headers)
 
         if response.status_code == 409:
@@ -19,7 +29,7 @@ def post_or_put(url: str, data: dict, headers: dict = None):
                 and "expired" in response.json().get("description", "").lower()
             ):
                 authenticate()
-                headers["Authorization"] = f"Bearer {settings.token}"
+                headers = get_headers()
                 response = requests.post(url, json=data, headers=headers)
 
         response.raise_for_status()
@@ -33,9 +43,7 @@ def get(url: str):
     """
     Get request
     """
-    response = requests.get(
-        url,
-    )
+    response = requests.get(url)
     response.raise_for_status()
     return response
 
@@ -54,10 +62,11 @@ def check_resource(url: str):
     return success
 
 
-def delete(url, headers: dict = None):
+def delete(url):
     """
     Delete request
     """
+    headers = get_headers()
     response = requests.delete(url, headers=headers)
     if response.status_code == 200:
         success = True
@@ -69,7 +78,7 @@ def delete(url, headers: dict = None):
             and "expired" in response.json().get("description", "").lower()
         ):
             authenticate()
-            headers["Authorization"] = f"Bearer {settings.token}"
+            headers = get_headers()
             response = requests.delete(url, headers=headers)
             if response.status_code == 200:
                 success = True

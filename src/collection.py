@@ -11,7 +11,7 @@ from config import get_settings
 
 class Collection:
 
-    def __init__(self, token: str):
+    def __init__(self):
         self.items = []
         self.dates = []
         self.longs = []
@@ -20,8 +20,6 @@ class Collection:
         self.stac_items = []
         self.stac_url = get_settings().stac_url
         self.storage = storage.Storage()
-        self.token = token
-        self.headers = {"Authorization": f"Bearer {self.token}"}
 
     def load_items(self, folder, raw_items):
         """
@@ -165,7 +163,7 @@ class Collection:
                     logger.info(f"Deleting file {url} from Azure Blob Storage")
                     self.storage.remove_file(url)
 
-            stac_rest.delete(collection_url, headers=self.headers)
+            stac_rest.delete(collection_url)
             logger.info(f"Collection {collection_id} removed successfully")
 
         except Exception as e:
@@ -184,7 +182,6 @@ class Collection:
             stac_rest.post_or_put(
                 parse.urljoin(self.stac_url, "/collections"),
                 self.stac_collection.to_dict(),
-                headers=self.headers,
             )
             logger.info(
                 f"Collection {self.stac_collection.id} uploaded successfully"
@@ -198,7 +195,6 @@ class Collection:
                         f"/collections/{self.stac_collection.id}/items",
                     ),
                     item_dict,
-                    headers=self.headers,
                 )
                 logger.info(
                     f"Item upload response: {item_response.status_code}"
