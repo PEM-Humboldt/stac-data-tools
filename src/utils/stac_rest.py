@@ -11,6 +11,7 @@ def get_headers():
     settings = get_settings()
     return {"Authorization": f"Bearer {settings.token}"}
 
+
 def post_or_put(url: str, data: dict):
     """
     Post or put data to URL
