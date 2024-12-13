@@ -5,6 +5,7 @@ from config import get_settings
 
 from utils.url import build_url
 
+
 settings = get_settings()
 
 
@@ -27,7 +28,7 @@ def authenticate():
         new_token = response.json().get("access_token")
 
         if new_token:
-            settings.token = new_token
+            settings.set_token(new_token)
             logger.info("Token updated successfully.")
         else:
             logger.error("Authentication failed: No token received.")

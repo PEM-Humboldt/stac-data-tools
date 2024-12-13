@@ -13,6 +13,9 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env")
 
+    def set_token(self, token: str):
+        self.token = token
+
 
 @lru_cache
 def get_settings():
