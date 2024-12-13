@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 
 from utils.logging_config import logger
 from utils import spec
+from utils.auth import authenticate
 from collection import Collection
 from json import load
 from sys import exit as sysexit
@@ -28,12 +29,8 @@ def create_collection_local(collection, input_folder, collection_name):
 
 
 def main():
-    """
-    Read arguments and start data validation.
-    """
-
-    parser = ArgumentParser()
-    sub_parsers = parser.add_subparsers(dest="command")
+    parser = ArgumentParser(description="STAC Collection Manager")
+    sub_parsers = parser.add_subparsers(dest="command", help="Commands")
 
     create_parser = sub_parsers.add_parser(
         "create", help="Create a new collection"
@@ -92,14 +89,16 @@ def main():
 
     args = parser.parse_args()
 
+    authenticate()
+    collection = Collection()
+
     if args.command == "create":
-        collection = Collection()
         input_folder = f"input/{args.folder}"
         create_collection_local(collection, input_folder, args.collection)
 
         if collection.check_collection(args.overwrite):
             collection.remove_collection()
-            sysexit("Previous collection removed successfully.")
+            logger.info("Previous collection removed.")
 
         output_dir = f"{getcwd()}/output/{args.folder}"
         collection.convert_layers(input_folder, output_dir)
@@ -107,23 +106,20 @@ def main():
 
         collection.upload_layers(output_dir)
         logger.info("Layers uploaded successfully.")
-
         collection.upload_collection()
         logger.info("Collection uploaded successfully.")
 
         sysexit("Process completed successfully.")
 
     elif args.command == "validate":
-        collection = Collection()
         create_collection_local(
             collection, f"input/{args.folder}", args.collection
         )
         sysexit("Validation successful.")
 
     elif args.command == "remove":
-        collection = Collection()
         collection.remove_collection(args.collection)
-        sysexit("Collection successfully removed.")
+        sysexit("Collection removed successfully.")
 
     else:
         sysexit("No command used. Type -h for help")

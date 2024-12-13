@@ -33,13 +33,16 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
 
 ## Configuración
 
-Antes de usar la herramienta segurese de realizar lo siguiente:
+Antes de usar la herramienta asegurese de realizar lo siguiente:
 
 1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
    ```
    STAC_URL="" # URL del servidor del STAC
    ABS_STRING="" # Cadena de conexión a Azure Blob Storage
    ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
+   AUTH_URL="" # Path de la ruta de la url para autenticar, la cual seria "/auth/token"
+   USERNAME_AUTH:"" # Nombre de usuario para autenticación.
+   PASSWORD_AUTH:"" # Contraseña para autenticación.
    ```
    (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
 
@@ -64,42 +67,86 @@ Para crear una colección siga los siguientes pasos:
 
 # Instrucciones de Uso
 
+## Autenticación Configurada en Variables de Ambiente
+
+La autenticación se realiza automáticamente utilizando las credenciales definidas en las variables de ambiente.
+
+---
+
 ## Cargar una Colección
 
 Para cargar una colección de capas, ejecuta el siguiente comando:
 
 ```
-python src/main.py create -f folder_name [-c collection_name] [-o]
+python src/main.py create -f folder_name [-c collection_name]
 ```
 
 ### Parámetros:
 - `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
-- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el id del archivo collection.json.
+- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo collection.json.
 
 ### Ejemplo:
 
-* Especificando un nombre de colección
+* Especificando un nombre de colección:
 ```
 python src/main.py create -f my_folder -c MyCollection
 
 o
 
 python src/main.py create --folder my_folder --collection MyCollection
-
 ```
 
-Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`
+Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`.
 
-* Usando el id del archivo collection.json:
-
+* Usando el `id` del archivo collection.json:
 ```
 python src/main.py create -f my_folder
 
 o
 
 python src/main.py create --folder my_folder
+```
+---
+## Sobrescribir una Colección Existente
+
+Para sobrescribir una colección existente, ejecuta el siguiente comando:
+
+python src/main.py create -f folder_name [-c collection_name] [-o]
+
+
+### Parámetros:
+- `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
+- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
+- `-o, --overwrite` (obligatorio): Permite sobrescribir una colección existente si ya existe. Si no se proporciona, la colección no será sobrescrita.
+
+### Ejemplo:
+
+* Sobrescribiendo una colección existente:
 
 ```
+python src/main.py create -f my_folder -o
+
+o
+
+python src/main.py create --folder my_folder --overwrite
+```
+
+
+Este comando sobrescribirá la colección existente (si ya existe) usando los archivos en el directorio `input/my_folder`.
+
+* Especificando un nombre de colección para sobrescribir:
+
+```
+python src/main.py create -f my_folder -c MyCollection -o
+
+o
+
+python src/main.py create --folder my_folder --collection MyCollection --overwrite
+```
+
+
+Este comando sobrescribirá la colección `MyCollection` si ya existe, usando los archivos en el directorio `input/my_folder`.
+
 ---
 
 ## Validar una Colección
@@ -112,17 +159,15 @@ python src/main.py validate -f folder_name [-c collection_name]
 
 ### Parámetros:
 - `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
-- `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el id del archivo collection.json.
+- `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el `id` del archivo collection.json.
 
 ### Ejemplo:
-
 ```
 python src/main.py validate -f my_folder
 
 o
 
 python src/main.py validate --folder my_folder
-
 ```
 
 Este comando validará los archivos de la colección en el directorio `input/my_folder` sin cargarlos.
@@ -138,18 +183,15 @@ python src/main.py remove --collection collection_name
 ```
 
 ### Parámetros:
-
 - `-c, --collection` (obligatorio): Nombre de la colección a eliminar.
 
 ### Ejemplo:
-
 ```
 python src/main.py remove -c my_collection
 
 o
 
 python src/main.py remove --collection my_collection
-
 ```
 
 Este comando eliminará la colección `my_collection` del sistema.
@@ -168,7 +210,6 @@ Para hacer formateo de estilos automático se utiliza el paquete black. Al ejecu
 
 ```
 black src
-
 ```
 
 ## Documentación

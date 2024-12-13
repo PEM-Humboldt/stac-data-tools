@@ -95,9 +95,7 @@ class Collection:
             extent=pystac.Extent(
                 spatial=spatial_extent, temporal=temporal_extent
             ),
-            extra_fields={
-                "metadata": collection_data["metadata"]
-            },
+            extra_fields={"metadata": collection_data["metadata"]},
         )
 
         self.stac_collection.validate()
@@ -156,13 +154,13 @@ class Collection:
         logger.info(f"Attempting to remove collection {collection_id}")
 
         try:
-            items_collection = stac_rest.get(f"{collection_url}/items").json()
-            for item in items_collection["features"]:
+            items_response = stac_rest.get(f"{collection_url}/items")
+            items = items_response.json().get("features", [])
+
+            for item in items:
                 for asset_key, asset_value in item["assets"].items():
                     url = asset_value["href"]
-                    logger.info(
-                        f"Deleting file: {url} from Azure Blob Storage"
-                    )
+                    logger.info(f"Deleting file {url} from Azure Blob Storage")
                     self.storage.remove_file(url)
 
             stac_rest.delete(collection_url)
@@ -201,6 +199,7 @@ class Collection:
                 logger.info(
                     f"Item upload response: {item_response.status_code}"
                 )
+
         except Exception as e:
             logger.error(f"Error uploading collection: {e}")
             raise RuntimeError(f"Error uploading collection: {e}")
