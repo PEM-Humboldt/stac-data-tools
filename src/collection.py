@@ -201,7 +201,14 @@ class Collection:
                 )
 
         except Exception as e:
-            logger.error(f"Error uploading collection: {e}")
+
+            try:
+                logger.info("Removing partially uploaded collection...")
+                self.remove_collection(self.stac_collection.id)
+                logger.info("Partial collection removed successfully.")
+            except Exception as remove_error:
+                logger.error(f"Error during collection removal: {remove_error}")
+
             raise RuntimeError(f"Error uploading collection: {e}")
 
     def convert_layers(self, input_dir, output_dir):
