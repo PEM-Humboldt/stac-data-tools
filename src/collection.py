@@ -1,4 +1,5 @@
 import pystac
+from typing_extensions import runtime
 
 from utils.logging_config import logger
 from utils import raster, storage, stac_rest
@@ -12,6 +13,7 @@ from config import get_settings
 class Collection:
 
     def __init__(self):
+        self.uploaded_urls = []
         self.items = []
         self.dates = []
         self.longs = []
@@ -175,6 +177,7 @@ class Collection:
         Upload the collection and items to the STAC server.
         """
         try:
+
             logger.info(
                 f"Uploading collection: {self.stac_collection.to_dict()}"
             )
@@ -202,14 +205,18 @@ class Collection:
 
         except Exception as e:
 
-            try:
-                logger.info("Removing partially uploaded collection...")
-                self.remove_collection(self.stac_collection.id)
-                logger.info("Partial collection removed successfully.")
-            except Exception as remove_error:
-                logger.error(f"Error during collection removal: {remove_error}")
+            logger.error(f"Error uploading collection: {e}")
 
-            raise RuntimeError(f"Error uploading collection: {e}")
+            for url in self.uploaded_urls:
+                try:
+                    self.storage.remove_file(url)
+                    logger.info(f"Removed uploaded file: {url}")
+                except Exception as cleanup_error:
+                    logger.error(
+                        f"Error cleaning up uploaded file {url}: {cleanup_error}"
+                    )
+
+            raise RuntimeError(f"Failed to upload collection: {e}")
 
     def convert_layers(self, input_dir, output_dir):
         """
@@ -228,6 +235,7 @@ class Collection:
         """
         Upload item layers to storage.
         """
+        self.uploaded_urls = []
         if self.items:
             for i, item in enumerate(self.items):
                 logger.info(f"Uploading {item['input_file']}")
@@ -240,6 +248,7 @@ class Collection:
                 )
 
                 if final_url:
+                    self.uploaded_urls.append(final_url)
                     remove(file_path)
 
                 self.stac_items[i].add_asset(
