@@ -1,5 +1,4 @@
 import pystac
-from typing_extensions import runtime
 
 from utils.logging_config import logger
 from utils import raster, storage, stac_rest
