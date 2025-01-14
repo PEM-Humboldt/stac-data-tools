@@ -12,6 +12,7 @@ from config import get_settings
 class Collection:
 
     def __init__(self):
+        self.uploaded_urls = []
         self.items = []
         self.dates = []
         self.longs = []
@@ -202,7 +203,17 @@ class Collection:
 
         except Exception as e:
             logger.error(f"Error uploading collection: {e}")
-            raise RuntimeError(f"Error uploading collection: {e}")
+
+            for url in self.uploaded_urls:
+                try:
+                    self.storage.remove_file(url)
+                    logger.info(f"Removed uploaded file: {url}")
+                except Exception as cleanup_error:
+                    logger.error(
+                        f"Error cleaning up uploaded file {url}: {cleanup_error}"
+                    )
+
+            raise RuntimeError(f"Failed to upload collection: {e}")
 
     def convert_layers(self, input_dir, output_dir):
         """
@@ -221,6 +232,7 @@ class Collection:
         """
         Upload item layers to storage.
         """
+        self.uploaded_urls = []
         if self.items:
             for i, item in enumerate(self.items):
                 logger.info(f"Uploading {item['input_file']}")
@@ -233,6 +245,7 @@ class Collection:
                 )
 
                 if final_url:
+                    self.uploaded_urls.append(final_url)
                     remove(file_path)
 
                 self.stac_items[i].add_asset(
