@@ -176,7 +176,6 @@ class Collection:
         Upload the collection and items to the STAC server.
         """
         try:
-
             logger.info(
                 f"Uploading collection: {self.stac_collection.to_dict()}"
             )
@@ -203,7 +202,6 @@ class Collection:
                 )
 
         except Exception as e:
-
             logger.error(f"Error uploading collection: {e}")
 
             for url in self.uploaded_urls:
