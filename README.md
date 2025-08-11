@@ -198,6 +198,39 @@ Este comando eliminará la colección `my_collection` del sistema.
 
 ---
 
+## Inyectar ítems en una colección existente (inject)
+Este comando lee el archivo collection.json existente en input/<carpeta> y reemplaza su sección items usando los .tif presentes en la carpeta, manteniendo la demás información.
+
+```
+python src/main.py inject -f my_folder [--no-backup] [-o ruta_salida]
+```
+
+### Parámetros:
+
+- `-f, --folder` (obligatorio): Carpeta dentro de input/ con collection.json y .tif.
+
+- `--no-backup` (opcional): No crear copia de seguridad antes de sobrescribir.
+
+- `-o, --output` (opcional): Guardar el archivo resultante en otra ruta en vez de sobrescribir.
+
+### Ejemplos:
+
+
+### Inyectar ítems sobrescribiendo collection.json y creando backup
+```
+python src/main.py inject -f my_collection
+```
+
+### Inyectar ítems sin crear backup
+```
+python src/main.py inject -f my_folder --no-backup
+```
+
+### Inyectar ítems y guardar en otra ruta
+```
+python src/main.py inject -f my_folder -o output/my_collection.collection.json
+```
+
 ## Revisión y formato de estilos para el código
 
 El formato de estilos para la revisión con flake8 se define en el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
