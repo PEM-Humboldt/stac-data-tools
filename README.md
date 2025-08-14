@@ -85,7 +85,7 @@ python src/main.py create -f folder_name [-c collection_name]
 - `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
 - `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo collection.json.
 
-### Ejemplo:
+#### Ejemplo:
 
 * Especificando un nombre de colección:
 ```
@@ -119,7 +119,7 @@ python src/main.py create -f folder_name [-c collection_name] [-o]
 - `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
 - `-o, --overwrite` (obligatorio): Permite sobrescribir una colección existente si ya existe. Si no se proporciona, la colección no será sobrescrita.
 
-### Ejemplo:
+#### Ejemplo:
 
 * Sobrescribiendo una colección existente:
 
@@ -161,7 +161,7 @@ python src/main.py validate -f folder_name [-c collection_name]
 - `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
 - `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el `id` del archivo collection.json.
 
-### Ejemplo:
+#### Ejemplo:
 ```
 python src/main.py validate -f my_folder
 
@@ -185,7 +185,7 @@ python src/main.py remove --collection collection_name
 ### Parámetros:
 - `-c, --collection` (obligatorio): Nombre de la colección a eliminar.
 
-### Ejemplo:
+#### Ejemplo:
 ```
 python src/main.py remove -c my_collection
 
@@ -198,49 +198,70 @@ Este comando eliminará la colección `my_collection` del sistema.
 
 ---
 
-## Inyectar ítems en una colección existente (inject)
-Este comando lee el archivo collection.json existente en input/<carpeta> y reemplaza su sección items usando los .tif presentes en la carpeta, manteniendo la demás información.
+### Inyectar ítems en una colección existente (`inject`)
+Este comando:
+1. Lee el `collection.json` en `input/<folder>`
+2. Reemplaza la sección `"items"` usando los `.tif` en esa carpeta
+3. Mantiene el resto de la información intacta
+4. Genera un nuevo `collection.json` actualizado
 
+📌 **Importante:**  
+- Los `.tif` deben tener en el nombre **un año** (`2005`) o un **periodo** (`2000_2005`, `2000-2005`).
+- Si hay duplicados (mismo id de año o periodo) se producirá un error.
+
+**Sintaxis:**
 ```
-python src/main.py inject -f my_folder [--no-backup] [-o ruta_salida]
+python src/main.py inject -f <folder> [--no-backup]
 ```
 
 ### Parámetros:
+- `-f, --folder`: Carpeta en `input` con el `collection.json` y los `.tif`
+- `--no-backup`: (opcional) No generar backup del `collection.json` original
 
-- `-f, --folder` (obligatorio): Carpeta dentro de input/ con collection.json y .tif.
-
-- `--no-backup` (opcional): No crear copia de seguridad antes de sobrescribir.
-
-- `-o, --output` (opcional): Guardar el archivo resultante en otra ruta en vez de sobrescribir.
-
-### Ejemplos:
-
-
-### Inyectar ítems sobrescribiendo collection.json y creando backup
+#### Ejemplos:
 ```
-python src/main.py inject -f my_collection
-```
+# Inyectar con backup
+python src/main.py inject -f my_folder
 
-### Inyectar ítems sin crear backup
-```
+# Inyectar sin backup
 python src/main.py inject -f my_folder --no-backup
 ```
 
-### Inyectar ítems y guardar en otra ruta
-```
-python src/main.py inject -f my_folder -o output/my_collection.collection.json
-```
+El resultado es un archivo `collection.json` actualizado, listo para ser usado en la creación/sobrescritura de la colección.
 
 ## Revisión y formato de estilos para el código
 
-El formato de estilos para la revisión con flake8 se define en el archivo [.flake8](.flake8). La revisión de estilos se puede realizar con el paquete flake8 de la siguiente forma:
+El repositorio incluye un script (`format.py`) que ejecuta de forma automática todas las herramientas de formateo y validación de estilos.  
+Esto permite unificar el proceso en **un solo comando**, independientemente del sistema operativo.
 
+Las herramientas que se ejecutan son:
+- **autoflake** → elimina importaciones y variables no usadas.
+- **isort** → ordena las importaciones.
+- **black** → aplica el formateo definido en [pyproject.toml](pyproject.toml).
+- **autopep8** → corrige estilos según PEP8.
+- **flake8** → valida que el código cumpla con las reglas de estilo definidas en [.flake8](.flake8).
+
+### Ejecución
+
+Para revisar y formatear el código automáticamente:
+```bash
+python src/format.py 
+```
+
+Este comando:
+
+1. Aplica limpieza y ordenamiento de imports.
+
+2. Formatea el código según la configuración del proyecto.
+
+3. Ejecuta la validación final con flake8.
+
+Si quieres solo validar sin modificar archivos:
 ```
 flake8 src
 ```
 
-Para hacer formateo de estilos automático se utiliza el paquete black. Al ejecutarlo se tendran en cuenta las configuraciones de estilo definidas en el archivo [pyproject.toml](pyproject.toml).
-
+Si quieres solo formatear con black:
 ```
 black src
 ```

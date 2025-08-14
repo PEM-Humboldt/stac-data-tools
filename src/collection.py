@@ -2,18 +2,18 @@ import json
 import os
 import re
 from copy import deepcopy
+from datetime import datetime, timedelta
+from os import makedirs, path, remove, rmdir
+from sys import exit as sysexit
+from urllib import parse
 
 import pystac
 import rasterio
 from pystac.extensions.projection import ProjectionExtension
 
-from utils.logging_config import logger
-from utils import raster, storage, stac_rest
-from datetime import datetime, timedelta
-from sys import exit as sysexit
-from urllib import parse
-from os import remove, rmdir, path, makedirs
 from config import get_settings
+from utils import raster, stac_rest, storage
+from utils.logging_config import logger
 
 
 class Collection:
@@ -205,7 +205,7 @@ class Collection:
         ):
             collection_id = self.stac_collection.id
         if collection_id is None:
-            raise RuntimeError(f"Missing collection id to remove")
+            raise RuntimeError("Missing collection id to remove")
 
         collection_url = f"{self.stac_url}/collections/{collection_id}"
         logger.info(f"Attempting to remove collection {collection_id}")

@@ -1,12 +1,12 @@
 from argparse import ArgumentParser
+from json import load
+from os import getcwd
+from sys import exit as sysexit
 
-from utils.logging_config import logger
+from collection import Collection, update_collection_json_inplace
 from utils import spec
 from utils.auth import authenticate
-from json import load
-from sys import exit as sysexit
-from os import getcwd
-from collection import Collection, update_collection_json_inplace
+from utils.logging_config import logger
 
 
 def create_collection_local(collection, input_folder, collection_name):
