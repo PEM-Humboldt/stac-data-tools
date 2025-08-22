@@ -1,6 +1,7 @@
-from os import path, listdir
 from json import load
-from jsonschema import validate, FormatError
+from os import listdir, path
+
+from jsonschema import FormatError, validate
 
 
 def validate_input_folder(folder):

@@ -1,15 +1,16 @@
 from argparse import ArgumentParser
+from json import load
+from os import getcwd
+from sys import exit as sysexit
 
-from utils.logging_config import logger
+from collection import Collection, update_collection_json_inplace
 from utils import spec
 from utils.auth import authenticate
-from collection import Collection
-from json import load
-from sys import exit as sysexit
-from os import getcwd
+from utils.logging_config import logger
 
 
 def create_collection_local(collection, input_folder, collection_name):
+    """Read and validate local collection.json, load items, and build pystac objects."""
     spec.validate_input_folder(input_folder)
 
     with open(f"{input_folder}/collection.json", "r") as f:
@@ -87,6 +88,31 @@ def main():
         required=True,
     )
 
+    inject_parser = sub_parsers.add_parser(
+        "inject",
+        help="Inject items into input/<folder>/collection.json from .tif files in that folder (overwrite file)",
+    )
+    inject_parser.add_argument(
+        "-f",
+        "--folder",
+        dest="folder",
+        required=True,
+        help="Folder name under 'input/' containing collection.json and .tif files (e.g., LossPersistence)",
+    )
+    inject_parser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        required=False,
+        help="Optional output path to write the resulting JSON elsewhere (otherwise overwrite in place)",
+    )
+    inject_parser.add_argument(
+        "--no-backup",
+        dest="no_backup",
+        action="store_true",
+        help="Do not create a backup when overwriting collection.json",
+    )
+
     args = parser.parse_args()
 
     authenticate()
@@ -106,6 +132,7 @@ def main():
 
         collection.upload_layers(output_dir)
         logger.info("Layers uploaded successfully.")
+
         collection.upload_collection()
         logger.info("Collection uploaded successfully.")
 
@@ -120,6 +147,25 @@ def main():
     elif args.command == "remove":
         collection.remove_collection(args.collection)
         sysexit("Collection removed successfully.")
+
+    elif args.command == "inject":
+
+        input_folder = f"input/{args.folder}"
+
+        output_path = args.output
+
+        make_backup = not args.no_backup
+
+        backup_dir = f"{getcwd()}/output/{args.folder}/_backups"
+
+        update_collection_json_inplace(
+            input_folder=input_folder,
+            output_path=output_path,
+            make_backup=make_backup,
+            backup_dir=backup_dir,
+        )
+
+        sysexit("Items injected and collection.json overwritten successfully.")
 
     else:
         sysexit("No command used. Type -h for help")

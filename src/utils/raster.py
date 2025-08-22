@@ -1,7 +1,8 @@
-import rasterio
 import os
-from shapely.geometry import Polygon, mapping
+
+import rasterio
 from osgeo import gdal
+from shapely.geometry import Polygon, mapping
 
 
 def get_tif_metadata(file_name):

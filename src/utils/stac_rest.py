@@ -1,7 +1,7 @@
 import requests
 
-from utils.auth import authenticate
 from config import get_settings
+from utils.auth import authenticate
 
 
 def get_headers():

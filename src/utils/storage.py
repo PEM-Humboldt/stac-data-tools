@@ -3,7 +3,6 @@ from urllib import parse
 from azure.storage.blob import BlobServiceClient
 
 from config import get_settings
-
 from utils.logging_config import logger
 
 

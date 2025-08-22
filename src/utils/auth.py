@@ -1,10 +1,10 @@
-import requests
-from utils.logging_config import logger
 from sys import exit as sysexit
+
+import requests
+
 from config import get_settings
-
+from utils.logging_config import logger
 from utils.url import build_url
-
 
 settings = get_settings()
 
