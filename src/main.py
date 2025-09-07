@@ -136,9 +136,7 @@ def main():
 
         output_dir = f"{getcwd()}/output/{args.folder}"
 
-        collection.convert_layers(
-            input_folder, output_dir
-        )
+        collection.convert_layers(input_folder, output_dir)
         logger.info("Layers converted successfully.")
 
         collection.upload_layers(output_dir)
