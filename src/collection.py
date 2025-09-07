@@ -273,50 +273,88 @@ class Collection:
 
     def convert_layers(self, input_dir, output_dir):
         """
-        Convert item layers format and ensure the output directory exists.
+        Convert item layers to COG. If a target COG already exists in the output
+        directory, skip its conversion. Ensure the output directory exists.
         """
         if not path.exists(output_dir):
             makedirs(output_dir)
             logger.info(f"Directory created: {output_dir}")
 
-        for i, item in enumerate(self.items):
-            logger.info(f"Converting {item['input_file']} to COG")
-            raster.tif_to_cog(item["input_file"], input_dir, output_dir)
-            logger.info(f"Conversion of {item['input_file']} completed")
+        for item in self.items:
+            src_name = item["input_file"]
+            target_path = path.join(output_dir, src_name)
+
+            if path.exists(target_path):
+                logger.info(
+                    f"COG already exists, skipping conversion: {target_path}"
+                )
+                continue
+
+            logger.info(f"Converting {src_name} to COG at {target_path}")
+            raster.tif_to_cog(src_name, input_dir, output_dir)
+            logger.info(f"Conversion completed: {target_path}")
 
     def upload_layers(self, output_folder):
         """
         Upload item layers to storage.
         """
         self.uploaded_urls = []
-        if self.items:
-            for i, item in enumerate(self.items):
-                logger.info(f"Uploading {item['input_file']}")
-                file_path = path.join(output_folder, item["input_file"])
+        if not self.items:
+            return
 
-                collection_name = self.stac_collection.id
+        for i, item in enumerate(self.items):
+            logger.info(f"Uploading {item['input_file']}")
+            file_path = path.join(output_folder, item["input_file"])
+            if not path.isfile(file_path):
+                raise FileNotFoundError(f"Expected COG not found: {file_path}")
 
-                final_url = self.storage.upload_file(
-                    f"{collection_name}/{item['input_file']}", file_path
-                )
+            collection_name = self.stac_collection.id
+            final_url = self.storage.upload_file(
+                f"{collection_name}/{item['input_file']}", file_path
+            )
 
-                if final_url:
-                    self.uploaded_urls.append(final_url)
+            if final_url:
+                self.uploaded_urls.append(final_url)
+
+            self.stac_items[i].add_asset(
+                key=item["id"],
+                asset=pystac.Asset(
+                    href=final_url, media_type=pystac.MediaType.COG
+                ),
+            )
+            self.stac_items[i].set_self_href(final_url)
+
+    def clean_local_cogs(
+        self, output_folder: str, remove_dir_if_empty: bool = True
+    ):
+        """
+        Remove local COG files corresponding to the items in this collection.
+        Only called if --delete-local-cog flag is passed.
+        """
+        if not self.items:
+            logger.info("No items to clean locally.")
+            return
+
+        deleted = 0
+        for item in self.items:
+            file_path = path.join(output_folder, item["input_file"])
+            if path.isfile(file_path):
+                try:
                     remove(file_path)
+                    deleted += 1
+                    logger.info(f"Removed local COG: {file_path}")
+                except Exception as e:
+                    logger.error(f"Error removing {file_path}: {e}")
 
-                self.stac_items[i].add_asset(
-                    key=item["id"],
-                    asset=pystac.Asset(
-                        href=final_url,
-                        media_type=pystac.MediaType.COG,
-                    ),
-                )
-                self.stac_items[i].set_self_href(final_url)
-
+        if remove_dir_if_empty and path.isdir(output_folder):
             try:
-                rmdir(output_folder)
+                if not os.listdir(output_folder):
+                    rmdir(output_folder)
+                    logger.info(f"Output directory removed: {output_folder}")
             except Exception as e:
-                raise RuntimeError(f"Error removing directory: {e}")
+                logger.info(f"Could not remove output directory: {e}")
+
+        logger.info(f"Local cleanup completed. Files deleted: {deleted}")
 
 
 def update_collection_json_inplace(
@@ -398,7 +436,11 @@ def update_collection_json_inplace(
         seen_ids.add(item_id)
 
         items.append(
-            {"id": item_id, "year": year, "assets": {"input_file": tif_file}}
+            {
+                "id": item_id,
+                "year": year,
+                "assets": {"input_file": tif_file},
+            }
         )
 
     items.sort(key=lambda it: int(it["year"]))
