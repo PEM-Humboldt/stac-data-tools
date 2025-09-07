@@ -138,7 +138,7 @@ def main():
 
         collection.convert_layers(
             input_folder, output_dir
-        )  # hace skip si existe
+        )
         logger.info("Layers converted successfully.")
 
         collection.upload_layers(output_dir)
