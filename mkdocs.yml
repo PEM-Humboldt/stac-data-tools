@@ -3,18 +3,20 @@ site_name: stac-data-tools
 theme:
   name: material
   features:
-    - content.code.copy
+    - content.code.copy   # botón copiar
 
 plugins:
   - search
+  - markdown-exec
 
 markdown_extensions:
-  - attr_list            # <— ¡necesario!
   - pymdownx.superfences
   - pymdownx.highlight
   - tables
 
 nav:
-  - Test: test.md
+  - Inicio: index.md
+  - Guía principal: main.md
   - Referencia CLI:
       - Comandos: cli.md
+
