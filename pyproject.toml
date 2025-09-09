@@ -1,7 +1,23 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stac-data-tools"
+version = "0.1.0"
+description = "CLI para gestionar colecciones STAC"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+sdt = "main:main"
+
+
 [tool.black]
 line-length = 79
-target-version = ['py310']
-include = '\.pyi?$'
+target-version = ["py310"]
+include = "\\.pyi?$"
 
-[tool.poetry.dependencies]
-python = "3.10"

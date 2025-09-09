@@ -1,0 +1,20 @@
+site_name: stac-data-tools
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+
+plugins:
+  - search
+
+markdown_extensions:
+  - attr_list            # <— ¡necesario!
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - tables
+
+nav:
+  - Test: test.md
+  - Referencia CLI:
+      - Comandos: cli.md
