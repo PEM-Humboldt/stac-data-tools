@@ -90,7 +90,7 @@ def main():
 
     inject_parser = sub_parsers.add_parser(
         "inject",
-        help="Inject items into input/<folder>/collection.json from .tif files in that folder (overwrite file)",
+        help="Inject items into input/FOLDER/collection.json from .tif files in that folder (overwrite file)",
     )
     inject_parser.add_argument(
         "-f",
