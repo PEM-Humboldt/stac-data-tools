@@ -1,0 +1,68 @@
+site_name: STAC-DATA-TOOLS CLI
+site_description: "Herramienta de línea de comandos para cargar, validar y transformar datos geoespaciales en catálogos bajo la especificación STAC"
+site_url: https://pem-humboldt.github.io/stac-data-tools/
+repo_url: https://github.com/PEM-Humboldt/stac-data-tools/
+repo_name: PEM-Humboldt/stac-data-tools
+
+docs_dir: ../docs
+site_dir: site
+
+theme:
+  name: material
+  language: es
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+      default: true
+    - scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+nav:
+  - Home: index.md
+  - Commands:
+      - Create: commands_info/create.md
+      - Validate: commands_info/validate.md
+      - Remove: commands_info/remove.md
+      - Inject: commands_info/inject.md
+
+plugins:
+  - search
+  - autorefs
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - toc:
+      permalink: true
+  - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.details
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
