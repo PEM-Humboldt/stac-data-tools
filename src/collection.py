@@ -10,10 +10,25 @@ from urllib import parse
 import pystac
 import rasterio
 from pystac.extensions.projection import ProjectionExtension
+from pystac.extensions.raster import RasterExtension, RasterBand, DataType
 
 from config import get_settings
 from utils import raster, stac_rest, storage
 from utils.logging_config import logger
+
+
+def _map_dtype_to_pystac(dtype_str: str) -> DataType | None:
+    """Map the detected dtype (e.g. 'uint16', 'float32') to DataType from PySTAC.
+    Expand according to the possible dtypes that raster.get_tif_metadata returns."""
+    d = (dtype_str or "").lower()
+    if d in ("uint8", "ubyte"):    return DataType.UINT8
+    if d in ("uint16",):           return DataType.UINT16
+    if d in ("uint32",):           return DataType.UINT32
+    if d in ("int16",):            return DataType.INT16
+    if d in ("int32",):            return DataType.INT32
+    if d in ("float32", "float"):  return DataType.FLOAT32
+    if d in ("float64", "double"): return DataType.FLOAT64
+    return None
 
 
 class Collection:
@@ -146,6 +161,17 @@ class Collection:
             extra_fields={"metadata": collection_data["metadata"]},
         )
 
+        try:
+            resolutions = sorted({it["resolution"] for it in self.items if "resolution" in it})
+            if resolutions:
+                extras = self.stac_collection.extra_fields or {}
+                summaries = extras.get("summaries", {})
+                summaries["raster:spatial_resolution"] = resolutions
+                extras["summaries"] = summaries
+                self.stac_collection.extra_fields = extras
+        except Exception as e:
+            logger.warning(f"Could not build resolution summaries: {e}")
+
         self.stac_collection.validate()
         logger.info(f"Collection {collection_id} validated successfully")
 
@@ -171,7 +197,8 @@ class Collection:
                     "proj:epsg"
                 ]
                 item.stac_extensions = [
-                    "https://stac-extensions.github.io/projection/v1.0.0/schema.json"
+                    "https://stac-extensions.github.io/projection/v1.0.0/schema.json",
+                    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
                 ]
                 item.validate()
                 self.stac_items.append(item)
@@ -296,7 +323,7 @@ class Collection:
 
     def upload_layers(self, output_folder):
         """
-        Upload item layers to storage.
+        Upload item layers to storage and annotate raster:bands on each asset.
         """
         self.uploaded_urls = []
         if not self.items:
@@ -316,13 +343,38 @@ class Collection:
             if final_url:
                 self.uploaded_urls.append(final_url)
 
+            asset = pystac.Asset(
+                href=final_url,
+                media_type=pystac.MediaType.COG
+            )
             self.stac_items[i].add_asset(
                 key=item["id"],
-                asset=pystac.Asset(
-                    href=final_url, media_type=pystac.MediaType.COG
-                ),
+                asset=asset,
             )
-            self.stac_items[i].set_self_href(final_url)
+
+            try:
+                band_dtype = _map_dtype_to_pystac(item.get("dtype"))
+                band_resolution = item.get("resolution")
+
+                bands = [
+                    RasterBand.create(
+                        data_type=band_dtype,
+                        spatial_resolution=band_resolution
+                    )
+                ]
+
+                raster_ext = RasterExtension.ext(asset, add_if_missing=True)
+                raster_ext.bands = bands
+
+            except Exception as e:
+                logger.warning(
+                    f"Could not attach raster:bands to asset {item['id']}: {e}"
+                )
+
+            try:
+                self.stac_items[i].validate()
+            except Exception as e:
+                logger.warning(f"Item {self.stac_items[i].id} failed validation after assets: {e}")
 
     def clean_local_cogs(
         self, output_folder: str, remove_dir_if_empty: bool = True
