@@ -10,7 +10,7 @@ from urllib import parse
 import pystac
 import rasterio
 from pystac.extensions.projection import ProjectionExtension
-from pystac.extensions.raster import RasterExtension, RasterBand, DataType
+from pystac.extensions.raster import DataType, RasterBand, RasterExtension
 
 from config import get_settings
 from utils import raster, stac_rest, storage
@@ -19,15 +19,23 @@ from utils.logging_config import logger
 
 def _map_dtype_to_pystac(dtype_str: str) -> DataType | None:
     """Map the detected dtype (e.g. 'uint16', 'float32') to DataType from PySTAC.
-    Expand according to the possible dtypes that raster.get_tif_metadata returns."""
+    Expand according to the possible dtypes that raster.get_tif_metadata returns.
+    """
     d = (dtype_str or "").lower()
-    if d in ("uint8", "ubyte"):    return DataType.UINT8
-    if d in ("uint16",):           return DataType.UINT16
-    if d in ("uint32",):           return DataType.UINT32
-    if d in ("int16",):            return DataType.INT16
-    if d in ("int32",):            return DataType.INT32
-    if d in ("float32", "float"):  return DataType.FLOAT32
-    if d in ("float64", "double"): return DataType.FLOAT64
+    if d in ("uint8", "ubyte"):
+        return DataType.UINT8
+    if d in ("uint16",):
+        return DataType.UINT16
+    if d in ("uint32",):
+        return DataType.UINT32
+    if d in ("int16",):
+        return DataType.INT16
+    if d in ("int32",):
+        return DataType.INT32
+    if d in ("float32", "float"):
+        return DataType.FLOAT32
+    if d in ("float64", "double"):
+        return DataType.FLOAT64
     return None
 
 
@@ -162,7 +170,9 @@ class Collection:
         )
 
         try:
-            resolutions = sorted({it["resolution"] for it in self.items if "resolution" in it})
+            resolutions = sorted(
+                {it["resolution"] for it in self.items if "resolution" in it}
+            )
             if resolutions:
                 extras = self.stac_collection.extra_fields or {}
                 summaries = extras.get("summaries", {})
@@ -344,8 +354,7 @@ class Collection:
                 self.uploaded_urls.append(final_url)
 
             asset = pystac.Asset(
-                href=final_url,
-                media_type=pystac.MediaType.COG
+                href=final_url, media_type=pystac.MediaType.COG
             )
             self.stac_items[i].add_asset(
                 key=item["id"],
@@ -359,7 +368,7 @@ class Collection:
                 bands = [
                     RasterBand.create(
                         data_type=band_dtype,
-                        spatial_resolution=band_resolution
+                        spatial_resolution=band_resolution,
                     )
                 ]
 
@@ -374,7 +383,9 @@ class Collection:
             try:
                 self.stac_items[i].validate()
             except Exception as e:
-                logger.warning(f"Item {self.stac_items[i].id} failed validation after assets: {e}")
+                logger.warning(
+                    f"Item {self.stac_items[i].id} failed validation after assets: {e}"
+                )
 
     def clean_local_cogs(
         self, output_folder: str, remove_dir_if_empty: bool = True
