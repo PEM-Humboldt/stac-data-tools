@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     username_auth: str = "admin"
     password_auth: str = "admin"
     token: str = ""
+    main_file: str = "src/main.py"
+    docs_dir: str = "docs"
 
     model_config = SettingsConfigDict(env_file=".env")
 
