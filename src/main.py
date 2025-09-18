@@ -59,6 +59,14 @@ def main():
         required=False,
     )
 
+    create_parser.add_argument(
+        "--delete-local-cog",
+        dest="delete_local_cog",
+        action="store_true",
+        help="(Opcional) Elimina los COG locales en la carpeta de salida luego de subirlos",
+        required=False,
+    )
+
     validate_parser = sub_parsers.add_parser(
         "validate", help="Validate collection specification"
     )
@@ -127,6 +135,7 @@ def main():
             logger.info("Previous collection removed.")
 
         output_dir = f"{getcwd()}/output/{args.folder}"
+
         collection.convert_layers(input_folder, output_dir)
         logger.info("Layers converted successfully.")
 
@@ -135,6 +144,9 @@ def main():
 
         collection.upload_collection()
         logger.info("Collection uploaded successfully.")
+
+        if args.delete_local_cog:
+            collection.clean_local_cogs(output_dir)
 
         sysexit("Process completed successfully.")
 

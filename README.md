@@ -81,13 +81,17 @@ Para cargar una colección de capas, ejecuta el siguiente comando:
 python src/main.py create -f folder_name [-c collection_name]
 ```
 
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
-- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo collection.json.
 
-#### Ejemplo:
+### Parámetros:
+- `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
+- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
+- `--delete-local-cog` (opcional): Elimina los COG locales de la carpeta `output/<folder>` después de subirlos exitosamente.  
+  Si la carpeta queda vacía tras la limpieza, también será eliminada.
+
+#### Ejemplos:
 
 * Especificando un nombre de colección:
+
 ```
 python src/main.py create -f my_folder -c MyCollection
 
@@ -106,13 +110,20 @@ o
 
 python src/main.py create --folder my_folder
 ```
+
+* Cargar una colección y eliminar los COG locales después de la carga:
+
+```
+python src/main.py create -f my_folder -c MyCollection --delete-local-cog
+```
 ---
 ## Sobrescribir una Colección Existente
 
 Para sobrescribir una colección existente, ejecuta el siguiente comando:
 
+```
 python src/main.py create -f folder_name [-c collection_name] [-o]
-
+```
 
 ### Parámetros:
 - `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
