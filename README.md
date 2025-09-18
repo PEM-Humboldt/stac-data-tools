@@ -27,7 +27,7 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
    conda env create -f environment.yml
    ```
 
-   El nombre del entorno de ejecución será el que se configure en el archivo `environment.yml`, el cual se encuentra en la raiz del proyecto. Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
+   El nombre del entorno de ejecución será el que se configure en el archivo [`environment.yml`](environment.yml), el cual se encuentra en la raiz del proyecto. Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
 
 4. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
 
@@ -35,16 +35,9 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
 
 Antes de usar la herramienta asegurese de realizar lo siguiente:
 
-1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
-   ```
-   STAC_URL="" # URL del servidor del STAC
-   ABS_STRING="" # Cadena de conexión a Azure Blob Storage
-   ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
-   AUTH_URL="" # Path de la ruta de la url para autenticar, la cual seria "/auth/token"
-   USERNAME_AUTH:"" # Nombre de usuario para autenticación.
-   PASSWORD_AUTH:"" # Contraseña para autenticación.
-   ```
-   (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
+1. Crear un archivo `.env` réplica de [`env.sample`](env.sample) y actualizar los valores de la variables existentes.
+
+   *Nota: Si la variable STAC_URL="localhost:8082" no funciona, asegúrese de incluir el protocolo http: STAC_URL="http://localhost:8082"
 
 ## Uso
 
@@ -72,162 +65,6 @@ Para crear una colección siga los siguientes pasos:
 La autenticación se realiza automáticamente utilizando las credenciales definidas en las variables de ambiente.
 
 ---
-
-## Cargar una Colección
-
-Para cargar una colección de capas, ejecuta el siguiente comando:
-
-```
-python src/main.py create -f folder_name [-c collection_name]
-```
-
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio con el archivo collection.json y las capas.
-- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo collection.json.
-
-#### Ejemplo:
-
-* Especificando un nombre de colección:
-```
-python src/main.py create -f my_folder -c MyCollection
-
-o
-
-python src/main.py create --folder my_folder --collection MyCollection
-```
-
-Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`.
-
-* Usando el `id` del archivo collection.json:
-```
-python src/main.py create -f my_folder
-
-o
-
-python src/main.py create --folder my_folder
-```
----
-## Sobrescribir una Colección Existente
-
-Para sobrescribir una colección existente, ejecuta el siguiente comando:
-
-python src/main.py create -f folder_name [-c collection_name] [-o]
-
-
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
-- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
-- `-o, --overwrite` (obligatorio): Permite sobrescribir una colección existente si ya existe. Si no se proporciona, la colección no será sobrescrita.
-
-#### Ejemplo:
-
-* Sobrescribiendo una colección existente:
-
-```
-python src/main.py create -f my_folder -o
-
-o
-
-python src/main.py create --folder my_folder --overwrite
-```
-
-
-Este comando sobrescribirá la colección existente (si ya existe) usando los archivos en el directorio `input/my_folder`.
-
-* Especificando un nombre de colección para sobrescribir:
-
-```
-python src/main.py create -f my_folder -c MyCollection -o
-
-o
-
-python src/main.py create --folder my_folder --collection MyCollection --overwrite
-```
-
-
-Este comando sobrescribirá la colección `MyCollection` si ya existe, usando los archivos en el directorio `input/my_folder`.
-
----
-
-## Validar una Colección
-
-Si solo deseas validar una colección sin cargarla, puedes ejecutar:
-
-```
-python src/main.py validate -f folder_name [-c collection_name]
-```
-
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
-- `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el `id` del archivo collection.json.
-
-#### Ejemplo:
-```
-python src/main.py validate -f my_folder
-
-o
-
-python src/main.py validate --folder my_folder
-```
-
-Este comando validará los archivos de la colección en el directorio `input/my_folder` sin cargarlos.
-
----
-
-## Eliminar una Colección
-
-Para eliminar una colección de STAC y de Azure, ejecuta el siguiente comando:
-
-```
-python src/main.py remove --collection collection_name
-```
-
-### Parámetros:
-- `-c, --collection` (obligatorio): Nombre de la colección a eliminar.
-
-#### Ejemplo:
-```
-python src/main.py remove -c my_collection
-
-o
-
-python src/main.py remove --collection my_collection
-```
-
-Este comando eliminará la colección `my_collection` del sistema.
-
----
-
-### Inyectar ítems en una colección existente (`inject`)
-Este comando:
-1. Lee el `collection.json` en `input/<folder>`
-2. Reemplaza la sección `"items"` usando los `.tif` en esa carpeta
-3. Mantiene el resto de la información intacta
-4. Genera un nuevo `collection.json` actualizado
-
-📌 **Importante:**  
-- Los `.tif` deben tener en el nombre **un año** (`2005`) o un **periodo** (`2000_2005`, `2000-2005`).
-- Si hay duplicados (mismo id de año o periodo) se producirá un error.
-
-**Sintaxis:**
-```
-python src/main.py inject -f <folder> [--no-backup]
-```
-
-### Parámetros:
-- `-f, --folder`: Carpeta en `input` con el `collection.json` y los `.tif`
-- `--no-backup`: (opcional) No generar backup del `collection.json` original
-
-#### Ejemplos:
-```
-# Inyectar con backup
-python src/main.py inject -f my_folder
-
-# Inyectar sin backup
-python src/main.py inject -f my_folder --no-backup
-```
-
-El resultado es un archivo `collection.json` actualizado, listo para ser usado en la creación/sobrescritura de la colección.
 
 ## Revisión y formato de estilos para el código
 
@@ -268,16 +105,46 @@ black src
 
 ## Documentación
 
-La documentación se genera con ayuda del paquete pdoc que lee los docstrings presentes en los scripts para describir las clases y funciones. Pdoc genera documentación en formatos como Markdown o HTML y permite especificar el directorio de salida.
+La documentación se genera con **MkDocs**, a partir de archivos Markdown. Estos archivos son autogenerados por el script [`mkdocs/generate_docs.py`](mkdocs/generate_docs.py), el cual extrae automáticamente la descripción, la sintaxis y las opciones de cada subcomando a partir de la ayuda del CLI. Los archivos resultantes se guardan en la carpeta [`docs/commands_info`](docs/commands_info).  
+De manera complementaria, se incluyen contenidos adicionales —como ejemplos de uso y notas aclaratorias— que pueden editarse manualmente en los archivos ubicados en la carpeta [`docs/commands_extended`](docs/commands_extended).
 
-Salida como HTML:
+Estos pasos son para generar y ver la documentación en el ambiente local:
 
-```
-pdoc --html --output-dir docs src
-```
+1. Asegurese de tener actualizadas las dependencias asociadas a la documentación y que se encuentran en el archivo [`environment.yml`](environment.yml)
+
+   ```
+   conda env update -f environment.yml --prune
+   ```
+1. Asegurese de tener activo el ambiente de conda
+
+   ```
+   conda activate <nombre_del_entorno>
+   ```
+1. Asegurese de tener configuradas las siguientes variables de ambiente:
+
+   - `MAIN_FILE`: Ruta relativa al script principal `main.py`
+   - `DOCS_DIR`: Directorio donde se van a generar los archivos de documentación para cada uno de los comandos
+
+   *Nota: Si no se definen estas variables de ambiente, se tomarán los valores por defecto configurados en [src/config.py](src/config.py)
+
+1. Generar la documentación formato Markdown:
+
+   ```
+   python mkdocs/generate_docs.py
+   ```
+1. Iniciar el servidor local:
+
+   ```
+   mkdocs serve -f mkdocs/mkdocs.yml
+   ```
+1. Ver la documentación en ambiente local ir a esta ruta:
+
+   http://127.0.0.1:8000
+
+TODO: Actualizar cuando se configure el despliegue en github pages:
 
 La documentación de la versión actual se puede consultar [aquí](https://pem-humboldt.github.io/stac-data-tools/src/).
-
+   
 ## Licencia
 
 Licencia MIT (MIT) 2024 - [Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://humboldt.org.co). Vea el archivo [LICENSE](LICENSE) para mas información.
