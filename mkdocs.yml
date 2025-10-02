@@ -1,4 +1,5 @@
 site_name: stac-data-tools
+repo_url: https://github.com/PEM-Humboldt/stac-data-tools
 
 theme:
   name: material
