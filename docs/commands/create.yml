@@ -1,0 +1,38 @@
+title: "Create command"
+description: >
+  Create a new collection.
+
+examples:
+  - name: "Creating a New Collection"
+    descriptions:
+      - text: "Using the command with a collection name:"
+        cmd: "python src/main.py create -f my_folder -c my_collection"
+      - text: "Alternative syntax with full parameter names:"
+        cmd: "python src/main.py create --folder my_folder --collection my_collection"
+        footer: "This will create a collection named `my_collection` using the files in `input/my_folder`."
+  - name: "Overwriting an Existing Collection"
+    descriptions:
+      - text: "To overwrite an existing collection, use the `-o` or `--overwrite` flag:"
+        cmd: "python src/main.py create -f my_folder -o"
+      - text: "With a specific collection name:"
+        cmd: "python src/main.py create -f my_folder -c my_collection -o"
+      - text: "Using full parameter names:"
+        cmd: "python src/main.py create --folder my_folder --collection my_collection --overwrite"
+        footer: "These commands will overwrite the existing collection if it already exists, using the files from `input/my_folder`."
+notes:
+  - title: "General Setup"
+    description: |
+      - The collection folder must be placed in the `input` directory.
+      - The input folder must contain:
+          - A `collection.json` file that describes the collection
+          - The corresponding layer files (.tif)
+      - The `collection.json` must follow the specification described in `spec/collection.md`.
+      - Use `collection.example.json` as a template for creating your collection configuration.
+  - title: "Command Behavior"
+    description: |
+      - If no collection name is provided with `-c`, the `id` from collection.json will be used.
+      - Without the `-o` flag, the command will fail if the collection already exists.
+      - With `-o` flag, any existing collection with the same name will be completely replaced.
+      - The folder must contain valid STAC assets.
+      - This command does not validate items, only the collection structure.
+      - You can combine this command with validate after creation for consistency checks.

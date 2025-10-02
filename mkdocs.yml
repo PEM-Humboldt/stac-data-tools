@@ -12,7 +12,6 @@ plugins:
       modules:
         - docs.main
 
-
 markdown_extensions:
   - tables
   - admonition
@@ -20,4 +19,4 @@ markdown_extensions:
   - pymdownx.highlight
 
 nav:
-  - CLI Reference: cli.md
+  - CLI Reference: command.md
