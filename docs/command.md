@@ -1,11 +1,11 @@
-# {{ command.title }}
+# {{ command().title }}
 
-{{ command.description }}
+{{ command().description }}
 
-{% if command.examples %}
+{% if command().examples %}
 ## Examples
 
-{% for example in command.examples %}
+{% for example in command().examples %}
 ---
 ### {{ example.name }}
 
@@ -37,11 +37,11 @@
 
 {% endif %}
 
-{% if command.notes %}
+{% if command().notes %}
 
 ## Notes
 
-{% for note in command.notes %}
+{% for note in command().notes %}
 
 ### {{ note.title }}
 

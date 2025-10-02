@@ -11,6 +11,9 @@ plugins:
   - macros:
       modules:
         - docs.main
+  - gen-files:
+      scripts:
+          - docs/gen_pages.py
 
 markdown_extensions:
   - tables
@@ -19,4 +22,9 @@ markdown_extensions:
   - pymdownx.highlight
 
 nav:
-  - CLI Reference: command.md
+  - Home: index.md
+  - Create: create.md
+  - Validate: validate.md
+  - Remove: remove.md
+  - Inject: inject.md
+

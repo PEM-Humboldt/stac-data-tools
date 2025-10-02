@@ -1,19 +1,20 @@
-# docs/main.py
 def define_env(env):
-    """
-    Called by mkdocs-macros-plugin at build time.
-    We load docs/data/cli.yml and expose it as {{ cli }} in templates.
-    """
+    
     import os, yaml
 
-    # # YAML relative path
-    # yml_path = os.path.join(env.project_dir, "docs", "commands", "cli.yml")
+    base_path = os.path.join(env.project_dir, "docs", "commands")
 
-    # with open(yml_path, "r", encoding="utf-8") as f:
-    #     env.variables["cli"] = yaml.safe_load(f)
+    @env.macro
+    def command():
+        """
+        Returns the YAML corresponding to the current page name.
+        """
+        page_name = env.page.title.lower()
 
-    # YAML relative path
-    yml_path = os.path.join(env.project_dir, "docs", "commands", "create.yml")
+        yml_file = os.path.join(base_path, f"{page_name}.yml")
 
-    with open(yml_path, "r", encoding="utf-8") as f:
-        env.variables["command"] = yaml.safe_load(f)
+        if os.path.exists(yml_file):
+            with open(yml_file, "r", encoding="utf-8") as f:
+                return yaml.safe_load(f)
+        else:
+            return {"error": f"{page_name}.yml doesn't exist"}
