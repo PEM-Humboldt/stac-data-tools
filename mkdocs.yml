@@ -5,6 +5,8 @@ theme:
   name: material
   features:
     - content.code.copy
+    - navigation.expand
+    - navigation.top
 
 plugins:
   - search
@@ -23,8 +25,9 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Create: create.md
-  - Validate: validate.md
-  - Remove: remove.md
-  - Inject: inject.md
+  - Commands:
+    - Create: create.md
+    - Validate: validate.md
+    - Remove: remove.md
+    - Inject: inject.md
 
