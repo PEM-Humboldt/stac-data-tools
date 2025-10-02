@@ -289,6 +289,19 @@ pdoc --html --output-dir docs src
 
 La documentación de la versión actual se puede consultar [aquí](https://pem-humboldt.github.io/stac-data-tools/src/).
 
+### Documentación de línea de comandos
+
+La documentación para la línea de comandos se realiza con [MkDocs](https://www.mkdocs.org/).
+
+```sh
+# Generar documentación
+python -m mkdocs build
+# Desplegar página en ambiente local
+python -m mkdocs serve
+# Desplegar página en github pages
+python -m mkdocs gh-deploy
+```
+
 ## Licencia
 
 Licencia MIT (MIT) 2024 - [Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://humboldt.org.co). Vea el archivo [LICENSE](LICENSE) para mas información.
