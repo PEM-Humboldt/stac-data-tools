@@ -11,5 +11,4 @@
 > Write if it's necessary to make data modifications or other special things to test these changes
 
 ## ✅ Checks
-
 - [ ] Verify that the docs has been updated according to the changes in this PR
