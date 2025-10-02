@@ -1,0 +1,75 @@
+prog: sdt
+title: STAC Collection Manager
+description: >
+  Manage STAC collections: validate, create (convert/upload), remove and inject items.
+
+commands:
+  - name: create
+    title: Create a new STAC collection
+    usage: "sdt create -f FOLDER_NAME [-c COLLECTION_NAME] [-o] [--delete-local-cog]"
+    description: |
+      Build the collection from `input/<folder>`, convert layers to COG, upload layers
+      and the collection. Optionally clean local COGs after a successful upload.
+    params:
+      - flags: "-f, --folder"
+        required: true
+        desc: "Input folder under `input/` with `collection.json` and layers."
+      - flags: "-c, --collection"
+        required: false
+        desc: "Collection name. If omitted, the `id` in `collection.json` is used."
+      - flags: "-o, --overwrite"
+        required: false
+        desc: "Overwrite existing collection if it already exists."
+      - flags: "--delete-local-cog"
+        required: false
+        desc: "Delete local COGs in `output/<folder>` after a successful upload."
+    examples:
+      - "sdt create -f my_folder -c MyCollection"
+      - "sdt create -f my_folder --delete-local-cog"
+
+  - name: validate
+    title: Validate a collection specification (no upload)
+    usage: "sdt validate -f FOLDER_NAME [-c COLLECTION_NAME]"
+    description: |
+      Validate folder structure and `collection.json` schema without converting or uploading.
+    params:
+      - flags: "-f, --folder"
+        required: true
+        desc: "Input folder under `input/` containing `collection.json` and layers."
+      - flags: "-c, --collection"
+        required: false
+        desc: "Collection name to validate. If omitted, uses the `id` from `collection.json`."
+    examples:
+      - "sdt validate -f my_folder"
+
+  - name: remove
+    title: Remove a collection
+    usage: "sdt remove -c COLLECTION_NAME"
+    description: "Remove the indicated collection from the target storage."
+    params:
+      - flags: "-c, --collection"
+        required: true
+        desc: "Collection name to remove."
+    examples:
+      - "sdt remove -c MyCollection"
+
+  - name: inject
+    title: Inject items into collection.json from .tif files
+    usage: "sdt inject -f FOLDER_NAME [-o OUTPUT] [--no-backup]"
+    description: |
+      Scan `input/<folder>` for `.tif` and rewrite the `items` array in `collection.json`.
+      The rest of fields remain unchanged. Filenames must include a year (`2005`) or a
+      period (`2000_2005` or `2000-2005`). Duplicate period/year IDs raise an error.
+    params:
+      - flags: "-f, --folder"
+        required: true
+        desc: "Folder under `input/` with `collection.json` and `.tif` files."
+      - flags: "-o, --output"
+        required: false
+        desc: "Optional output path for the resulting JSON (default: overwrite in place)."
+      - flags: "--no-backup"
+        required: false
+        desc: "Do not create a backup when overwriting `collection.json`."
+    examples:
+      - "sdt inject -f my_folder"
+      - "sdt inject -f my_folder --no-backup"
