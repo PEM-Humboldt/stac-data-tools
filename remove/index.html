@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../validate/">
+      
+      
+        <link rel="next" href="../inject/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -16,7 +20,7 @@
     
     
       
-        <title>CLI Reference - stac-data-tools</title>
+        <title>Remove - stac-data-tools</title>
       
     
     
@@ -58,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#stac-collection-manager" class="md-skip">
+        <a href="#remove-command" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CLI Reference
+              Remove
             
           </span>
         </div>
@@ -211,6 +215,72 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../create/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Create
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../validate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Validate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -228,7 +298,7 @@
   
   
   <span class="md-ellipsis">
-    CLI Reference
+    Remove
     
   </span>
   
@@ -241,7 +311,7 @@
   
   
   <span class="md-ellipsis">
-    CLI Reference
+    Remove
     
   </span>
   
@@ -264,89 +334,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Commands
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Commands">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#create-create-a-new-stac-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      create — Create a new STAC collection
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="create — Create a new STAC collection">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       Examples
     </span>
   </a>
   
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#validate-validate-a-collection-specification-no-upload" class="md-nav__link">
-    <span class="md-ellipsis">
-      validate — Validate a collection specification (no upload)
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="validate — Validate a collection specification (no upload)">
+    <nav class="md-nav" aria-label="Examples">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage_1" class="md-nav__link">
+  <a href="#remove-by-collection-name" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
+      Remove by Collection Name
     </span>
   </a>
   
@@ -356,88 +356,32 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#remove-remove-a-collection" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
-      remove — Remove a collection
+      Notes
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="remove — Remove a collection">
+    <nav class="md-nav" aria-label="Notes">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage_2" class="md-nav__link">
+  <a href="#command-behavior" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage
+      Command Behavior
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#parameters_2" class="md-nav__link">
+  <a href="#best-practices" class="md-nav__link">
     <span class="md-ellipsis">
-      Parameters
+      Best Practices
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inject-inject-items-into-collectionjson-from-tif-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      inject — Inject items into collection.json from .tif files
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="inject — Inject items into collection.json from .tif files">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usage_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -450,6 +394,28 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inject/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inject
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -481,89 +447,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Commands
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Commands">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#create-create-a-new-stac-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      create — Create a new STAC collection
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="create — Create a new STAC collection">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       Examples
     </span>
   </a>
   
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#validate-validate-a-collection-specification-no-upload" class="md-nav__link">
-    <span class="md-ellipsis">
-      validate — Validate a collection specification (no upload)
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="validate — Validate a collection specification (no upload)">
+    <nav class="md-nav" aria-label="Examples">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage_1" class="md-nav__link">
+  <a href="#remove-by-collection-name" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
+      Remove by Collection Name
     </span>
   </a>
   
@@ -573,88 +469,32 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#remove-remove-a-collection" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
-      remove — Remove a collection
+      Notes
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="remove — Remove a collection">
+    <nav class="md-nav" aria-label="Notes">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage_2" class="md-nav__link">
+  <a href="#command-behavior" class="md-nav__link">
     <span class="md-ellipsis">
-      Usage
+      Command Behavior
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#parameters_2" class="md-nav__link">
+  <a href="#best-practices" class="md-nav__link">
     <span class="md-ellipsis">
-      Parameters
+      Best Practices
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inject-inject-items-into-collectionjson-from-tif-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      inject — Inject items into collection.json from .tif files
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="inject — Inject items into collection.json from .tif files">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usage_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      Parameters
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -678,76 +518,37 @@
                   
 
 
-  
-  
 
-
-<h1 id="stac-collection-manager">STAC Collection Manager</h1>
-<p>Manage STAC collections: validate, create (convert/upload), remove and inject items.</p>
-<h2 id="commands">Commands</h2>
+<h1 id="remove-command">Remove command</h1>
+<p>Remove a collection.</p>
+<h2 id="examples">Examples</h2>
 <hr />
-<h3 id="create-create-a-new-stac-collection">create — Create a new STAC collection</h3>
-<p>Build the collection from <code>input/&lt;folder&gt;</code>, convert layers to COG, upload layers
-and the collection. Optionally clean local COGs after a successful upload.</p>
-<h4 id="usage">Usage</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>FOLDER_NAME<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>COLLECTION_NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="o">]</span><span class="w"> </span><span class="o">[</span>--delete-local-cog<span class="o">]</span>
+<h3 id="remove-by-collection-name">Remove by Collection Name</h3>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>remove<span class="w"> </span>-c<span class="w"> </span>my_collection
 </code></pre></div>
-<h4 id="parameters">Parameters</h4>
+<p>Using full parameter name:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>remove<span class="w"> </span>--collection<span class="w"> </span>my_collection
+</code></pre></div>
+<p>This will remove the collection <code>my_collection</code> from both STAC and Azure storage.</p>
+<h2 id="notes">Notes</h2>
+<h3 id="command-behavior">Command Behavior</h3>
 <ul>
-<li><code>-f, --folder</code> (required): Input folder under <code>input/</code> with <code>collection.json</code> and layers.</li>
-<li><code>-c, --collection</code> (optional): Collection name. If omitted, the <code>id</code> in <code>collection.json</code> is used.</li>
-<li><code>-o, --overwrite</code> (optional): Overwrite existing collection if it already exists.</li>
-<li><code>--delete-local-cog</code> (optional): Delete local COGs in <code>output/&lt;folder&gt;</code> after a successful upload.</li>
+<li>This command removes the collection from both:<ul>
+<li>The STAC catalog</li>
+<li>Azure Blob Storage</li>
 </ul>
-<h4 id="examples">Examples</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>-c<span class="w"> </span>MyCollection
-sdt<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>--delete-local-cog
-</code></pre></div>
-<hr />
-<h3 id="validate-validate-a-collection-specification-no-upload">validate — Validate a collection specification (no upload)</h3>
-<p>Validate folder structure and <code>collection.json</code> schema without converting or uploading.</p>
-<h4 id="usage_1">Usage</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>FOLDER_NAME<span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>COLLECTION_NAME<span class="o">]</span>
-</code></pre></div>
-<h4 id="parameters_1">Parameters</h4>
+</li>
+<li>The operation cannot be undone</li>
+<li>The collection name parameter (-c/--collection) is required</li>
+<li>Make sure to have proper backup before removing collections</li>
+<li>Ensure you have the correct permissions in both STAC and Azure</li>
+</ul>
+<h3 id="best-practices">Best Practices</h3>
 <ul>
-<li><code>-f, --folder</code> (required): Input folder under <code>input/</code> containing <code>collection.json</code> and layers.</li>
-<li><code>-c, --collection</code> (optional): Collection name to validate. If omitted, uses the <code>id</code> from <code>collection.json</code>.</li>
+<li>Validate the collection name before removal</li>
+<li>Consider creating a backup before removing important collections</li>
+<li>Double-check the collection name to avoid accidental deletions</li>
 </ul>
-<h4 id="examples_1">Examples</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>validate<span class="w"> </span>-f<span class="w"> </span>my_folder
-</code></pre></div>
-<hr />
-<h3 id="remove-remove-a-collection">remove — Remove a collection</h3>
-<p>Remove the indicated collection from the target storage.</p>
-<h4 id="usage_2">Usage</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>remove<span class="w"> </span>-c<span class="w"> </span>COLLECTION_NAME
-</code></pre></div>
-<h4 id="parameters_2">Parameters</h4>
-<ul>
-<li><code>-c, --collection</code> (required): Collection name to remove.</li>
-</ul>
-<h4 id="examples_2">Examples</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>remove<span class="w"> </span>-c<span class="w"> </span>MyCollection
-</code></pre></div>
-<hr />
-<h3 id="inject-inject-items-into-collectionjson-from-tif-files">inject — Inject items into collection.json from .tif files</h3>
-<p>Scan <code>input/&lt;folder&gt;</code> for <code>.tif</code> and rewrite the <code>items</code> array in <code>collection.json</code>.
-The rest of fields remain unchanged. Filenames must include a year (<code>2005</code>) or a
-period (<code>2000_2005</code> or <code>2000-2005</code>). Duplicate period/year IDs raise an error.</p>
-<h4 id="usage_3">Usage</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>inject<span class="w"> </span>-f<span class="w"> </span>FOLDER_NAME<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--no-backup<span class="o">]</span>
-</code></pre></div>
-<h4 id="parameters_3">Parameters</h4>
-<ul>
-<li><code>-f, --folder</code> (required): Folder under <code>input/</code> with <code>collection.json</code> and <code>.tif</code> files.</li>
-<li><code>-o, --output</code> (optional): Optional output path for the resulting JSON (default: overwrite in place).</li>
-<li><code>--no-backup</code> (optional): Do not create a backup when overwriting <code>collection.json</code>.</li>
-</ul>
-<h4 id="examples_3">Examples</h4>
-<div class="highlight"><pre><span></span><code>sdt<span class="w"> </span>inject<span class="w"> </span>-f<span class="w"> </span>my_folder
-sdt<span class="w"> </span>inject<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>--no-backup
-</code></pre></div>
 
 
 
