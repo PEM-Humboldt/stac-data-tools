@@ -2,6 +2,8 @@
 
 Este paquete corresponde a la herramienta para cargar, editar y eliminar colecciones e items del stac.
 
+Ver la documentación de los comandos: [stac-data-tools](https://pem-humboldt.github.io/stac-data-tools/)
+
 ## Requisitos
 
 - Python (3.10)
