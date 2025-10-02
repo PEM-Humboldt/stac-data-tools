@@ -281,18 +281,6 @@ black src
 
 ## Documentación
 
-La documentación se genera con ayuda del paquete pdoc que lee los docstrings presentes en los scripts para describir las clases y funciones. Pdoc genera documentación en formatos como Markdown o HTML y permite especificar el directorio de salida.
-
-Salida como HTML:
-
-```
-pdoc --html --output-dir docs src
-```
-
-La documentación de la versión actual se puede consultar [aquí](https://pem-humboldt.github.io/stac-data-tools/src/).
-
-### Documentación de línea de comandos
-
 La documentación para la línea de comandos se realiza con [MkDocs](https://www.mkdocs.org/).
 
 ```sh
