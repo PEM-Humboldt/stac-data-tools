@@ -1,0 +1,31 @@
+title: "Validate command"
+description: >
+  Validate a collection specification (no upload).
+
+examples:
+  - name: "Basic Validation"
+    descriptions:
+      - text: "Using folder name only:"
+        cmd: "python src/main.py validate -f my_folder"
+      - text: "Using full parameter names:"
+        cmd: "python src/main.py validate --folder my_folder"
+  - name: "Validation with Collection Name"
+    descriptions:
+        cmd: "python src/main.py validate -f my_folder -c my_collection"
+        footer: "This will validate the collection files in `input/my_folder` without uploading them."
+notes:
+  - title: "General Setup"
+    description: |      
+      - The collection folder must be placed in the `input` directory.
+      - The input folder must contain:
+
+          - A `collection.json` file that describes the collection
+          - The corresponding layer files (.tif)
+
+      - The `collection.json` must follow the specification described in `spec/collection.md`.
+  - title: "Command Behavior"
+    description: |
+      - This command validates without uploading or modifying any data.
+      - If no collection name is provided with `-c`, the `id` from collection.json will be used.
+      - The command performs comprehensive validation of the collection structure.
+      - Use this command before creating/updating collections to ensure data integrity.

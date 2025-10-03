@@ -2,6 +2,8 @@
 
 Este paquete corresponde a la herramienta para cargar, editar y eliminar colecciones e items del stac.
 
+Ver la documentación de los comandos: [stac-data-tools](https://pem-humboldt.github.io/stac-data-tools/)
+
 ## Requisitos
 
 - Python (3.10)
@@ -279,15 +281,16 @@ black src
 
 ## Documentación
 
-La documentación se genera con ayuda del paquete pdoc que lee los docstrings presentes en los scripts para describir las clases y funciones. Pdoc genera documentación en formatos como Markdown o HTML y permite especificar el directorio de salida.
+La documentación para la línea de comandos se realiza con [MkDocs](https://www.mkdocs.org/).
 
-Salida como HTML:
-
+```sh
+# Generar documentación
+python -m mkdocs build
+# Desplegar página en ambiente local
+python -m mkdocs serve
+# Desplegar página en github pages
+python -m mkdocs gh-deploy
 ```
-pdoc --html --output-dir docs src
-```
-
-La documentación de la versión actual se puede consultar [aquí](https://pem-humboldt.github.io/stac-data-tools/src/).
 
 ## Licencia
 
