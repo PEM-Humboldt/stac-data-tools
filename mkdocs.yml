@@ -16,18 +16,11 @@ plugins:
   - gen-files:
       scripts:
           - docs/gen_pages.py
+  - literate-nav:
+      nav_file: summary.md
 
 markdown_extensions:
   - tables
   - admonition
   - pymdownx.superfences
   - pymdownx.highlight
-
-nav:
-  - Home: index.md
-  - Commands:
-    - Create: create.md
-    - Validate: validate.md
-    - Remove: remove.md
-    - Inject: inject.md
-
