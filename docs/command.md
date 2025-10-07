@@ -3,7 +3,7 @@
 {{ command().description }}
 
 {% if command().examples %}
-## Examples
+## Ejemplos
 
 {% for example in command().examples %}
 ---
@@ -39,7 +39,7 @@
 
 {% if command().notes %}
 
-## Notes
+## Notas
 
 {% for note in command().notes %}
 

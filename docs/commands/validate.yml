@@ -1,31 +1,31 @@
-title: "Validate command"
+title: "Comando Validate"
 description: >
-  Validate a collection specification (no upload).
+  Validar una especificación de colección (sin carga).
 
 examples:
-  - name: "Basic Validation"
+  - name: "Validación básica"
     descriptions:
-      - text: "Using folder name only:"
+      - text: "Usando solo el nombre de la carpeta:"
         cmd: "python src/main.py validate -f my_folder"
-      - text: "Using full parameter names:"
+      - text: "Usando nombres completos de parámetros:"
         cmd: "python src/main.py validate --folder my_folder"
-  - name: "Validation with Collection Name"
+  - name: "Validación con nombre de colección"
     descriptions:
-        cmd: "python src/main.py validate -f my_folder -c my_collection"
-        footer: "This will validate the collection files in `input/my_folder` without uploading them."
+      - cmd: "python src/main.py validate -f my_folder -c my_collection"
+        footer: "Esto validará los archivos de la colección en `input/my_folder` sin subirlos."
 notes:
-  - title: "General Setup"
+  - title: "Configuración general"
     description: |      
-      - The collection folder must be placed in the `input` directory.
-      - The input folder must contain:
+      - La carpeta de la colección debe ubicarse en el directorio `input`.
+      - La carpeta de entrada debe contener:
 
-          - A `collection.json` file that describes the collection
-          - The corresponding layer files (.tif)
+          - Un archivo `collection.json` que describa la colección
+          - Los archivos de capa correspondientes (`.tif`)
 
-      - The `collection.json` must follow the specification described in `spec/collection.md`.
-  - title: "Command Behavior"
+      - El archivo `collection.json` debe seguir la especificación descrita en `spec/collection.md`.
+  - title: "Comportamiento del comando"
     description: |
-      - This command validates without uploading or modifying any data.
-      - If no collection name is provided with `-c`, the `id` from collection.json will be used.
-      - The command performs comprehensive validation of the collection structure.
-      - Use this command before creating/updating collections to ensure data integrity.
+      - Este comando valida sin subir ni modificar ningún dato.
+      - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo `collection.json`.
+      - El comando realiza una validación completa de la estructura de la colección.
+      - Usa este comando antes de crear o actualizar colecciones para garantizar la integridad de los datos.

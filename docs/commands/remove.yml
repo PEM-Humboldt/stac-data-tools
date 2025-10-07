@@ -1,26 +1,26 @@
-title: "Remove command"
+title: "Comando Remove"
 description: >
-  Remove a collection.
+  Elimina una colección.
 
 examples:
-  - name: "Remove by Collection Name"
+  - name: "Eliminar por nombre de colección"
     descriptions:
       - cmd: "python src/main.py remove -c my_collection"
-      - text: "Using full parameter name:"
+      - text: "Usando el nombre completo del parámetro:"
         cmd: "python src/main.py remove --collection my_collection"
-        footer: "This will remove the collection `my_collection` from both STAC and Azure storage."
+        footer: "Esto eliminará la colección `my_collection` tanto del catálogo `STAC` como del almacenamiento en Azure."
 notes:
-  - title: "Command Behavior"
-    description: |      
-      - This command removes the collection from both:
-          - The STAC catalog
-          - Azure Blob Storage
-      - The operation cannot be undone
-      - The collection name parameter (-c/--collection) is required
-      - Make sure to have proper backup before removing collections
-      - Ensure you have the correct permissions in both STAC and Azure
-  - title: "Best Practices"
+  - title: "Comportamiento del comando"
+    description: |            
+      - Este comando elimina la colección de:
+          - El catálogo `STAC`
+          - `Azure Blob Storage`
+      - La operación no se puede deshacer
+      - El parámetro de nombre de colección (`-c`/`--collection`) es obligatorio
+      - Asegúrate de tener una copia de seguridad antes de eliminar colecciones
+      - Verifica que tengas los permisos adecuados tanto en `STAC` como en `Azure`
+  - title: "Buenas prácticas"
     description: |
-      - Validate the collection name before removal
-      - Consider creating a backup before removing important collections
-      - Double-check the collection name to avoid accidental deletions
+      - Valida el nombre de la colección antes de eliminarla
+      - Considera crear una copia de seguridad antes de eliminar colecciones importantes
+      - Verifica dos veces el nombre de la colección para evitar eliminaciones accidentales

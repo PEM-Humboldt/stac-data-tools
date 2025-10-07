@@ -1,18 +1,18 @@
 # STAC-DATA-TOOLS CLI
 
-🚀 **STAC-DATA-TOOLS CLI** is a command-line tool for uploading, validating, and transforming geospatial data into catalogs under the **STAC (SpatioTemporal Asset Catalogs)** specification.
+🚀 **STAC-DATA-TOOLS CLI** es una herramienta de línea de comandos para cargar, validar y transformar datos geoespaciales en catálogos bajo la especificación **STAC (SpatioTemporal Asset Catalogs)**.
 
-## Key Features
+## Características principales
 
-- 📂 Create, validate, and remove STAC collections
-- 🛰️ Process and validate raster data for STAC integration
-- 🛠️ Automatically inject items from `.tif` files into existing collections
-- ✅ Ensure compliance with STAC specification standards
-- 💾 Backup and version management for collections
+* 📂 Crear, validar y eliminar colecciones `STAC`
+* 🛰️ Procesar y validar datos ráster para su integración con `STAC`
+* 🛠️ Inyectar automáticamente elementos desde archivos `.tif` en colecciones existentes
+* ✅ Garantizar el cumplimiento con los estándares de la especificación `STAC`
+* 💾 Copias de seguridad y gestión de versiones para colecciones
 
-## Installation
+## Instalación
 
-Clone the repository and activate the Conda environment with dependencies:
+Clona el repositorio y activa el entorno de `Conda` con las dependencias:
 
 ```bash
 git clone https://github.com/PEM-Humboldt/stac-data-tools.git
@@ -21,4 +21,8 @@ conda env create -f environment.yml
 conda activate sdt-conda-env
 ```
 
-For more information about installation and configuration, please check the [repository](https://github.com/PEM-Humboldt/stac-data-tools).
+Para más información sobre instalación y configuración, consulta el [repositorio](https://github.com/PEM-Humboldt/stac-data-tools).
+
+## Autenticación Configurada en variables de Ambiente
+
+La autenticación se realiza automáticamente utilizando las credenciales definidas en las variables de ambiente.

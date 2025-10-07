@@ -1,38 +1,38 @@
-title: "Create command"
+title: "Comando Create"
 description: >
-  Create a new collection.
+  Crea una nueva colección.
 
 examples:
-  - name: "Creating a New Collection"
+  - name: "Creación de una nueva colección"
     descriptions:
-      - text: "Using the command with a collection name:"
+      - text: "Usando el comando con un nombre de colección:"
         cmd: "python src/main.py create -f my_folder -c my_collection"
-      - text: "Alternative syntax with full parameter names:"
+      - text: "Sintaxis alternativa con nombres completos de parámetros:"
         cmd: "python src/main.py create --folder my_folder --collection my_collection"
-        footer: "This will create a collection named `my_collection` using the files in `input/my_folder`."
-  - name: "Overwriting an Existing Collection"
+        footer: "Esto creará una colección llamada `my_collection` usando los archivos en `input/my_folder`."
+  - name: "Sobrescribir una colección existente"
     descriptions:
-      - text: "To overwrite an existing collection, use the `-o` or `--overwrite` flag:"
+      - text: "Para sobrescribir una colección existente, usa la bandera `-o` o `--overwrite`:"
         cmd: "python src/main.py create -f my_folder -o"
-      - text: "With a specific collection name:"
+      - text: "Con un nombre de colección específico:"
         cmd: "python src/main.py create -f my_folder -c my_collection -o"
-      - text: "Using full parameter names:"
+      - text: "Usando nombres completos de parámetros:"
         cmd: "python src/main.py create --folder my_folder --collection my_collection --overwrite"
-        footer: "These commands will overwrite the existing collection if it already exists, using the files from `input/my_folder`."
+        footer: "Estos comandos sobrescribirán la colección existente si ya existe, usando los archivos de `input/my_folder`."
 notes:
-  - title: "General Setup"
+  - title: "Configuración general"
     description: |
-      - The collection folder must be placed in the `input` directory.
-      - The input folder must contain:
-          - A `collection.json` file that describes the collection
-          - The corresponding layer files (.tif)
-      - The `collection.json` must follow the specification described in `spec/collection.md`.
-      - Use `collection.example.json` as a template for creating your collection configuration.
-  - title: "Command Behavior"
+      - La carpeta de la colección debe ubicarse en el directorio `input`.
+      - La carpeta de entrada debe contener:
+          - Un archivo `collection.json` que describa la colección
+          - Los archivos de capa correspondientes (`.tif`)
+      - El archivo `collection.json` debe seguir la especificación descrita en `spec/collection.md`.
+      - Usa `collection.example.json` como plantilla para crear la configuración de tu colección.
+  - title: "Comportamiento del comando"
     description: |
-      - If no collection name is provided with `-c`, the `id` from collection.json will be used.
-      - Without the `-o` flag, the command will fail if the collection already exists.
-      - With `-o` flag, any existing collection with the same name will be completely replaced.
-      - The folder must contain valid STAC assets.
-      - This command does not validate items, only the collection structure.
-      - You can combine this command with validate after creation for consistency checks.
+      - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo collection.json.
+      - Sin la bandera `-o`, el comando fallará si la colección ya existe.
+      - Con la bandera `-o`, cualquier colección existente con el mismo nombre será reemplazada completamente.
+      - La carpeta debe contener activos del `STAC` válidos.
+      - Este comando no valida los ítems, solo la estructura de la colección.
+      - Puedes combinar este comando con `validate` después de la creación para realizar verificaciones de consistencia.

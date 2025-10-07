@@ -1,40 +1,40 @@
-title: "Inject command"
+title: "Comando Inject"
 description: >
-  Inject items into collection.json from .tif files.
+  Inyecta ítems en el archivo `collection.json` a partir de archivos `.tif`.
 
 examples:
-  - name: "Basic Injection with Backup"
+  - name: "Inyección básica con copia de seguridad"
     descriptions:
       - cmd: "python src/main.py inject -f my_folder"
-  - name: "Injection without Backup"
+  - name: "Inyección sin copia de seguridad"
     descriptions:
       - cmd: "python src/main.py inject -f my_folder --no-backup"
-      - text: "Using full parameter names:"
+      - text: "Usando nombres completos de parámetros:"
         cmd: "python src/main.py inject --folder my_folder --no-backup"
 notes:
-  - title: "Process Overview"
+  - title: "Descripción del proceso"
     description: |
-      The inject command:
-      1. Reads the `collection.json` from `input/<folder>`
-      2. Replaces the "items" section using the `.tif` files in that folder
-      3. Preserves all other collection information
-      4. Generates an updated `collection.json`
-  - title: "File Requirements"
+      El comando inject:  
+      1. Lee el archivo `collection.json` desde `input/<folder>`  
+      2. Reemplaza la sección "items" usando los archivos `.tif` en esa carpeta  
+      3. Conserva toda la información restante de la colección  
+      4. Genera un nuevo `collection.json` actualizado
+  - title: "Requisitos de los archivos"
     description: |
-      - The collection folder must be in the `input` directory
-      - `.tif` files must include in their name either:
-          - A year (e.g., `2005`)
-          - A period (e.g., `2000_2005` or `2000-2005`)
-      - The folder must contain a valid `collection.json` file
-  - title: "Command Behavior"
+      - La carpeta de la colección debe estar en el directorio `input`
+      - Los archivos `.tif` deben incluir en su nombre:
+          - Un año (por ejemplo, `2005`)
+          - O un período (por ejemplo, `2000_2005` o `2000-2005`)
+      - La carpeta debe contener un archivo `collection.json` válido
+  - title: "Comportamiento del comando"
     description: |
-      - By default, creates a backup of the original `collection.json`
-      - Use `--no-backup` to skip backup creation
-      - Fails if duplicate years/periods are found in file names
-      - The resulting `collection.json` is ready for collection creation/update
-  - title: "Best Practices"
+      - Por defecto, crea una copia de seguridad del archivo original `collection.json`
+      - Usa `--no-backup` para omitir la creación de la copia de seguridad
+      - Falla si se encuentran años o períodos duplicados en los nombres de archivo
+      - El `collection.json` resultante está listo para la creación o actualización de colecciones
+  - title: "Buenas prácticas"
     description: |
-      - Always review the generated `collection.json` after injection
-      - Keep backups of important collections
-      - Validate the collection after injection
-      - Use consistent naming patterns for your .tif files
+      - Revisa siempre el `collection.json` generado después de la inyección
+      - Conserva copias de seguridad de las colecciones importantes
+      - Valida la colección después de la inyección
+      - Usa patrones de nombres consistentes para tus archivos `.tif`

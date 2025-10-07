@@ -5,7 +5,7 @@ template_path = os.path.join("docs", "command.md")
 
 commands_dir = os.path.join("docs", "commands")
 
-summary_lines = ["- [Home](index.md)\n", "- Commands\n"]
+summary_lines = ["- [Inicio](index.md)\n", "- Comandos\n"]
 
 def gen_files():
     """
