@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#remove-command" class="md-skip">
+        <a href="#comando-remove" class="md-skip">
           Skip to content
         </a>
       
@@ -223,7 +223,7 @@
   
   
   <span class="md-ellipsis">
-    Home
+    Inicio
     
   </span>
   
@@ -258,7 +258,7 @@
   
   
   <span class="md-ellipsis">
-    Commands
+    Comandos
     
   </span>
   
@@ -269,7 +269,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            Commands
+            Comandos
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -376,19 +376,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#ejemplos" class="md-nav__link">
     <span class="md-ellipsis">
-      Examples
+      Ejemplos
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Examples">
+    <nav class="md-nav" aria-label="Ejemplos">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#remove-by-collection-name" class="md-nav__link">
+  <a href="#eliminar-por-nombre-de-coleccion" class="md-nav__link">
     <span class="md-ellipsis">
-      Remove by Collection Name
+      Eliminar por nombre de colección
     </span>
   </a>
   
@@ -400,28 +400,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#notas" class="md-nav__link">
     <span class="md-ellipsis">
-      Notes
+      Notas
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Notes">
+    <nav class="md-nav" aria-label="Notas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#command-behavior" class="md-nav__link">
+  <a href="#comportamiento-del-comando" class="md-nav__link">
     <span class="md-ellipsis">
-      Command Behavior
+      Comportamiento del comando
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
+  <a href="#buenas-practicas" class="md-nav__link">
     <span class="md-ellipsis">
-      Best Practices
+      Buenas prácticas
     </span>
   </a>
   
@@ -498,19 +498,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#ejemplos" class="md-nav__link">
     <span class="md-ellipsis">
-      Examples
+      Ejemplos
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Examples">
+    <nav class="md-nav" aria-label="Ejemplos">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#remove-by-collection-name" class="md-nav__link">
+  <a href="#eliminar-por-nombre-de-coleccion" class="md-nav__link">
     <span class="md-ellipsis">
-      Remove by Collection Name
+      Eliminar por nombre de colección
     </span>
   </a>
   
@@ -522,28 +522,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#notas" class="md-nav__link">
     <span class="md-ellipsis">
-      Notes
+      Notas
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Notes">
+    <nav class="md-nav" aria-label="Notas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#command-behavior" class="md-nav__link">
+  <a href="#comportamiento-del-comando" class="md-nav__link">
     <span class="md-ellipsis">
-      Command Behavior
+      Comportamiento del comando
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
+  <a href="#buenas-practicas" class="md-nav__link">
     <span class="md-ellipsis">
-      Best Practices
+      Buenas prácticas
     </span>
   </a>
   
@@ -570,35 +570,35 @@
 
 
 
-<h1 id="remove-command">Remove command</h1>
-<p>Remove a collection.</p>
-<h2 id="examples">Examples</h2>
+<h1 id="comando-remove">Comando Remove</h1>
+<p>Elimina una colección.</p>
+<h2 id="ejemplos">Ejemplos</h2>
 <hr />
-<h3 id="remove-by-collection-name">Remove by Collection Name</h3>
+<h3 id="eliminar-por-nombre-de-coleccion">Eliminar por nombre de colección</h3>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>remove<span class="w"> </span>-c<span class="w"> </span>my_collection
 </code></pre></div>
-<p>Using full parameter name:</p>
+<p>Usando el nombre completo del parámetro:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>remove<span class="w"> </span>--collection<span class="w"> </span>my_collection
 </code></pre></div>
-<p>This will remove the collection <code>my_collection</code> from both STAC and Azure storage.</p>
-<h2 id="notes">Notes</h2>
-<h3 id="command-behavior">Command Behavior</h3>
+<p>Esto eliminará la colección <code>my_collection</code> tanto del catálogo <code>STAC</code> como del almacenamiento en Azure.</p>
+<h2 id="notas">Notas</h2>
+<h3 id="comportamiento-del-comando">Comportamiento del comando</h3>
 <ul>
-<li>This command removes the collection from both:<ul>
-<li>The STAC catalog</li>
-<li>Azure Blob Storage</li>
+<li>Este comando elimina la colección de:<ul>
+<li>El catálogo <code>STAC</code></li>
+<li><code>Azure Blob Storage</code></li>
 </ul>
 </li>
-<li>The operation cannot be undone</li>
-<li>The collection name parameter (-c/--collection) is required</li>
-<li>Make sure to have proper backup before removing collections</li>
-<li>Ensure you have the correct permissions in both STAC and Azure</li>
+<li>La operación no se puede deshacer</li>
+<li>El parámetro de nombre de colección (<code>-c</code>/<code>--collection</code>) es obligatorio</li>
+<li>Asegúrate de tener una copia de seguridad antes de eliminar colecciones</li>
+<li>Verifica que tengas los permisos adecuados tanto en <code>STAC</code> como en <code>Azure</code></li>
 </ul>
-<h3 id="best-practices">Best Practices</h3>
+<h3 id="buenas-practicas">Buenas prácticas</h3>
 <ul>
-<li>Validate the collection name before removal</li>
-<li>Consider creating a backup before removing important collections</li>
-<li>Double-check the collection name to avoid accidental deletions</li>
+<li>Valida el nombre de la colección antes de eliminarla</li>
+<li>Considera crear una copia de seguridad antes de eliminar colecciones importantes</li>
+<li>Verifica dos veces el nombre de la colección para evitar eliminaciones accidentales</li>
 </ul>
 
 
