@@ -29,9 +29,9 @@ Ver la documentación de los comandos: [stac-data-tools](https://pem-humboldt.gi
    conda env create -f environment.yml
    ```
 
-   El nombre del entorno de ejecución será el que se configure en el archivo `environment.yml`, el cual se encuentra en la raiz del proyecto. Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
+   Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
 
-4. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
+4. Activar el entorno de ejecución: `conda activate sdt-conda-env`
 
 ## Configuración
 
