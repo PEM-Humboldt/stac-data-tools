@@ -8,7 +8,6 @@
 * 🛰️ Procesar y validar datos ráster para su integración con `STAC`
 * 🛠️ Inyectar automáticamente elementos desde archivos `.tif` en colecciones existentes
 * ✅ Garantizar el cumplimiento con los estándares de la especificación `STAC`
-* 💾 Copias de seguridad y gestión de versiones para colecciones
 
 ## Instalación
 
