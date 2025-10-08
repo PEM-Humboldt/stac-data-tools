@@ -3,10 +3,10 @@ description: >
   Inyecta ítems en el archivo `collection.json` a partir de archivos `.tif`.
 
 examples:
-  - name: "Inyección básica con copia de seguridad"
+  - name: "Inyección básica con copia de seguridad del archivo `collection.json`"
     descriptions:
       - cmd: "python src/main.py inject -f my_folder"
-  - name: "Inyección sin copia de seguridad"
+  - name: "Inyección sin copia de seguridad del archivo `collection.json`"
     descriptions:
       - cmd: "python src/main.py inject -f my_folder --no-backup"
       - text: "Usando nombres completos de parámetros:"
@@ -29,12 +29,10 @@ notes:
   - title: "Comportamiento del comando"
     description: |
       - Por defecto, crea una copia de seguridad del archivo original `collection.json`
-      - Usa `--no-backup` para omitir la creación de la copia de seguridad
+      - Usa `--no-backup` para omitir la creación de la copia de seguridad del archivo `collection.json`
       - Falla si se encuentran años o períodos duplicados en los nombres de archivo
-      - El `collection.json` resultante está listo para la creación o actualización de colecciones
+      - El archivo `collection.json` resultante está listo para la creación o actualización de colecciones
   - title: "Buenas prácticas"
     description: |
-      - Revisa siempre el `collection.json` generado después de la inyección
+      - Revisa siempre el archivo `collection.json` generado después de la inyección
       - Conserva copias de seguridad de las colecciones importantes
-      - Valida la colección después de la inyección
-      - Usa patrones de nombres consistentes para tus archivos `.tif`

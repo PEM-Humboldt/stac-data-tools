@@ -22,7 +22,7 @@ notes:
           - Un archivo `collection.json` que describa la colección
           - Los archivos de capa correspondientes (`.tif`)
 
-      - El archivo `collection.json` debe seguir la especificación descrita en `spec/collection.md`.
+      - El archivo `collection.json` debe seguir la especificación descrita en [spec/collection.md](https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md).
   - title: "Comportamiento del comando"
     description: |
       - Este comando valida sin subir ni modificar ningún dato.
