@@ -363,18 +363,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#inyeccion-basica-con-copia-de-seguridad" class="md-nav__link">
+  <a href="#inyeccion-basica-con-copia-de-seguridad-del-archivo-collectionjson" class="md-nav__link">
     <span class="md-ellipsis">
-      Inyección básica con copia de seguridad
+      Inyección básica con copia de seguridad del archivo collection.json
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#inyeccion-sin-copia-de-seguridad" class="md-nav__link">
+  <a href="#inyeccion-sin-copia-de-seguridad-del-archivo-collectionjson" class="md-nav__link">
     <span class="md-ellipsis">
-      Inyección sin copia de seguridad
+      Inyección sin copia de seguridad del archivo collection.json
     </span>
   </a>
   
@@ -535,18 +535,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#inyeccion-basica-con-copia-de-seguridad" class="md-nav__link">
+  <a href="#inyeccion-basica-con-copia-de-seguridad-del-archivo-collectionjson" class="md-nav__link">
     <span class="md-ellipsis">
-      Inyección básica con copia de seguridad
+      Inyección básica con copia de seguridad del archivo collection.json
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#inyeccion-sin-copia-de-seguridad" class="md-nav__link">
+  <a href="#inyeccion-sin-copia-de-seguridad-del-archivo-collectionjson" class="md-nav__link">
     <span class="md-ellipsis">
-      Inyección sin copia de seguridad
+      Inyección sin copia de seguridad del archivo collection.json
     </span>
   </a>
   
@@ -628,11 +628,11 @@
 <p>Inyecta ítems en el archivo <code>collection.json</code> a partir de archivos <code>.tif</code>.</p>
 <h2 id="ejemplos">Ejemplos</h2>
 <hr />
-<h3 id="inyeccion-basica-con-copia-de-seguridad">Inyección básica con copia de seguridad</h3>
+<h3 id="inyeccion-basica-con-copia-de-seguridad-del-archivo-collectionjson">Inyección básica con copia de seguridad del archivo <code>collection.json</code></h3>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>inject<span class="w"> </span>-f<span class="w"> </span>my_folder
 </code></pre></div>
 <hr />
-<h3 id="inyeccion-sin-copia-de-seguridad">Inyección sin copia de seguridad</h3>
+<h3 id="inyeccion-sin-copia-de-seguridad-del-archivo-collectionjson">Inyección sin copia de seguridad del archivo <code>collection.json</code></h3>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>inject<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>--no-backup
 </code></pre></div>
 <p>Usando nombres completos de parámetros:</p>
@@ -658,16 +658,14 @@
 <h3 id="comportamiento-del-comando">Comportamiento del comando</h3>
 <ul>
 <li>Por defecto, crea una copia de seguridad del archivo original <code>collection.json</code></li>
-<li>Usa <code>--no-backup</code> para omitir la creación de la copia de seguridad</li>
+<li>Usa <code>--no-backup</code> para omitir la creación de la copia de seguridad del archivo <code>collection.json</code></li>
 <li>Falla si se encuentran años o períodos duplicados en los nombres de archivo</li>
-<li>El <code>collection.json</code> resultante está listo para la creación o actualización de colecciones</li>
+<li>El archivo <code>collection.json</code> resultante está listo para la creación o actualización de colecciones</li>
 </ul>
 <h3 id="buenas-practicas">Buenas prácticas</h3>
 <ul>
-<li>Revisa siempre el <code>collection.json</code> generado después de la inyección</li>
+<li>Revisa siempre el archivo <code>collection.json</code> generado después de la inyección</li>
 <li>Conserva copias de seguridad de las colecciones importantes</li>
-<li>Valida la colección después de la inyección</li>
-<li>Usa patrones de nombres consistentes para tus archivos <code>.tif</code></li>
 </ul>
 
 
