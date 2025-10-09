@@ -8,17 +8,17 @@ examples:
       - cmd: "python src/main.py remove -c my_collection"
       - text: "Usando el nombre completo del parámetro:"
         cmd: "python src/main.py remove --collection my_collection"
-        footer: "Esto eliminará la colección `my_collection` y sus ítems tanto del catálogo `STAC` como del servidor de almacenamiento."
+        footer: "Esto eliminará la colección `my_collection` y sus ítems tanto del servidor `STAC` como del servidor de almacenamiento."
 notes:
   - title: "Comportamiento del comando"
     description: |            
       - Este comando elimina la colección de:
-          - El servidor `STAC`
-          - El servidor de almacenamiento
-      - La operación no se puede deshacer
-      - El parámetro de nombre de colección (`-c`/`--collection`) es obligatorio
+          - El servidor `STAC`.
+          - El servidor de almacenamiento.
+      - La operación no se puede deshacer.
+      - El parámetro de nombre de colección (`-c`/`--collection`) es obligatorio.
   - title: "Buenas prácticas"
     description: |
-      - Valida el nombre de la colección antes de eliminarla
-      - Considera crear una copia de seguridad antes de eliminar colecciones importantes
-      - Verifica dos veces el nombre de la colección para evitar eliminaciones accidentales
+      - Valida el nombre de la colección antes de eliminarla.
+      - Considera crear una copia de seguridad antes de eliminar colecciones importantes.
+      - Verifica dos veces el nombre de la colección para evitar eliminaciones accidentales.

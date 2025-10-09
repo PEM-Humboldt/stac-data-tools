@@ -641,31 +641,31 @@
 <h2 id="notas">Notas</h2>
 <h3 id="descripcion-del-proceso">Descripción del proceso</h3>
 <p>El comando inject:<br />
-1. Lee el archivo <code>collection.json</code> desde <code>input/&lt;folder&gt;</code><br />
-2. Reemplaza la sección "items" usando los archivos <code>.tif</code> en esa carpeta<br />
-3. Conserva toda la información restante de la colección<br />
-4. Genera un nuevo <code>collection.json</code> actualizado</p>
+1. Lee el archivo <code>collection.json</code> desde <code>input/&lt;folder&gt;</code>.<br />
+2. Reemplaza la sección <code>items</code> usando los archivos <code>.tif</code> en esa carpeta.<br />
+3. Conserva toda la información restante de la colección.<br />
+4. Genera un nuevo <code>collection.json</code> actualizado.</p>
 <h3 id="requisitos-de-los-archivos">Requisitos de los archivos</h3>
 <ul>
-<li>La carpeta de la colección debe estar en el directorio <code>input</code></li>
+<li>La carpeta de la colección debe estar en el directorio <code>input</code>.</li>
 <li>Los archivos <code>.tif</code> deben incluir en su nombre:<ul>
-<li>Un año (por ejemplo, <code>2005</code>)</li>
-<li>O un período (por ejemplo, <code>2000_2005</code> o <code>2000-2005</code>)</li>
+<li>Un año (por ejemplo, <code>2005</code>).</li>
+<li>O un período (por ejemplo, <code>2000_2005</code> o <code>2000-2005</code>).</li>
 </ul>
 </li>
-<li>La carpeta debe contener un archivo <code>collection.json</code> válido</li>
+<li>La carpeta debe contener un archivo <code>collection.json</code> válido.</li>
 </ul>
 <h3 id="comportamiento-del-comando">Comportamiento del comando</h3>
 <ul>
-<li>Por defecto, crea una copia de seguridad del archivo original <code>collection.json</code></li>
-<li>Usa <code>--no-backup</code> para omitir la creación de la copia de seguridad del archivo <code>collection.json</code></li>
-<li>Falla si se encuentran años o períodos duplicados en los nombres de archivo</li>
-<li>El archivo <code>collection.json</code> resultante está listo para la creación o actualización de colecciones</li>
+<li>Por defecto, crea una copia de seguridad del archivo original <code>collection.json</code>.</li>
+<li>Usa <code>--no-backup</code> para omitir la creación de la copia de seguridad del archivo <code>collection.json</code>.</li>
+<li>Falla si se encuentran años o períodos duplicados en los nombres de archivo.</li>
+<li>El archivo <code>collection.json</code> resultante estará listo para la creación o actualización de colecciones.</li>
 </ul>
 <h3 id="buenas-practicas">Buenas prácticas</h3>
 <ul>
-<li>Revisa siempre el archivo <code>collection.json</code> generado después de la inyección</li>
-<li>Conserva copias de seguridad de las colecciones importantes</li>
+<li>Revisa siempre el archivo <code>collection.json</code> generado después de la inyección.</li>
+<li>Conserva copias de seguridad de las colecciones importantes.</li>
 </ul>
 
 

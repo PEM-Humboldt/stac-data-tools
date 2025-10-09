@@ -1,6 +1,6 @@
 title: "Comando Validate"
 description: >
-  Validar una especificación de colección (sin carga).
+  Valida una colección sin cargarla.
 
 examples:
   - name: "Validación básica"
@@ -18,14 +18,10 @@ notes:
     description: |      
       - La carpeta de la colección debe ubicarse en el directorio `input`.
       - La carpeta de entrada debe contener:
-
-          - Un archivo `collection.json` que describa la colección
-          - Los archivos de capa correspondientes (`.tif`)
-
+          - Un archivo `collection.json` que describa la colección.
+          - Los archivos de capa correspondientes (`.tif`).
       - El archivo `collection.json` debe seguir la especificación descrita en [spec/collection.md](https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md).
   - title: "Comportamiento del comando"
     description: |
       - Este comando valida sin subir ni modificar ningún dato.
       - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo `collection.json`.
-      - El comando realiza una validación completa de la estructura de la colección.
-      - Usa este comando antes de crear o actualizar colecciones para garantizar la integridad de los datos.

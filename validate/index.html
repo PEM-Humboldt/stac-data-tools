@@ -587,7 +587,7 @@
 
 
 <h1 id="comando-validate">Comando Validate</h1>
-<p>Validar una especificación de colección (sin carga).</p>
+<p>Valida una colección sin cargarla.</p>
 <h2 id="ejemplos">Ejemplos</h2>
 <hr />
 <h3 id="validacion-basica">Validación básica</h3>
@@ -606,23 +606,17 @@
 <h3 id="configuracion-general">Configuración general</h3>
 <ul>
 <li>La carpeta de la colección debe ubicarse en el directorio <code>input</code>.</li>
-<li>
-<p>La carpeta de entrada debe contener:</p>
-<ul>
-<li>Un archivo <code>collection.json</code> que describa la colección</li>
-<li>Los archivos de capa correspondientes (<code>.tif</code>)</li>
+<li>La carpeta de entrada debe contener:<ul>
+<li>Un archivo <code>collection.json</code> que describa la colección.</li>
+<li>Los archivos de capa correspondientes (<code>.tif</code>).</li>
 </ul>
 </li>
-<li>
-<p>El archivo <code>collection.json</code> debe seguir la especificación descrita en <a href="https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md">spec/collection.md</a>.</p>
-</li>
+<li>El archivo <code>collection.json</code> debe seguir la especificación descrita en <a href="https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md">spec/collection.md</a>.</li>
 </ul>
 <h3 id="comportamiento-del-comando">Comportamiento del comando</h3>
 <ul>
 <li>Este comando valida sin subir ni modificar ningún dato.</li>
 <li>Si no se proporciona un nombre de colección con <code>-c</code>, se usará el <code>id</code> del archivo <code>collection.json</code>.</li>
-<li>El comando realiza una validación completa de la estructura de la colección.</li>
-<li>Usa este comando antes de crear o actualizar colecciones para garantizar la integridad de los datos.</li>
 </ul>
 
 

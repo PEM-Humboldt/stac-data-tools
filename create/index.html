@@ -340,9 +340,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creacion-de-una-nueva-coleccion" class="md-nav__link">
+  <a href="#cargar-una-nueva-coleccion" class="md-nav__link">
     <span class="md-ellipsis">
-      Creación de una nueva colección
+      Cargar una nueva colección
     </span>
   </a>
   
@@ -517,9 +517,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creacion-de-una-nueva-coleccion" class="md-nav__link">
+  <a href="#cargar-una-nueva-coleccion" class="md-nav__link">
     <span class="md-ellipsis">
-      Creación de una nueva colección
+      Cargar una nueva colección
     </span>
   </a>
   
@@ -589,10 +589,10 @@
 
 
 <h1 id="comando-create">Comando Create</h1>
-<p>Crea una nueva colección.</p>
+<p>Carga una nueva colección.</p>
 <h2 id="ejemplos">Ejemplos</h2>
 <hr />
-<h3 id="creacion-de-una-nueva-coleccion">Creación de una nueva colección</h3>
+<h3 id="cargar-una-nueva-coleccion">Cargar una nueva colección</h3>
 <p>Usando el comando con un nombre de colección:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>-c<span class="w"> </span>my_collection
 </code></pre></div>
@@ -602,10 +602,10 @@
 <p>Esto creará una colección llamada <code>my_collection</code> usando los archivos en <code>input/my_folder</code>.</p>
 <hr />
 <h3 id="sobrescribir-una-coleccion-existente">Sobrescribir una colección existente</h3>
-<p>Para sobrescribir una colección existente, usa la bandera <code>-o</code> o <code>--overwrite</code>:</p>
+<p>Para sobrescribir una colección existente, usa la bandera <code>-o</code> u <code>--overwrite</code>:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>-o
 </code></pre></div>
-<p>Con un nombre de colección específico:</p>
+<p>Usando un nombre de colección específico:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>-c<span class="w"> </span>my_collection<span class="w"> </span>-o
 </code></pre></div>
 <p>Usando nombres completos de parámetros:</p>
@@ -617,19 +617,19 @@
 <ul>
 <li>La carpeta de la colección debe ubicarse en el directorio <code>input</code>.</li>
 <li>La carpeta de entrada debe contener:<ul>
-<li>Un archivo <code>collection.json</code> que describa la colección</li>
-<li>Los archivos de capa correspondientes (<code>.tif</code>)</li>
+<li>Un archivo <code>collection.json</code> que describa la colección.</li>
+<li>Los archivos de capa correspondientes (<code>.tif</code>).</li>
 </ul>
 </li>
 <li>El archivo <code>collection.json</code> debe seguir la especificación descrita en <a href="https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md">spec/collection.md</a>.</li>
-<li>Usa <code>collection.example.json</code> como plantilla para crear la configuración de tu colección.</li>
+<li>Usa el archivo <code>collection.example.json</code> como plantilla para crear la configuración de tu colección.</li>
 </ul>
 <h3 id="comportamiento-del-comando">Comportamiento del comando</h3>
 <ul>
-<li>Si no se proporciona un nombre de colección con <code>-c</code>, se usará el <code>id</code> del archivo collection.json.</li>
+<li>Si no se proporciona un nombre de colección con <code>-c</code>, se usará el <code>id</code> del archivo <code>collection.json</code>.</li>
 <li>Sin la bandera <code>-o</code>, el comando fallará si la colección ya existe.</li>
 <li>Con la bandera <code>-o</code>, cualquier colección existente con el mismo nombre será reemplazada completamente.</li>
-<li>La carpeta debe contener archivos del <code>STAC</code> válidos.</li>
+<li>Con la bandera <code>--delete-local-cog</code>, se eliminarán los <code>COG</code> locales de la carpeta <code>output/&lt;folder&gt;</code> después de subirlos exitosamente. Si la carpeta queda vacía tras la limpieza, también será eliminada.</li>
 </ul>
 
 
