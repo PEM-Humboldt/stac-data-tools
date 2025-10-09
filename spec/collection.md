@@ -4,7 +4,7 @@ La descripción de las colecciones a cargar se debe hacer siguiendo la siguiente
 
 | Atributo | Tipo | Descripción | Es requerido? | Observaciones |
 |---:|:---:|---|:---:|---|
-| id | string | Identificador de la colección | Sí | |
+| id | string | Identificador de la colección | Sí | Debe ser un año o periodo |
 | title | string | Título de la colección | Sí | |
 | description | string | Descripción de la colección | Sí | |
 | metadata | object | Objeto con información o datos extra relacionados con todos los items de la colección | Sí | |

@@ -1,0 +1,27 @@
+title: "Comando Validate"
+description: >
+  Valida una colección sin cargarla.
+
+examples:
+  - name: "Validación básica"
+    descriptions:
+      - text: "Usando solo el nombre de la carpeta:"
+        cmd: "python src/main.py validate -f my_folder"
+      - text: "Usando nombres completos de parámetros:"
+        cmd: "python src/main.py validate --folder my_folder"
+  - name: "Validación con nombre de colección"
+    descriptions:
+      - cmd: "python src/main.py validate -f my_folder -c my_collection"
+        footer: "Esto validará los archivos de la colección en `input/my_folder` sin subirlos."
+notes:
+  - title: "Configuración general"
+    description: |      
+      - La carpeta de la colección debe ubicarse en el directorio `input`.
+      - La carpeta de entrada debe contener:
+          - Un archivo `collection.json` que describa la colección.
+          - Los archivos de capa correspondientes (`.tif`).
+      - El archivo `collection.json` debe seguir la especificación descrita en [spec/collection.md](https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md).
+  - title: "Comportamiento del comando"
+    description: |
+      - Este comando valida sin subir ni modificar ningún dato.
+      - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo `collection.json`.

@@ -1,0 +1,36 @@
+title: "Comando Create"
+description: >
+  Carga una nueva colección.
+
+examples:
+  - name: "Cargar una nueva colección"
+    descriptions:
+      - text: "Usando el comando con un nombre de colección:"
+        cmd: "python src/main.py create -f my_folder -c my_collection"
+      - text: "Sintaxis alternativa con nombres completos de parámetros:"
+        cmd: "python src/main.py create --folder my_folder --collection my_collection"
+        footer: "Esto creará una colección llamada `my_collection` usando los archivos en `input/my_folder`."
+  - name: "Sobrescribir una colección existente"
+    descriptions:
+      - text: "Para sobrescribir una colección existente, usa la bandera `-o` u `--overwrite`:"
+        cmd: "python src/main.py create -f my_folder -o"
+      - text: "Usando un nombre de colección específico:"
+        cmd: "python src/main.py create -f my_folder -c my_collection -o"
+      - text: "Usando nombres completos de parámetros:"
+        cmd: "python src/main.py create --folder my_folder --collection my_collection --overwrite"
+        footer: "Estos comandos sobrescribirán la colección si ya existe, usando los archivos de `input/my_folder`."
+notes:
+  - title: "Configuración general"
+    description: |
+      - La carpeta de la colección debe ubicarse en el directorio `input`.
+      - La carpeta de entrada debe contener:
+          - Un archivo `collection.json` que describa la colección.
+          - Los archivos de capa correspondientes (`.tif`).
+      - El archivo `collection.json` debe seguir la especificación descrita en [spec/collection.md](https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md).
+      - Usa el archivo `collection.example.json` como plantilla para crear la configuración de tu colección.
+  - title: "Comportamiento del comando"
+    description: |
+      - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo `collection.json`.
+      - Sin la bandera `-o`, el comando fallará si la colección ya existe.
+      - Con la bandera `-o`, cualquier colección existente con el mismo nombre será reemplazada completamente.
+      - Con la bandera `--delete-local-cog`, se eliminarán los `COG` locales de la carpeta `output/<folder>` después de subirlos exitosamente. Si la carpeta queda vacía tras la limpieza, también será eliminada.

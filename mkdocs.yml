@@ -1,0 +1,26 @@
+site_name: stac-data-tools
+repo_url: https://github.com/PEM-Humboldt/stac-data-tools
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - navigation.expand
+    - navigation.top
+
+plugins:
+  - search
+  - macros:
+      modules:
+        - docs.main
+  - gen-files:
+      scripts:
+          - docs/gen_pages.py
+  - literate-nav:
+      nav_file: summary.md
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight

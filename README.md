@@ -2,6 +2,8 @@
 
 Este paquete corresponde a la herramienta para cargar, editar y eliminar colecciones e items del stac.
 
+Ver la documentación de los comandos: [stac-data-tools](https://pem-humboldt.github.io/stac-data-tools/)
+
 ## Requisitos
 
 - Python (3.10)
@@ -27,9 +29,9 @@ Este paquete corresponde a la herramienta para cargar, editar y eliminar colecci
    conda env create -f environment.yml
    ```
 
-   El nombre del entorno de ejecución será el que se configure en el archivo `environment.yml`, el cual se encuentra en la raiz del proyecto. Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
+   Este comando no solo crea el entorno de ejecución si no que tambien instala las dependencias.
 
-4. Activar el entorno de ejecución: `conda activate <nombre_del_entorno>`
+4. Activar el entorno de ejecución: `conda activate sdt-conda-env`
 
 ## Configuración
 
@@ -64,181 +66,6 @@ Para crear una colección siga los siguientes pasos:
 1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado previamente en la sección `Preparación de los insumos` que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
 
 ---
-
-# Instrucciones de Uso
-
-## Autenticación Configurada en Variables de Ambiente
-
-La autenticación se realiza automáticamente utilizando las credenciales definidas en las variables de ambiente.
-
----
-
-## Cargar una Colección
-
-Para cargar una colección de capas, ejecuta el siguiente comando:
-
-```
-python src/main.py create -f folder_name [-c collection_name]
-```
-
-
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
-- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
-- `--delete-local-cog` (opcional): Elimina los COG locales de la carpeta `output/<folder>` después de subirlos exitosamente.  
-  Si la carpeta queda vacía tras la limpieza, también será eliminada.
-
-#### Ejemplos:
-
-* Especificando un nombre de colección:
-
-```
-python src/main.py create -f my_folder -c MyCollection
-
-o
-
-python src/main.py create --folder my_folder --collection MyCollection
-```
-
-Este comando creará la colección `MyCollection` a partir de los archivos en el directorio `input/my_folder`.
-
-* Usando el `id` del archivo collection.json:
-```
-python src/main.py create -f my_folder
-
-o
-
-python src/main.py create --folder my_folder
-```
-
-* Cargar una colección y eliminar los COG locales después de la carga:
-
-```
-python src/main.py create -f my_folder -c MyCollection --delete-local-cog
-```
----
-## Sobrescribir una Colección Existente
-
-Para sobrescribir una colección existente, ejecuta el siguiente comando:
-
-```
-python src/main.py create -f folder_name [-c collection_name] [-o]
-```
-
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio con el archivo `collection.json` y las capas.
-- `-c, --collection` (opcional): Nombre de la colección. Si no se proporciona, se tomará el `id` del archivo `collection.json`.
-- `-o, --overwrite` (obligatorio): Permite sobrescribir una colección existente si ya existe. Si no se proporciona, la colección no será sobrescrita.
-
-#### Ejemplo:
-
-* Sobrescribiendo una colección existente:
-
-```
-python src/main.py create -f my_folder -o
-
-o
-
-python src/main.py create --folder my_folder --overwrite
-```
-
-
-Este comando sobrescribirá la colección existente (si ya existe) usando los archivos en el directorio `input/my_folder`.
-
-* Especificando un nombre de colección para sobrescribir:
-
-```
-python src/main.py create -f my_folder -c MyCollection -o
-
-o
-
-python src/main.py create --folder my_folder --collection MyCollection --overwrite
-```
-
-
-Este comando sobrescribirá la colección `MyCollection` si ya existe, usando los archivos en el directorio `input/my_folder`.
-
----
-
-## Validar una Colección
-
-Si solo deseas validar una colección sin cargarla, puedes ejecutar:
-
-```
-python src/main.py validate -f folder_name [-c collection_name]
-```
-
-### Parámetros:
-- `-f, --folder` (obligatorio): Directorio que contiene los archivos de la colección.
-- `-c, --collection` (opcional): Nombre de la colección para validar. Si no se proporciona, se tomará el `id` del archivo collection.json.
-
-#### Ejemplo:
-```
-python src/main.py validate -f my_folder
-
-o
-
-python src/main.py validate --folder my_folder
-```
-
-Este comando validará los archivos de la colección en el directorio `input/my_folder` sin cargarlos.
-
----
-
-## Eliminar una Colección
-
-Para eliminar una colección de STAC y de Azure, ejecuta el siguiente comando:
-
-```
-python src/main.py remove --collection collection_name
-```
-
-### Parámetros:
-- `-c, --collection` (obligatorio): Nombre de la colección a eliminar.
-
-#### Ejemplo:
-```
-python src/main.py remove -c my_collection
-
-o
-
-python src/main.py remove --collection my_collection
-```
-
-Este comando eliminará la colección `my_collection` del sistema.
-
----
-
-### Inyectar ítems en una colección existente (`inject`)
-Este comando:
-1. Lee el `collection.json` en `input/<folder>`
-2. Reemplaza la sección `"items"` usando los `.tif` en esa carpeta
-3. Mantiene el resto de la información intacta
-4. Genera un nuevo `collection.json` actualizado
-
-📌 **Importante:**  
-- Los `.tif` deben tener en el nombre **un año** (`2005`) o un **periodo** (`2000_2005`, `2000-2005`).
-- Si hay duplicados (mismo id de año o periodo) se producirá un error.
-
-**Sintaxis:**
-```
-python src/main.py inject -f <folder> [--no-backup]
-```
-
-### Parámetros:
-- `-f, --folder`: Carpeta en `input` con el `collection.json` y los `.tif`
-- `--no-backup`: (opcional) No generar backup del `collection.json` original
-
-#### Ejemplos:
-```
-# Inyectar con backup
-python src/main.py inject -f my_folder
-
-# Inyectar sin backup
-python src/main.py inject -f my_folder --no-backup
-```
-
-El resultado es un archivo `collection.json` actualizado, listo para ser usado en la creación/sobrescritura de la colección.
 
 ## Revisión y formato de estilos para el código
 
@@ -279,15 +106,16 @@ black src
 
 ## Documentación
 
-La documentación se genera con ayuda del paquete pdoc que lee los docstrings presentes en los scripts para describir las clases y funciones. Pdoc genera documentación en formatos como Markdown o HTML y permite especificar el directorio de salida.
+La documentación para la línea de comandos se realiza con [MkDocs](https://www.mkdocs.org/).
 
-Salida como HTML:
-
+```sh
+# Generar documentación
+python -m mkdocs build
+# Desplegar página en ambiente local
+python -m mkdocs serve
+# Desplegar página en github pages
+python -m mkdocs gh-deploy
 ```
-pdoc --html --output-dir docs src
-```
-
-La documentación de la versión actual se puede consultar [aquí](https://pem-humboldt.github.io/stac-data-tools/src/).
 
 ## Licencia
 
