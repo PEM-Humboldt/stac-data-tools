@@ -28,4 +28,3 @@ notes:
       - Este comando valida sin subir ni modificar ningún dato.
       - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo `collection.json`.
       - El comando realiza una validación completa de la estructura de la colección.
-      - Usa este comando antes de crear o actualizar colecciones para garantizar la integridad de los datos.

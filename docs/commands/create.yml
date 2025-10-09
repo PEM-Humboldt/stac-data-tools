@@ -27,7 +27,7 @@ notes:
           - Un archivo `collection.json` que describa la colección
           - Los archivos de capa correspondientes (`.tif`)
       - El archivo `collection.json` debe seguir la especificación descrita en [spec/collection.md](https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.md).
-      - Usa `collection.example.json` como plantilla para crear la configuración de tu colección.
+      - Usa el archivo `collection.example.json` como plantilla para crear la configuración de tu colección.
   - title: "Comportamiento del comando"
     description: |
       - Si no se proporciona un nombre de colección con `-c`, se usará el `id` del archivo collection.json.

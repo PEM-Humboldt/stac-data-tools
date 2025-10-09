@@ -8,7 +8,7 @@ examples:
       - cmd: "python src/main.py remove -c my_collection"
       - text: "Usando el nombre completo del parámetro:"
         cmd: "python src/main.py remove --collection my_collection"
-        footer: "Esto eliminará la colección `my_collection` y sus ítems tanto del catálogo `STAC` como del servidor de almacenamiento."
+        footer: "Esto eliminará la colección `my_collection` y sus ítems tanto del servidor `STAC` como del servidor de almacenamiento."
 notes:
   - title: "Comportamiento del comando"
     description: |            
