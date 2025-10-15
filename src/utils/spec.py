@@ -43,16 +43,78 @@ def validate_format(data):
             if data_type not in data_type_values:
                 raise FormatError(data_type_error)
 
+            data_type_enum = CollectionDataType(data_type)
+
             if "properties" in data["metadata"]:
-                metadata_properties_lengths = [
-                    len(data["metadata"]["properties"][key])
-                    for key in data["metadata"]["properties"]
-                ]
-                if len(set(metadata_properties_lengths)) != 1:
-                    raise FormatError(
-                        "Error en las propiedades de la colección: "
-                        "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
-                    )
+                if data_type_enum == CollectionDataType.CLASSIFIED:
+                    properties = {
+                        "values": data["metadata"]["properties"]["values"],
+                        "colors": data["metadata"]["properties"]["colors"],
+                        "classes": data["metadata"]["properties"]["classes"],
+                    }
+
+                    for property_name in properties:
+                        if not isinstance(properties[property_name], list):
+                            raise FormatError(
+                                f"Error en el metadato de la colección 'metadata.properties.{property_name}': "
+                                "El elemento debe ser una lista."
+                            )
+
+                    metadata_properties_lengths = [
+                        len(data["metadata"]["properties"][property_name])
+                        for property_name in properties
+                    ]
+
+                    if len(set(metadata_properties_lengths)) != 1:
+                        raise FormatError(
+                            "Error en las propiedades de la colección: "
+                            "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
+                        )
+
+                if data_type_enum == CollectionDataType.CONTINUOUS:
+                    properties_values = data["metadata"]["properties"][
+                        "values"
+                    ]
+
+                    properties = {
+                        "values": data["metadata"]["properties"]["values"],
+                        "colors": data["metadata"]["properties"]["colors"],
+                    }
+
+                    for property_name in properties:
+                        if not isinstance(properties[property_name], list):
+                            raise FormatError(
+                                f"Error en el metadato de la colección 'metadata.properties.{property_name}': "
+                                "El elemento debe ser una lista."
+                            )
+
+                    if not "class" in data["metadata"]["properties"]:
+                        raise FormatError(
+                            f"Error en el metadato de la colección 'metadata.properties.class': "
+                            "El elemento no existe."
+                        )
+
+                    properties["class"] = data["metadata"]["properties"][
+                        "class"
+                    ]
+
+                    if len(properties["colors"]) != 3:
+                        raise FormatError(
+                            f"Error en el metadato de la colección 'metadata.properties.colors': "
+                            "La lista debe tener 3 elementos."
+                        )
+
+                    if len(properties["values"]) != 2:
+                        raise FormatError(
+                            f"Error en el metadato de la colección 'metadata.properties.values': "
+                            "La lista debe tener 2 elementos."
+                        )
+
+                    if not isinstance(properties["class"], str):
+                        raise FormatError(
+                            f"Error en el metadato de la colección 'metadata.properties.class': "
+                            "El elemento debe ser una cadena de texto."
+                        )
 
     except Exception as e:
         raise FormatError(
