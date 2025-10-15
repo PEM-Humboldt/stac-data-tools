@@ -1,7 +1,13 @@
+from enum import Enum
 from json import load
 from os import listdir, path
 
 from jsonschema import FormatError, validate
+
+
+class CollectionDataType(Enum):
+    CONTINUOUS = "Continua"
+    CLASSIFIED = "Clasificada"
 
 
 def validate_input_folder(folder):
@@ -24,16 +30,29 @@ def validate_format(data):
     try:
         validate(instance=data, schema=schema)
 
-        if "metadata" in data and "properties" in data["metadata"]:
-            metadata_properties_lengths = [
-                len(data["metadata"]["properties"][key])
-                for key in data["metadata"]["properties"]
+        if "metadata" in data:
+            data_type_values = [
+                data_type.value for data_type in CollectionDataType
             ]
-            if len(set(metadata_properties_lengths)) != 1:
-                raise FormatError(
-                    "Error en las propiedades de la colección: "
-                    "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
-                )
+            data_type_error = f"Error en el tipo de dato de la colección 'metadata.data_type': \nEl elemento debe tener uno de estos valores: {data_type_values}"
+
+            if "data_type" not in data["metadata"]:
+                raise FormatError(data_type_error)
+
+            data_type = data["metadata"]["data_type"]
+            if data_type not in data_type_values:
+                raise FormatError(data_type_error)
+
+            if "properties" in data["metadata"]:
+                metadata_properties_lengths = [
+                    len(data["metadata"]["properties"][key])
+                    for key in data["metadata"]["properties"]
+                ]
+                if len(set(metadata_properties_lengths)) != 1:
+                    raise FormatError(
+                        "Error en las propiedades de la colección: "
+                        "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
+                    )
 
     except Exception as e:
         raise FormatError(
