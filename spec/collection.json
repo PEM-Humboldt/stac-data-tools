@@ -13,6 +13,9 @@
     "metadata": {
       "type": "object",
       "properties": {
+        "data_type": {
+          "type": "string"          
+        },
         "properties": {
           "type": "object",
           "properties": {
@@ -20,6 +23,12 @@
               "type": "array",
               "items": {
                 "type": "number"
+              }
+            },
+            "colors": {
+              "type": "array",
+              "items": {
+                "type": "string"
               }
             },
             "classes": {
@@ -31,7 +40,7 @@
           },
           "required": [
             "values",
-            "classes"
+            "colors"
           ]
         }
       }

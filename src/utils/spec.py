@@ -34,14 +34,13 @@ def validate_format(data):
             data_type_values = [
                 data_type.value for data_type in CollectionDataType
             ]
-            data_type_error = f"Error en el tipo de dato de la colección 'metadata.data_type': \nEl elemento debe tener uno de estos valores: {data_type_values}"
-
-            if "data_type" not in data["metadata"]:
-                raise FormatError(data_type_error)
 
             data_type = data["metadata"]["data_type"]
             if data_type not in data_type_values:
-                raise FormatError(data_type_error)
+                raise FormatError(
+                    "Error en el tipo de dato de la colección 'metadata.data_type': "
+                    f"El elemento debe tener uno de estos valores: {data_type_values}"
+                )
 
             data_type_enum = CollectionDataType(data_type)
 
