@@ -71,9 +71,6 @@ def validate_format(data):
                         )
 
                 if data_type_enum == CollectionDataType.CONTINUOUS:
-                    properties_values = data["metadata"]["properties"][
-                        "values"
-                    ]
 
                     properties = {
                         "values": data["metadata"]["properties"]["values"],
@@ -87,9 +84,9 @@ def validate_format(data):
                                 "El elemento debe ser una lista."
                             )
 
-                    if not "class" in data["metadata"]["properties"]:
+                    if "class" not in data["metadata"]["properties"]:
                         raise FormatError(
-                            f"Error en el metadato de la colección 'metadata.properties.class': "
+                            "Error en el metadato de la colección 'metadata.properties.class': "
                             "El elemento no existe."
                         )
 
@@ -99,13 +96,13 @@ def validate_format(data):
 
                     if len(properties["colors"]) != 3:
                         raise FormatError(
-                            f"Error en el metadato de la colección 'metadata.properties.colors': "
+                            "Error en el metadato de la colección 'metadata.properties.colors': "
                             "La lista debe tener 3 elementos."
                         )
 
                     if len(properties["values"]) != 2:
                         raise FormatError(
-                            f"Error en el metadato de la colección 'metadata.properties.values': "
+                            "Error en el metadato de la colección 'metadata.properties.values': "
                             "La lista debe tener 2 elementos."
                         )
 
