@@ -108,7 +108,7 @@ def validate_format(data):
 
                     if not isinstance(properties["class"], str):
                         raise FormatError(
-                            f"Error en el metadato de la colección 'metadata.properties.class': "
+                            "Error en el metadato de la colección 'metadata.properties.class': "
                             "El elemento debe ser una cadena de texto."
                         )
 
