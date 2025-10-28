@@ -1,7 +1,13 @@
+from enum import Enum
 from json import load
 from os import listdir, path
 
 from jsonschema import FormatError, validate
+
+
+class CollectionDataType(Enum):
+    CONTINUOUS = "Continua"
+    CLASSIFIED = "Clasificada"
 
 
 def validate_input_folder(folder):
@@ -24,16 +30,58 @@ def validate_format(data):
     try:
         validate(instance=data, schema=schema)
 
-        if "metadata" in data and "properties" in data["metadata"]:
-            metadata_properties_lengths = [
-                len(data["metadata"]["properties"][key])
-                for key in data["metadata"]["properties"]
+        if "metadata" in data:
+            data_type_values = [
+                data_type.value for data_type in CollectionDataType
             ]
-            if len(set(metadata_properties_lengths)) != 1:
+
+            data_type = data["metadata"]["data_type"]
+            if data_type not in data_type_values:
                 raise FormatError(
-                    "Error en las propiedades de la colección: "
-                    "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
+                    "Error en el tipo de dato de la colección 'metadata.data_type': "
+                    f"El elemento debe tener uno de estos valores: {data_type_values}"
                 )
+
+            data_type_enum = CollectionDataType(data_type)
+
+            if "properties" in data["metadata"]:
+                if data_type_enum == CollectionDataType.CLASSIFIED:
+                    properties = {
+                        "values": data["metadata"]["properties"]["values"],
+                        "colors": data["metadata"]["properties"]["colors"],
+                        "classes": data["metadata"]["properties"]["classes"],
+                    }
+
+                    metadata_properties_lengths = [
+                        len(data["metadata"]["properties"][property_name])
+                        for property_name in properties
+                    ]
+
+                    if len(set(metadata_properties_lengths)) != 1:
+                        raise FormatError(
+                            "Error en las propiedades de la colección: "
+                            "Los elementos dentro de 'metadata.properties' no tienen la misma longitud."
+                        )
+
+                if data_type_enum == CollectionDataType.CONTINUOUS:
+
+                    if "class" not in data["metadata"]["properties"]:
+                        raise FormatError(
+                            "Error en el metadato de la colección 'metadata.properties.class': "
+                            "El elemento no existe."
+                        )
+
+                    if len(data["metadata"]["properties"]["colors"]) != 3:
+                        raise FormatError(
+                            "Error en el metadato de la colección 'metadata.properties.colors': "
+                            "La lista debe tener 3 elementos."
+                        )
+
+                    if len(data["metadata"]["properties"]["values"]) != 2:
+                        raise FormatError(
+                            "Error en el metadato de la colección 'metadata.properties.values': "
+                            "La lista debe tener 2 elementos."
+                        )
 
     except Exception as e:
         raise FormatError(

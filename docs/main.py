@@ -1,5 +1,5 @@
 def define_env(env):
-    
+
     import os, yaml
 
     base_path = os.path.join(env.project_dir, "docs", "commands")
