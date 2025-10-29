@@ -1,0 +1,43 @@
+title: "Comando Add-Item"
+description: >
+  Agrega un nuevo item a una colección existente en el servidor STAC.
+  Valida que el item sea compatible con la colección (proyección, resolución y tipo de datos).
+
+examples:
+  - name: "Agregar item básico"
+    descriptions:
+      - text: "Agregar un nuevo archivo TIF a una colección:"
+        cmd: "python src/main.py add-item -c my_collection -f my_folder --file 2022.tif --year 2022"
+      - text: "Con ID de item personalizado:"
+        cmd: "python src/main.py add-item -c my_collection -f my_folder --file 2022.tif --year 2022 --item-id 2022-update"
+      - text: "Eliminar COG local después de subir:"
+        cmd: "python src/main.py add-item -c my_collection -f my_folder --file 2022.tif --year 2022 --delete-local-cog"
+      - footer: "Los parámetros --year y --item-id son opcionales. Si no se especifica --item-id, se infiere del nombre del archivo."
+
+notes:
+  - title: "Parámetros del comando"
+    description:
+      - `-c, --collection`: ID de la colección existente en el servidor STAC (requerido)
+      - `-f, --folder`: Nombre de la carpeta bajo `input/` que contiene el archivo TIF (requerido)
+      - `--file`: Nombre del archivo TIF a agregar como item (requerido)
+      - `--year`: Año asociado con el item (requerido)
+      - `--item-id`: ID del item (opcional, se infiere del nombre del archivo si no se especifica)
+      - `--delete-local-cog`: Eliminar COG local después de subir (opcional)
+  - title: "Configuración general"
+    description:
+      - La carpeta debe estar ubicada en el directorio `input`.
+      - El archivo TIF debe estar en la carpeta especificada con `-f`.
+      - La colección debe existir en el servidor STAC.
+  - title: "Validaciones"
+    description:
+      - El comando valida que la proyección (EPSG) del item coincida con la de la colección.
+      - Valida que la resolución espacial sea compatible (muestra advertencia si difiere).
+      - El tipo de datos debe ser compatible con el tipo de la colección (clasificada/continua).
+  - title: "Comportamiento del comando"
+    description:
+      - Obtiene la información de la colección desde el servidor STAC.
+      - Convierte el archivo TIF a formato COG.
+      - Sube el archivo a Azure Blob Storage.
+      - Crea el item STAC con metadatos apropiados.
+      - Agrega el item a la colección en el servidor.
+      - Opcionalmente elimina el COG local después de subirlo.
