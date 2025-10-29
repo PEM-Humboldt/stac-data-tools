@@ -4,6 +4,9 @@
   "description": "Time series of the binary presence of forests in Colombia. Bosque/Non Bosque. With 1 indicating the presence of forests.",
   "metadata": {
     "data_type": "Clasificada",
+    "projection": {
+      "epsg": 4326
+    },
     "properties": {
       "values": [0, 1, 2],
       "colors": ["#c65453", "#92ab58", "#c5b599"],

@@ -31,6 +31,19 @@ def validate_format(data):
         validate(instance=data, schema=schema)
 
         if "metadata" in data:
+            if "projection" in data["metadata"]:
+                projection = data["metadata"]["projection"]
+                if "epsg" not in projection:
+                    raise FormatError(
+                        "Error en la proyección de la colección 'metadata.projection.epsg': "
+                        "El elemento es requerido."
+                    )
+                if not isinstance(projection["epsg"], int) or projection["epsg"] < 1:
+                    raise FormatError(
+                        "Error en la proyección de la colección 'metadata.projection.epsg': "
+                        "Debe ser un número entero positivo."
+                    )
+
             data_type_values = [
                 data_type.value for data_type in CollectionDataType
             ]

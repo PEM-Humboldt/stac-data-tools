@@ -139,6 +139,17 @@ class Collection:
             else collection_data["id"]
         )
 
+        if "projection" not in collection_data["metadata"] and self.items:
+            first_item = self.items[0]
+            if "proj:epsg" in first_item["properties"]:
+                collection_data["metadata"]["projection"] = {
+                    "epsg": first_item["properties"]["proj:epsg"]
+                }
+                logger.info(
+                    f"Extracted projection EPSG:{first_item['properties']['proj:epsg']} "
+                    f"from first item {first_item['id']} for collection"
+                )
+
         self.stac_collection = pystac.Collection(
             id=collection_id,
             title=collection_data["title"],
