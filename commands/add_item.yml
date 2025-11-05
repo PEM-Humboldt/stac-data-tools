@@ -16,25 +16,25 @@ examples:
 
 notes:
   - title: "Parámetros del comando"
-    description:
-      - "-c, --collection: ID de la colección existente en el servidor STAC (requerido)"
-      - "-f, --folder: Nombre de la carpeta bajo input/ que contiene el archivo TIF (requerido)"
-      - "--file: Nombre del archivo TIF a agregar como item (requerido)"
-      - "--year: Año asociado con el item (requerido)"
-      - "--item-id: ID del item (opcional, se infiere del nombre del archivo si no se especifica)"
-      - "--delete-local-cog: Eliminar COG local después de subir (opcional)"
+    description: |
+      - `-c, --collection`: ID de la colección existente en el servidor STAC (requerido)
+      - `-f, --folder`: Nombre de la carpeta bajo `input/` que contiene el archivo TIF (requerido)
+      - `--file`: Nombre del archivo TIF a agregar como item (requerido)
+      - `--year`: Año asociado con el item (requerido)
+      - `--item-id`: ID del item (opcional, se infiere del nombre del archivo si no se especifica)
+      - `--delete-local-cog`: Eliminar COG local después de subir (opcional)
   - title: "Configuración general"
-    description:
-      - "La carpeta debe estar ubicada en el directorio input."
-      - "El archivo TIF debe estar en la carpeta especificada con -f."
-      - "La colección debe existir en el servidor STAC."
+    description: |
+      - La carpeta debe estar ubicada en el directorio `input`.
+      - El archivo TIF debe estar en la carpeta especificada con `-f`.
+      - La colección debe existir en el servidor STAC.
   - title: "Validaciones"
-    description:
+    description: |
       - El comando valida que la proyección (EPSG) del item coincida con la de la colección.
       - Valida que la resolución espacial sea compatible (muestra advertencia si difiere).
       - El tipo de datos debe ser compatible con el tipo de la colección (clasificada/continua).
   - title: "Comportamiento del comando"
-    description:
+    description: |
       - Obtiene la información de la colección desde el servidor STAC.
       - Convierte el archivo TIF a formato COG.
       - Sube el archivo a Azure Blob Storage.
