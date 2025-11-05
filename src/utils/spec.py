@@ -38,7 +38,10 @@ def validate_format(data):
                         "Error en la proyección de la colección 'metadata.projection.epsg': "
                         "El elemento es requerido."
                     )
-                if not isinstance(projection["epsg"], int) or projection["epsg"] < 1:
+                if (
+                    not isinstance(projection["epsg"], int)
+                    or projection["epsg"] < 1
+                ):
                     raise FormatError(
                         "Error en la proyección de la colección 'metadata.projection.epsg': "
                         "Debe ser un número entero positivo."

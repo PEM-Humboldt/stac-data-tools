@@ -223,30 +223,35 @@ def main():
 
     elif args.command == "add-item":
         from datetime import datetime
+
         from utils import raster
-        
+
         # Get collection and existing items from server
-        collection_data, existing_items = collection.get_collection_from_server(args.collection)
-        
+        collection_data, existing_items = (
+            collection.get_collection_from_server(args.collection)
+        )
+
         # Process the new item file
         input_folder = f"input/{args.folder}"
         file_path = f"{input_folder}/{args.file}"
-        
+
         logger.info(f"Processing file: {file_path}")
-        
+
         # Get metadata from TIF file
-        bbox, footprint, crs, resolution, dtype = raster.get_tif_metadata(file_path)
-        
+        bbox, footprint, crs, resolution, dtype = raster.get_tif_metadata(
+            file_path
+        )
+
         # Get or infer EPSG
         epsg = None
         if isinstance(crs, int):
             epsg = crs
         else:
             logger.warning(f"Could not determine EPSG from CRS: {crs}")
-        
+
         # Infer item ID from filename or use provided
         item_id = args.item_id or args.file.replace(".tif", "")
-        
+
         # Create item data
         item_data = {
             "id": item_id,
@@ -257,45 +262,58 @@ def main():
             "dtype": dtype,
             "input_file": args.file,
             "datetime": datetime(int(args.year), 1, 1),
-            "properties": {"proj:epsg": epsg} if epsg else {}
+            "properties": {"proj:epsg": epsg} if epsg else {},
         }
-        
+
         # Validate item against collection
-        collection.validate_item_against_collection(item_data, collection_data, existing_items)
-        
+        collection.validate_item_against_collection(
+            item_data, collection_data, existing_items
+        )
+
         # Use existing collection from server (convert dict to PySTAC Collection)
         from pystac import Collection as PySTACCollection
-        collection.stac_collection = PySTACCollection.from_dict(collection_data)
-        
+
+        collection.stac_collection = PySTACCollection.from_dict(
+            collection_data
+        )
+
         # Load and create the item
         collection.items = [item_data]
         collection.dates = [args.year]
         collection.longs = [bbox[0], bbox[2]]
         collection.lats = [bbox[1], bbox[3]]
-        
+
         collection.create_items()
-        
+
         # Convert to COG
         output_dir = f"{getcwd()}/output/{args.folder}"
         collection.convert_layers(input_folder, output_dir)
         logger.info("Layer converted to COG successfully.")
-        
+
         # Upload layer and item
         collection.upload_layers(output_dir)
         logger.info("Layer uploaded successfully.")
-        
+
         # Upload single item to server
         success = collection.upload_single_item(item_data)
         if success:
-            logger.info(f"Item {item_id} added to collection {args.collection} successfully.")
+            logger.info(
+                f"Item {item_id} added to collection {args.collection} successfully."
+            )
         else:
-            logger.error(f"Failed to add item {item_id} to collection {args.collection}")
-            sysexit(f"Error: Failed to add item {item_id} to collection {args.collection}")
-        
+            logger.error(
+                f"Failed to add item {item_id} to collection {args.collection}"
+            )
+            sysexit(
+                f"Error: Failed to add item {item_id} to collection {args.collection}"
+            )
+
         if args.delete_local_cog:
             collection.clean_local_cogs(output_dir)
-        
-        sysexit(f"Item {item_id} added successfully to collection {args.collection}.")
+
+        sysexit(
+            f"Item {item_id} added successfully to collection {args.collection}."
+        )
 
     else:
         sysexit("No command used. Type -h for help")
