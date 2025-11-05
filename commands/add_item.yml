@@ -17,12 +17,12 @@ examples:
 notes:
   - title: "Parámetros del comando"
     description:
-      - `-c, --collection`: ID de la colección existente en el servidor STAC (requerido)
-      - `-f, --folder`: Nombre de la carpeta bajo `input/` que contiene el archivo TIF (requerido)
-      - `--file`: Nombre del archivo TIF a agregar como item (requerido)
-      - `--year`: Año asociado con el item (requerido)
-      - `--item-id`: ID del item (opcional, se infiere del nombre del archivo si no se especifica)
-      - `--delete-local-cog`: Eliminar COG local después de subir (opcional)
+      - "-c, --collection: ID de la colección existente en el servidor STAC (requerido)"
+      - "-f, --folder: Nombre de la carpeta bajo `input/` que contiene el archivo TIF (requerido)"
+      - "--file: Nombre del archivo TIF a agregar como item (requerido)"
+      - "--year: Año asociado con el item (requerido)"
+      - "--item-id: ID del item (opcional, se infiere del nombre del archivo si no se especifica)"
+      - "--delete-local-cog: Eliminar COG local después de subir (opcional)"
   - title: "Configuración general"
     description:
       - La carpeta debe estar ubicada en el directorio `input`.

@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#comando-add-item" class="md-skip">
           Skip to content
         </a>
       
@@ -289,6 +289,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Add_item
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -300,6 +313,100 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ejemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agregar-item-basico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agregar item básico
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Notas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parametros-del-comando" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parámetros del comando
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuracion-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración general
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validaciones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comportamiento-del-comando" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comportamiento del comando
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -425,6 +532,89 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ejemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agregar-item-basico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agregar item básico
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Notas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parametros-del-comando" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parámetros del comando
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuracion-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración general
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validaciones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comportamiento-del-comando" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comportamiento del comando
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -439,66 +629,29 @@
 
 
 
-<h1 id="macro-rendering-error"><em>Macro Rendering Error</em></h1>
-<div class="highlight"><pre><span></span><code>    _File_: `add_item.md`
-
-    _ScannerError_: while scanning for the next token
+<h1 id="comando-add-item">Comando Add-Item</h1>
+<p>Agrega un nuevo item a una colección existente en el servidor STAC. Valida que el item sea compatible con la colección (proyección, resolución y tipo de datos).</p>
+<h2 id="ejemplos">Ejemplos</h2>
+<hr />
+<h3 id="agregar-item-basico">Agregar item básico</h3>
+<p>Agregar un nuevo archivo TIF a una colección:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>add-item<span class="w"> </span>-c<span class="w"> </span>my_collection<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>--file<span class="w"> </span><span class="m">2022</span>.tif<span class="w"> </span>--year<span class="w"> </span><span class="m">2022</span>
 </code></pre></div>
-<p>found character '`' that cannot start any token
-  in "C:\Users\denis.armenta\Documents\GitHub\stac-data-tools\docs\commands\add_item.yml", line 20, column 9</p>
-<div class="highlight"><pre><span></span><code>    ```
-    Traceback (most recent call last):
+<p>Con ID de item personalizado:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>add-item<span class="w"> </span>-c<span class="w"> </span>my_collection<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>--file<span class="w"> </span><span class="m">2022</span>.tif<span class="w"> </span>--year<span class="w"> </span><span class="m">2022</span><span class="w"> </span>--item-id<span class="w"> </span><span class="m">2022</span>-update
 </code></pre></div>
-<p>File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\mkdocs_macros\plugin.py", line 703, in render
-    return md_template.render(**page_variables)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\jinja2\environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\jinja2\environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "<template>", line 1, in top-level template code
-  File "C:\Users\denis.armenta\Documents\GitHub\stac-data-tools\docs\main.py", line 18, in command
-    return yaml.safe_load(f)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml__init__.py", line 125, in safe_load
-    return load(stream, SafeLoader)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml__init__.py", line 81, in load
-    return loader.get_single_data()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\constructor.py", line 49, in get_single_data
-    node = self.get_single_node()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 36, in get_single_node
-    document = self.compose_document()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 55, in compose_document
-    node = self.compose_node(None, None)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 84, in compose_node
-    node = self.compose_mapping_node(anchor)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 133, in compose_mapping_node
-    item_value = self.compose_node(node, item_key)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 82, in compose_node
-    node = self.compose_sequence_node(anchor)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 111, in compose_sequence_node
-    node.value.append(self.compose_node(node, index))
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 84, in compose_node
-    node = self.compose_mapping_node(anchor)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 133, in compose_mapping_node
-    item_value = self.compose_node(node, item_key)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 82, in compose_node
-    node = self.compose_sequence_node(anchor)
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\composer.py", line 110, in compose_sequence_node
-    while not self.check_event(SequenceEndEvent):
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\parser.py", line 98, in check_event
-    self.current_event = self.state()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\parser.py", line 379, in parse_block_sequence_first_entry
-    return self.parse_block_sequence_entry()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\parser.py", line 384, in parse_block_sequence_entry
-    if not self.check_token(BlockEntryToken, BlockEndToken):
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\scanner.py", line 116, in check_token
-    self.fetch_more_tokens()
-  File "C:\Users\denis.armenta\AppData\Local\miniconda3\envs\stac\lib\site-packages\yaml\scanner.py", line 258, in fetch_more_tokens
-    raise ScannerError("while scanning for the next token", None,
-yaml.scanner.ScannerError: while scanning for the next token
-found character '`' that cannot start any token
-  in "C:\Users\denis.armenta\Documents\GitHub\stac-data-tools\docs\commands\add_item.yml", line 20, column 9</p>
-<div class="highlight"><pre><span></span><code>    ```
+<p>Eliminar COG local después de subir:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src/main.py<span class="w"> </span>add-item<span class="w"> </span>-c<span class="w"> </span>my_collection<span class="w"> </span>-f<span class="w"> </span>my_folder<span class="w"> </span>--file<span class="w"> </span><span class="m">2022</span>.tif<span class="w"> </span>--year<span class="w"> </span><span class="m">2022</span><span class="w"> </span>--delete-local-cog
 </code></pre></div>
+<h2 id="notas">Notas</h2>
+<h3 id="parametros-del-comando">Parámetros del comando</h3>
+<p>['-c, --collection: ID de la colección existente en el servidor STAC (requerido)', '-f, --folder: Nombre de la carpeta bajo <code>input/</code> que contiene el archivo TIF (requerido)', '--file: Nombre del archivo TIF a agregar como item (requerido)', '--year: Año asociado con el item (requerido)', '--item-id: ID del item (opcional, se infiere del nombre del archivo si no se especifica)', '--delete-local-cog: Eliminar COG local después de subir (opcional)']</p>
+<h3 id="configuracion-general">Configuración general</h3>
+<p>['La carpeta debe estar ubicada en el directorio <code>input</code>.', 'El archivo TIF debe estar en la carpeta especificada con <code>-f</code>.', 'La colección debe existir en el servidor STAC.']</p>
+<h3 id="validaciones">Validaciones</h3>
+<p>['El comando valida que la proyección (EPSG) del item coincida con la de la colección.', 'Valida que la resolución espacial sea compatible (muestra advertencia si difiere).', 'El tipo de datos debe ser compatible con el tipo de la colección (clasificada/continua).']</p>
+<h3 id="comportamiento-del-comando">Comportamiento del comando</h3>
+<p>['Obtiene la información de la colección desde el servidor STAC.', 'Convierte el archivo TIF a formato COG.', 'Sube el archivo a Azure Blob Storage.', 'Crea el item STAC con metadatos apropiados.', 'Agrega el item a la colección en el servidor.', 'Opcionalmente elimina el COG local después de subirlo.']</p>
 
 
 
