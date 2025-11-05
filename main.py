@@ -9,7 +9,7 @@ def define_env(env):
         """
         Returns the YAML corresponding to the current page name.
         """
-        page_name = env.page.title.lower()
+        page_name = env.page.title.lower().replace(" ", "_")
 
         yml_file = os.path.join(base_path, f"{page_name}.yml")
 
