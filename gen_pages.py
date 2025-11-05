@@ -23,7 +23,8 @@ def gen_files():
             with mkdocs_gen_files.open(md_file, "w") as f:
                 f.write(template_content)
 
-            summary_lines.append(f"    - [{name.capitalize()}]({md_file})\n")
+            display_name = name.replace("_", " ").title()
+            summary_lines.append(f"    - [{display_name}]({md_file})\n")
 
     with mkdocs_gen_files.open("summary.md", "w") as f:
         f.writelines(summary_lines)
