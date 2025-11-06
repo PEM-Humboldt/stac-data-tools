@@ -16,6 +16,18 @@
         "data_type": {
           "type": "string"          
         },
+        "projection": {
+          "type": "object",
+          "properties": {
+            "epsg": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "epsg"
+          ]
+        },
         "properties": {
           "type": "object",
           "properties": {
