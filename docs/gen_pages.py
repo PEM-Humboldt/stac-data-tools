@@ -1,4 +1,5 @@
 import os
+import yaml
 import mkdocs_gen_files
 
 template_path = os.path.join("docs", "command.md")
@@ -22,7 +23,6 @@ def gen_files():
             
             display_name = name.replace("_", " ").title()
             
-            import yaml
             yml_path = os.path.join(commands_dir, fname)
             with open(yml_path, "r", encoding="utf-8") as yml_file:
                 yml_data = yaml.safe_load(yml_file)

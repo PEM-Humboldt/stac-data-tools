@@ -283,12 +283,30 @@ class Collection:
                         collection_resolution = band_info["spatial_resolution"]
                         break
 
-        # Get data type from collection metadata
+        # Get and validate data type from collection metadata
+        collection_data_type = None
         if (
             "metadata" in collection_metadata
             and "data_type" in collection_metadata.get("metadata", {})
         ):
-            collection_metadata["metadata"]["data_type"]
+            collection_data_type = collection_metadata["metadata"]["data_type"]
+            
+            # Validate that item dtype is compatible with collection data_type
+            item_dtype = new_item_data.get("dtype", "").lower()
+            is_integer_type = item_dtype in ("uint8", "ubyte", "uint16", "uint32", "int16", "int32")
+            is_float_type = item_dtype in ("float32", "float", "float64", "double")
+            
+            if collection_data_type == "Clasificada" and not is_integer_type:
+                raise ValueError(
+                    f"Data type mismatch: collection is 'Clasificada' (requires integer dtype), "
+                    f"but item has dtype '{item_dtype}'"
+                )
+            elif collection_data_type == "Continua" and not is_float_type:
+                raise ValueError(
+                    f"Data type mismatch: collection is 'Continua' (requires float dtype), "
+                    f"but item has dtype '{item_dtype}'"
+                )
+            logger.info(f"Data type validated: collection '{collection_data_type}', item dtype '{item_dtype}'")
 
         # Validate projection
         new_epsg = new_item_data.get("properties", {}).get("proj:epsg")
