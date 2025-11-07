@@ -1,4 +1,5 @@
 import os
+import yaml
 import mkdocs_gen_files
 
 template_path = os.path.join("docs", "command.md")
@@ -19,11 +20,21 @@ def gen_files():
         if fname.endswith(".yml"):
             name = os.path.splitext(fname)[0]
             md_file = f"{name}.md"
+            
+            display_name = name.replace("_", " ").title()
+            
+            yml_path = os.path.join(commands_dir, fname)
+            with open(yml_path, "r", encoding="utf-8") as yml_file:
+                yml_data = yaml.safe_load(yml_file)
+                if yml_data and "title" in yml_data:
+                    title = yml_data["title"].replace("Comando ", "")
+                    display_name = title.replace("-", " ")
 
             with mkdocs_gen_files.open(md_file, "w") as f:
+                f.write(f"---\ntitle: {display_name}\n---\n\n")
                 f.write(template_content)
 
-            summary_lines.append(f"    - [{name.capitalize()}]({md_file})\n")
+            summary_lines.append(f"    - [{display_name}]({md_file})\n")
 
     with mkdocs_gen_files.open("summary.md", "w") as f:
         f.writelines(summary_lines)

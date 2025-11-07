@@ -7,6 +7,7 @@
 * 📂 Crear, validar y eliminar colecciones `STAC`
 * 🛰️ Procesar y validar datos ráster para su integración con `STAC`
 * 🛠️ Inyectar automáticamente elementos desde archivos `.tif` en colecciones existentes
+* ➕ Agregar items individuales a colecciones existentes en el servidor STAC
 * ✅ Garantizar el cumplimiento con los estándares de la especificación `STAC`
 
 ## Instalación

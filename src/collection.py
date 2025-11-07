@@ -9,6 +9,7 @@ from urllib import parse
 
 import pystac
 import rasterio
+from pystac import Asset, Item
 from pystac.extensions.projection import ProjectionExtension
 from pystac.extensions.raster import RasterBand, RasterExtension
 
@@ -221,6 +222,113 @@ class Collection:
             collection_exist = False
         return collection_exist
 
+    def get_collection_from_server(self, collection_id):
+        """
+        Get collection and its items from STAC server.
+        Returns collection metadata and items list.
+        """
+        collection_url = f"{self.stac_url}/collections/{collection_id}"
+        logger.info(f"Fetching collection {collection_id} from server")
+
+        collection_response = stac_rest.get(collection_url)
+        collection_data = collection_response.json()
+
+        items_url = f"{collection_url}/items"
+        items_response = stac_rest.get(items_url)
+        items_data = items_response.json().get("features", [])
+
+        logger.info(f"Collection found with {len(items_data)} items")
+
+        return collection_data, items_data
+
+    def validate_item_against_collection(
+        self, new_item_data, collection_metadata, existing_items
+    ):
+        """
+        Validate that a new item matches the collection's specifications:
+        - Projection (EPSG)
+        - Spatial resolution
+        - Data type (classified/continuous)
+        """
+        logger.info("Validating new item against collection specifications")
+
+        # Get projection from collection metadata or existing items
+        collection_projection = None
+        if (
+            "metadata" in collection_metadata
+            and "projection" in collection_metadata.get("metadata", {})
+        ):
+            collection_projection = collection_metadata["metadata"][
+                "projection"
+            ].get("epsg")
+
+        if collection_projection is None and existing_items:
+            # Extract from first existing item
+            first_item = existing_items[0]
+            collection_projection = first_item.get("properties", {}).get(
+                "proj:epsg"
+            )
+
+        # Get spatial resolution from existing items
+        collection_resolution = None
+        if existing_items:
+            for item in existing_items:
+                if "raster:bands" in item.get("assets", {}).get(
+                    list(item["assets"].keys())[0], {}
+                ):
+                    band_info = item["assets"][list(item["assets"].keys())[0]][
+                        "raster:bands"
+                    ][0]
+                    if "spatial_resolution" in band_info:
+                        collection_resolution = band_info["spatial_resolution"]
+                        break
+
+        # Get and validate data type from collection metadata
+        collection_data_type = None
+        if (
+            "metadata" in collection_metadata
+            and "data_type" in collection_metadata.get("metadata", {})
+        ):
+            collection_data_type = collection_metadata["metadata"]["data_type"]
+            
+            # Validate that item dtype is compatible with collection data_type
+            item_dtype = new_item_data.get("dtype", "").lower()
+            is_integer_type = item_dtype in ("uint8", "ubyte", "uint16", "uint32", "int16", "int32")
+            is_float_type = item_dtype in ("float32", "float", "float64", "double")
+            
+            if collection_data_type == "Clasificada" and not is_integer_type:
+                raise ValueError(
+                    f"Data type mismatch: collection is 'Clasificada' (requires integer dtype), "
+                    f"but item has dtype '{item_dtype}'"
+                )
+            elif collection_data_type == "Continua" and not is_float_type:
+                raise ValueError(
+                    f"Data type mismatch: collection is 'Continua' (requires float dtype), "
+                    f"but item has dtype '{item_dtype}'"
+                )
+            logger.info(f"Data type validated: collection '{collection_data_type}', item dtype '{item_dtype}'")
+
+        # Validate projection
+        new_epsg = new_item_data.get("properties", {}).get("proj:epsg")
+        if collection_projection and new_epsg != collection_projection:
+            raise ValueError(
+                f"Projection mismatch: collection uses EPSG:{collection_projection}, "
+                f"but item uses EPSG:{new_epsg}"
+            )
+        logger.info(f"Projection validated: EPSG:{new_epsg}")
+
+        # Validate resolution (optional, if available)
+        if collection_resolution:
+            new_resolution = new_item_data.get("resolution")
+            if new_resolution and new_resolution != collection_resolution:
+                logger.warning(
+                    f"Resolution mismatch: collection {collection_resolution}m, "
+                    f"item {new_resolution}m"
+                )
+
+        logger.info("Item validation successful")
+        return True
+
     def remove_collection(self, collection_name=None):
         """
         Remove collection from STAC server and Azure Blob Storage.
@@ -253,6 +361,81 @@ class Collection:
         except Exception as e:
             logger.error(f"Error removing collection from server: {e}")
             raise RuntimeError(f"Error removing collection from server: {e}")
+
+    def upload_single_item(self, item_data, asset_href=None):
+        """
+        Upload a single item to an existing collection on the STAC server.
+
+        Args:
+            item_data: Dictionary with item metadata
+            asset_href: URL for the asset (optional, will be constructed if not provided)
+        """
+        try:
+            logger.info(f"Uploading single item: {item_data['id']}")
+
+            # Create STAC item from item_data
+            item = Item(
+                id=item_data["id"],
+                geometry=item_data["footprint"],
+                bbox=item_data["bbox"],
+                datetime=item_data["datetime"],
+                properties=item_data["properties"],
+            )
+
+            # Use provided asset_href or construct default one
+            if asset_href is None:
+                settings = get_settings()
+                asset_href = (
+                    f"{settings.asset_base_url}/{settings.abs_container}/"
+                    f"{self.stac_collection.id}/{item_data['input_file']}"
+                )
+
+            logger.info(f"Using asset href: {asset_href}")
+
+            # Add assets
+            item.add_asset(
+                item_data["input_file"],
+                Asset(
+                    href=asset_href,
+                    media_type="image/tiff; application=geotiff; profile=cloud-optimized",
+                    roles=["data"],
+                    extra_fields={
+                        "raster:bands": [
+                            {
+                                "data_type": item_data["dtype"],
+                                "spatial_resolution": item_data["resolution"],
+                            }
+                        ]
+                    },
+                ),
+            )
+
+            # Upload the item
+            item_dict = item.to_dict()
+            item_response = stac_rest.post_or_put(
+                parse.urljoin(
+                    self.stac_url,
+                    f"/collections/{self.stac_collection.id}/items",
+                ),
+                item_dict,
+            )
+
+            logger.info(
+                f"Item {item_data['id']} upload response: {item_response.status_code}"
+            )
+
+            if item_response.status_code in [200, 201]:
+                logger.info(f"Item {item_data['id']} uploaded successfully")
+                return True
+            else:
+                logger.error(
+                    f"Failed to upload item {item_data['id']}: {item_response.text}"
+                )
+                return False
+
+        except Exception as e:
+            logger.error(f"Error uploading item {item_data['id']}: {e}")
+            return False
 
     def upload_collection(self):
         """

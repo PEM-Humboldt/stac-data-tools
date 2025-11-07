@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     stac_url: str = "http://localhost:8082"
     abs_string: str = ""
     abs_container: str = "cog-test"
+    asset_base_url: str = "https://staccatalog.blob.core.windows.net"
     auth_url: str = "/auth/token"
     username_auth: str = "admin"
     password_auth: str = "admin"
