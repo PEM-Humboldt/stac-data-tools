@@ -13,6 +13,7 @@ def authenticate():
     """
     Authenticate against the authentication service and retrieve a token.
     """
+    response = None
     try:
         username = settings.username_auth
         password = settings.password_auth

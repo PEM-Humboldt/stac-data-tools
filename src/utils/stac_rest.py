@@ -18,8 +18,15 @@ def post_or_put(url: str, data: dict):
     """
 
     try:
+        import json
+
         headers = get_headers()
-        response = requests.post(url, json=data, headers=headers)
+        headers["Content-Type"] = "application/json; charset=utf-8"
+        response = requests.post(
+            url,
+            data=json.dumps(data, ensure_ascii=False).encode("utf-8"),
+            headers=headers,
+        )
 
         if response.status_code == 401:
             if (
@@ -28,10 +35,20 @@ def post_or_put(url: str, data: dict):
             ):
                 authenticate()
                 headers = get_headers()
-                response = requests.post(url, json=data, headers=headers)
+                headers["Content-Type"] = "application/json; charset=utf-8"
+                response = requests.post(
+                    url,
+                    data=json.dumps(data, ensure_ascii=False).encode("utf-8"),
+                    headers=headers,
+                )
 
         if response.status_code == 409:
-            response = requests.put(url, json=data, headers=headers)
+            headers["Content-Type"] = "application/json; charset=utf-8"
+            response = requests.put(
+                url,
+                data=json.dumps(data, ensure_ascii=False).encode("utf-8"),
+                headers=headers,
+            )
 
         response.raise_for_status()
 
@@ -60,6 +77,7 @@ def check_resource(url: str):
         success = False
     else:
         response.raise_for_status()
+        success = False
     return success
 
 
@@ -83,11 +101,15 @@ def delete(url):
                 success = False
             else:
                 response.raise_for_status()
+                success = False
+        else:
+            response.raise_for_status()
+            success = False
     elif response.status_code == 200:
         success = True
     elif response.status_code == 404:
         success = False
-
     else:
         response.raise_for_status()
+        success = False
     return success

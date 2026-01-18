@@ -8,7 +8,9 @@
 * 🛰️ Procesar y validar datos ráster para su integración con `STAC`
 * 🛠️ Inyectar automáticamente elementos desde archivos `.tif` en colecciones existentes
 * ➕ Agregar items individuales a colecciones existentes en el servidor STAC
+* 📋 Listar todas las colecciones disponibles en el servidor STAC
 * ✅ Garantizar el cumplimiento con los estándares de la especificación `STAC`
+* 🔄 Normalización automática de IDs a PascalCase y de títulos/descripciones (quitar tildes)
 
 ## Instalación
 

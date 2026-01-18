@@ -34,3 +34,14 @@ notes:
       - Sin la bandera `-o`, el comando fallará si la colección ya existe.
       - Con la bandera `-o`, cualquier colección existente con el mismo nombre será reemplazada completamente.
       - Con la bandera `--delete-local-cog`, se eliminarán los `COG` locales de la carpeta `output/<folder>` después de subirlos exitosamente. Si la carpeta queda vacía tras la limpieza, también será eliminada.
+  - title: "Normalización automática"
+    description: |
+      - El campo `id` se normaliza automáticamente a PascalCase (ej: `"huella_humana"` → `"HuellaHumana"`, `"bosque-seco"` → `"BosqueSeco"`).
+      - Los campos `title` y `description` se normalizan automáticamente quitando tildes y caracteres especiales para evitar problemas de codificación UTF-8 (ej: `"Colección"` → `"Coleccion"`, `"análisis"` → `"analisis"`).
+      - Esta normalización se aplica automáticamente antes de subir la colección al servidor STAC.
+  - title: "Validación pre-upload"
+    description: |
+      - Antes de subir, se valida el formato JSON del archivo `collection.json`.
+      - Se verifica que el archivo esté codificado en UTF-8.
+      - Se valida que el campo `id` esté en PascalCase (se sugiere el valor normalizado si no cumple).
+      - Se verifica el cumplimiento con el estándar STAC definido en la especificación.

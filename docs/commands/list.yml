@@ -1,0 +1,19 @@
+title: "Comando List"
+description: >
+  Lista todas las colecciones disponibles en el servidor STAC.
+
+examples:
+  - name: "Listar todas las colecciones"
+    descriptions:
+      - text: "Listar todas las colecciones del servidor:"
+        cmd: "python src/main.py list"
+notes:
+  - title: "Configuración general"
+    description: |
+      - Este comando requiere autenticación configurada en las variables de ambiente.
+      - Muestra todas las colecciones disponibles en el servidor STAC configurado.
+  - title: "Comportamiento del comando"
+    description: |
+      - Este comando solo lista las colecciones, no modifica ningún dato.
+      - Muestra el ID de cada colección tal como está almacenado en el servidor.
+      - Útil para verificar qué colecciones existen antes de crear, modificar o eliminar.

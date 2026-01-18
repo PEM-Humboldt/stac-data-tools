@@ -8,6 +8,8 @@ from utils import spec
 from utils.auth import authenticate
 from utils.logging_config import logger
 
+DOCS_URL = "https://pem-humboldt.github.io/stac-data-tools/"
+
 
 def create_collection_local(collection, input_folder, collection_name):
     """Read and validate local collection.json, load items, and build pystac objects."""
@@ -96,6 +98,10 @@ def main():
         required=True,
     )
 
+    list_parser = sub_parsers.add_parser(
+        "list", help="List all collections from STAC server"
+    )
+
     inject_parser = sub_parsers.add_parser(
         "inject",
         help="Inject items into input/<folder>/collection.json from .tif files in that folder (overwrite file)",
@@ -176,6 +182,14 @@ def main():
             collection.remove_collection()
             logger.info("Previous collection removed.")
 
+        collection_json_path = f"{input_folder}/collection.json"
+        with open(collection_json_path, "r", encoding="utf-8") as f:
+            collection_data = load(f)
+        spec.validate_pre_upload(collection_data, collection_json_path)
+        logger.info(
+            "Pre-upload validation passed: formatting, encoding, and standard compliance verified."
+        )
+
         output_dir = f"{getcwd()}/output/{args.folder}"
 
         collection.convert_layers(input_folder, output_dir)
@@ -201,6 +215,22 @@ def main():
     elif args.command == "remove":
         collection.remove_collection(args.collection)
         sysexit("Collection removed successfully.")
+
+    elif args.command == "list":
+        collection_ids = collection.list_collections_from_server()
+        print("\n" + "=" * 50)
+        print("Colecciones en el servidor STAC:")
+        print("=" * 50)
+        if collection_ids:
+            for col_id in collection_ids:
+                print(f"  - {col_id}")
+            print(f"\nTotal: {len(collection_ids)} colecciones")
+        else:
+            print(
+                "No se encontraron colecciones en el servidor o hubo un error al consultarlas."
+            )
+        print("=" * 50 + "\n")
+        return
 
     elif args.command == "inject":
 
@@ -305,7 +335,8 @@ def main():
                 f"Failed to add item {item_id} to collection {args.collection}"
             )
             sysexit(
-                f"Error: Failed to add item {item_id} to collection {args.collection}"
+                f"Error: Failed to add item {item_id} to collection {args.collection}. "
+                f"Para más información, consulte la documentación: {DOCS_URL}"
             )
 
         if args.delete_local_cog:
