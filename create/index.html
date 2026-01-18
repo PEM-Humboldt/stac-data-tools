@@ -237,6 +237,28 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../especificacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Especificación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -250,10 +272,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -266,8 +288,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Comandos
           </label>
@@ -413,6 +435,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#normalizacion-automatica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalización automática
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validacion-pre-upload" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validación pre-upload
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -440,6 +480,29 @@
   
   <span class="md-ellipsis">
     Inject
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    List
     
   </span>
   
@@ -590,6 +653,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#normalizacion-automatica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalización automática
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validacion-pre-upload" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validación pre-upload
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -653,6 +734,19 @@
 <li>Sin la bandera <code>-o</code>, el comando fallará si la colección ya existe.</li>
 <li>Con la bandera <code>-o</code>, cualquier colección existente con el mismo nombre será reemplazada completamente.</li>
 <li>Con la bandera <code>--delete-local-cog</code>, se eliminarán los <code>COG</code> locales de la carpeta <code>output/&lt;folder&gt;</code> después de subirlos exitosamente. Si la carpeta queda vacía tras la limpieza, también será eliminada.</li>
+</ul>
+<h3 id="normalizacion-automatica">Normalización automática</h3>
+<ul>
+<li>El campo <code>id</code> se normaliza automáticamente a PascalCase (ej: <code>"huella_humana"</code> → <code>"HuellaHumana"</code>, <code>"bosque-seco"</code> → <code>"BosqueSeco"</code>).</li>
+<li>Los campos <code>title</code> y <code>description</code> se normalizan automáticamente quitando tildes y caracteres especiales para evitar problemas de codificación UTF-8 (ej: <code>"Colección"</code> → <code>"Coleccion"</code>, <code>"análisis"</code> → <code>"analisis"</code>).</li>
+<li>Esta normalización se aplica automáticamente antes de subir la colección al servidor STAC.</li>
+</ul>
+<h3 id="validacion-pre-upload">Validación pre-upload</h3>
+<ul>
+<li>Antes de subir, se valida el formato JSON del archivo <code>collection.json</code>.</li>
+<li>Se verifica que el archivo esté codificado en UTF-8.</li>
+<li>Se valida que el campo <code>id</code> esté en PascalCase (se sugiere el valor normalizado si no cumple).</li>
+<li>Se verifica el cumplimiento con el estándar STAC definido en la especificación.</li>
 </ul>
 
 
