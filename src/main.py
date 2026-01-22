@@ -6,9 +6,8 @@ from sys import exit as sysexit
 from collection import Collection, update_collection_json_inplace
 from utils import spec
 from utils.auth import authenticate
+from utils.constants import DOCS_URL
 from utils.logging_config import logger
-
-DOCS_URL = "https://pem-humboldt.github.io/stac-data-tools/"
 
 
 def create_collection_local(collection, input_folder, collection_name):

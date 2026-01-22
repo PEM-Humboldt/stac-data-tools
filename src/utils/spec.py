@@ -2,11 +2,11 @@ from enum import Enum
 from json import load
 from os import listdir, path
 import re
+import unicodedata
 
 from jsonschema import FormatError, validate
+from utils.constants import DOCS_URL
 from utils.logging_config import logger
-
-DOCS_URL = "https://pem-humboldt.github.io/stac-data-tools/"
 
 
 class CollectionDataType(Enum):
@@ -47,59 +47,13 @@ def _normalize_to_pascal_case(text):
     if not isinstance(text, str):
         return text
 
-    replacements = {
-        "á": "a",
-        "à": "a",
-        "ä": "a",
-        "â": "a",
-        "ã": "a",
-        "é": "e",
-        "è": "e",
-        "ë": "e",
-        "ê": "e",
-        "í": "i",
-        "ì": "i",
-        "ï": "i",
-        "î": "i",
-        "ó": "o",
-        "ò": "o",
-        "ö": "o",
-        "ô": "o",
-        "õ": "o",
-        "ú": "u",
-        "ù": "u",
-        "ü": "u",
-        "û": "u",
-        "ñ": "n",
-        "Ñ": "N",
-        "Á": "A",
-        "À": "A",
-        "Ä": "A",
-        "Â": "A",
-        "Ã": "A",
-        "É": "E",
-        "È": "E",
-        "Ë": "E",
-        "Ê": "E",
-        "Í": "I",
-        "Ì": "I",
-        "Ï": "I",
-        "Î": "I",
-        "Ó": "O",
-        "Ò": "O",
-        "Ö": "O",
-        "Ô": "O",
-        "Õ": "O",
-        "Ú": "U",
-        "Ù": "U",
-        "Ü": "U",
-        "Û": "U",
-    }
-
-    normalized = text.strip()
-
-    for accented, unaccented in replacements.items():
-        normalized = normalized.replace(accented, unaccented)
+    # Normalize to NFD (decomposed form) and remove combining diacritical marks
+    normalized = unicodedata.normalize("NFD", text.strip())
+    normalized = "".join(
+        char
+        for char in normalized
+        if unicodedata.category(char) != "Mn"  # Mn = Nonspacing Mark
+    )
 
     import re
 

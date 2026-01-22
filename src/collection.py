@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import unicodedata
 from copy import deepcopy
 from datetime import datetime, timedelta
 from os import makedirs, path, remove, rmdir
@@ -15,72 +16,27 @@ from pystac.extensions.raster import RasterBand, RasterExtension
 
 from config import get_settings
 from utils import raster, stac_rest, storage
+from utils.constants import DOCS_URL
 from utils.logging_config import logger
 from utils.stac_helpers import map_dtype_to_pystac_datatype
-
-DOCS_URL = "https://pem-humboldt.github.io/stac-data-tools/"
 
 
 def _normalize_text(text):
     """
     Normalize text by removing accents to avoid encoding issues with STAC server.
+    Uses Unicode normalization (NFD) and removes combining diacritical marks.
     Converts characters like á, é, í, ó, ú, ñ to a, e, i, o, u, n.
     """
     if not isinstance(text, str):
         return text
 
-    replacements = {
-        "á": "a",
-        "à": "a",
-        "ä": "a",
-        "â": "a",
-        "ã": "a",
-        "é": "e",
-        "è": "e",
-        "ë": "e",
-        "ê": "e",
-        "í": "i",
-        "ì": "i",
-        "ï": "i",
-        "î": "i",
-        "ó": "o",
-        "ò": "o",
-        "ö": "o",
-        "ô": "o",
-        "õ": "o",
-        "ú": "u",
-        "ù": "u",
-        "ü": "u",
-        "û": "u",
-        "ñ": "n",
-        "Ñ": "N",
-        "Á": "A",
-        "À": "A",
-        "Ä": "A",
-        "Â": "A",
-        "Ã": "A",
-        "É": "E",
-        "È": "E",
-        "Ë": "E",
-        "Ê": "E",
-        "Í": "I",
-        "Ì": "I",
-        "Ï": "I",
-        "Î": "I",
-        "Ó": "O",
-        "Ò": "O",
-        "Ö": "O",
-        "Ô": "O",
-        "Õ": "O",
-        "Ú": "U",
-        "Ù": "U",
-        "Ü": "U",
-        "Û": "U",
-    }
-
-    normalized = text
-    for accented, unaccented in replacements.items():
-        normalized = normalized.replace(accented, unaccented)
+    # Normalize to NFD (decomposed form) and remove combining diacritical marks
+    normalized = unicodedata.normalize("NFD", text)
+    normalized = "".join(
+        char
+        for char in normalized
+        if unicodedata.category(char) != "Mn"  # Mn = Nonspacing Mark
+    )
 
     return normalized
 
