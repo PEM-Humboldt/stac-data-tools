@@ -14,23 +14,6 @@ class CollectionDataType(Enum):
     CLASSIFIED = "Clasificada"
 
 
-def _is_pascal_case(text):
-    """
-    Check if a string is in PascalCase format.
-    PascalCase: First letter of each word is uppercase, no spaces, no underscores, no hyphens.
-    Examples: HuellaHumanaClasificada, ForestNonForestColombia, GSIColombia2024
-    """
-    if not text:
-        return False
-    if not text[0].isupper():
-        return False
-    if " " in text or "_" in text or "-" in text:
-        return False
-    if len(text) == 1:
-        return True
-    return bool(re.match(r"^[A-Z][a-zA-Z0-9]*$", text))
-
-
 def _normalize_to_pascal_case(text):
     """
     Normalize text to PascalCase format.
