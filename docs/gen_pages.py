@@ -8,7 +8,7 @@ commands_dir = os.path.join("docs", "commands")
 
 summary_lines = [
     "- [Inicio](index.md)\n",
-    "- [Especificación](especificacion.md)\n",
+    "- [Especificación](specification.md)\n",
     "- Comandos\n",
 ]
 

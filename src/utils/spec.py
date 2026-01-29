@@ -185,7 +185,7 @@ def validate_pre_upload(collection_data, collection_json_path):
     Validate collection.json before uploading to ensure:
     - Proper JSON formatting
     - UTF-8 character encoding (no encoding issues with special characters)
-    - Compliance with the standard defined in spec/collection.json and spec/collection.md
+    - Compliance with the standard defined in spec/collection.json
 
     Args:
         collection_data: Dictionary with collection data

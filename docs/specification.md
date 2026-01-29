@@ -29,4 +29,4 @@ La descripción de las colecciones a cargar se debe hacer siguiendo la siguiente
 
 ## Ejemplo
 
-Puedes ver un ejemplo completo en el archivo [collection.example.json](https://github.com/PEM-Humboldt/stac-data-tools/blob/main/spec/collection.example.json).
+Puedes ver un ejemplo completo en el archivo [collection.example.json](../spec/collection.example.json).
