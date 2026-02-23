@@ -1,10 +1,13 @@
 from argparse import ArgumentParser
+from datetime import datetime
 from json import load
 from os import getcwd
 from sys import exit as sysexit
 
+from pystac import Collection as PySTACCollection
+
 from collection import Collection, update_collection_json_inplace
-from utils import spec
+from utils import raster, spec
 from utils.auth import authenticate
 from utils.constants import DOCS_URL
 from utils.logging_config import logger
@@ -97,7 +100,7 @@ def main():
         required=True,
     )
 
-    list_parser = sub_parsers.add_parser(
+    sub_parsers.add_parser(
         "list", help="List all collections from STAC server"
     )
 
@@ -251,9 +254,6 @@ def main():
         sysexit("Items injected and collection.json overwritten successfully.")
 
     elif args.command == "add-item":
-        from datetime import datetime
-
-        from utils import raster
 
         # Get collection and existing items from server
         collection_data, existing_items = (
@@ -300,8 +300,6 @@ def main():
         )
 
         # Use existing collection from server (convert dict to PySTAC Collection)
-        from pystac import Collection as PySTACCollection
-
         collection.stac_collection = PySTACCollection.from_dict(
             collection_data
         )

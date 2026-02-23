@@ -1,10 +1,12 @@
+import json
+import re
+import unicodedata
 from enum import Enum
 from json import load
 from os import listdir, path
-import re
-import unicodedata
 
 from jsonschema import FormatError, validate
+
 from utils.constants import DOCS_URL
 from utils.logging_config import logger
 
@@ -37,8 +39,6 @@ def _normalize_to_pascal_case(text):
         for char in normalized
         if unicodedata.category(char) != "Mn"  # Mn = Nonspacing Mark
     )
-
-    import re
 
     normalized = normalized.replace("_", " ").replace("-", " ")
 
@@ -195,8 +195,6 @@ def validate_pre_upload(collection_data, collection_json_path):
         FormatError: If validation fails
     """
     try:
-        import json
-
         json_str = json.dumps(collection_data, ensure_ascii=False, indent=2)
         json.loads(json_str)
     except (TypeError, ValueError) as e:

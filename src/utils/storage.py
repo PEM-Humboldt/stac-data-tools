@@ -24,7 +24,7 @@ class Storage:
 
         with open(file_path, "rb") as data:
             blob_client = self.container_client.upload_blob(
-                file_name, data, overwrite=True
+                file_name, data, overwrite=True, max_concurrency=4
             )
             return blob_client.url
 
@@ -39,7 +39,7 @@ class Storage:
         container_name = self.container_client.container_name
 
         if file_path.startswith(f"{container_name}/"):
-            file_path = file_path[len(f"{container_name}/") :]
+            file_path = file_path[len(f"{container_name}/"):]
 
         blob_client = self.container_client.get_blob_client(file_path)
 

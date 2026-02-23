@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import traceback
 import unicodedata
 from copy import deepcopy
 from datetime import datetime, timedelta
@@ -18,6 +19,7 @@ from config import get_settings
 from utils import raster, stac_rest, storage
 from utils.constants import DOCS_URL
 from utils.logging_config import logger
+from utils.spec import _normalize_to_pascal_case
 from utils.stac_helpers import map_dtype_to_pystac_datatype
 
 
@@ -156,8 +158,6 @@ class Collection:
             ]
         )
 
-        from utils.spec import _normalize_to_pascal_case
-
         collection_id = (
             collection_name
             if collection_name is not None
@@ -179,8 +179,8 @@ class Collection:
 
         self.stac_collection = pystac.Collection(
             id=collection_id,
-            title=_normalize_text(collection_data["title"]),
-            description=_normalize_text(collection_data["description"]),
+            title=collection_data["title"],
+            description=collection_data["description"],
             extent=pystac.Extent(
                 spatial=spatial_extent, temporal=temporal_extent
             ),
@@ -295,7 +295,6 @@ class Collection:
             return collection_ids
         except Exception as e:
             logger.error(f"Error fetching collections from server: {e}")
-            import traceback
 
             logger.error(traceback.format_exc())
             return []
@@ -329,7 +328,6 @@ class Collection:
             )
 
         # Get spatial resolution from existing items
-        collection_resolution = None
         if existing_items:
             for item in existing_items:
                 if "raster:bands" in item.get("assets", {}).get(
@@ -339,7 +337,7 @@ class Collection:
                         "raster:bands"
                     ][0]
                     if "spatial_resolution" in band_info:
-                        collection_resolution = band_info["spatial_resolution"]
+                        band_info["spatial_resolution"]
                         break
 
         # Get and validate data type from collection metadata
@@ -520,16 +518,6 @@ class Collection:
             )
 
             collection_dict = self.stac_collection.to_dict()
-            import json
-
-            if "title" in collection_dict:
-                collection_dict["title"] = _normalize_text(
-                    collection_dict["title"]
-                )
-            if "description" in collection_dict:
-                collection_dict["description"] = _normalize_text(
-                    collection_dict["description"]
-                )
 
             collection_json_str = json.dumps(
                 collection_dict, ensure_ascii=False
@@ -779,9 +767,7 @@ def update_collection_json_inplace(
     target_path = output_path or template_path
 
     if make_backup and path.isfile(template_path):
-        from datetime import datetime as _dt
-
-        ts = _dt.now().strftime("%Y%m%d-%H%M%S")
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
 
         if backup_dir:
             dest_dir = backup_dir
