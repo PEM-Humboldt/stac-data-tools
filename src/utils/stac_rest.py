@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 from config import get_settings
@@ -18,7 +20,6 @@ def post_or_put(url: str, data: dict):
     """
 
     try:
-        import json
 
         headers = get_headers()
         headers["Content-Type"] = "application/json; charset=utf-8"
