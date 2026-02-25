@@ -1,6 +1,8 @@
-def define_env(env):
+import os, yaml
+import json
 
-    import os, yaml
+
+def define_env(env):
 
     base_path = os.path.join(env.project_dir, "docs", "commands")
 
@@ -18,3 +20,12 @@ def define_env(env):
                 return yaml.safe_load(f)
         else:
             return {"error": f"{page_name}.yml doesn't exist"}
+
+    @env.macro
+    def render_json(filename):
+        """
+        Renders a JSON file as a markdown code block.
+        """
+        json_path = os.path.join(env.project_dir, "docs", filename)
+        with open(json_path, "r", encoding="utf-8") as f:
+            return f"```json\n{f.read()}\n```"

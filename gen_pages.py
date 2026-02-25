@@ -6,7 +6,11 @@ template_path = os.path.join("docs", "command.md")
 
 commands_dir = os.path.join("docs", "commands")
 
-summary_lines = ["- [Inicio](index.md)\n", "- [Especificación](especificacion.md)\n", "- Comandos\n"]
+summary_lines = [
+    "- [Inicio](index.md)\n",
+    "- [Especificación](specification.md)\n",
+    "- Comandos\n",
+]
 
 
 def gen_files():
@@ -20,9 +24,9 @@ def gen_files():
         if fname.endswith(".yml"):
             name = os.path.splitext(fname)[0]
             md_file = f"{name}.md"
-            
+
             display_name = name.replace("_", " ").title()
-            
+
             yml_path = os.path.join(commands_dir, fname)
             with open(yml_path, "r", encoding="utf-8") as yml_file:
                 yml_data = yaml.safe_load(yml_file)
