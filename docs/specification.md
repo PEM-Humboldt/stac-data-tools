@@ -7,7 +7,7 @@ La descripción de las colecciones a cargar se debe hacer siguiendo la siguiente
 | id | string | Identificador de la colección | Sí | Debe estar en PascalCase (primera letra de cada palabra en mayúscula, sin espacios, guiones bajos ni guiones). Se normaliza automáticamente si no cumple con este formato. Ejemplos: `HuellaHumanaClasificada`, `ForestNonForestColombia`, `GSIColombia2024` |
 | title | string | Título de la colección | Sí | Se normaliza automáticamente quitando tildes y caracteres especiales para evitar problemas de codificación UTF-8 en el servidor STAC |
 | description | string | Descripción de la colección | Sí | Se normaliza automáticamente quitando tildes y caracteres especiales para evitar problemas de codificación UTF-8 en el servidor STAC |
-| metadata | object | Objeto con información o datospecification.mds extra relacionados con todos los items de la colección | Sí | |
+| metadata | object | Objeto con información o datos extra relacionados con todos los items de la colección | Sí | |
 | metadata.data_type | string | Tipo de datos de la colección (`Clasificada` o `Continua`) | Sí | Determina el tipo de colección, de acuerdo al formato y lectura de sus propiedades |
 | metadata.projection | object | Información sobre la proyección de la colección | No | Solo si se necesita especificar la proyección de la colección |
 | metadata.projection.epsg | integer | Código EPSG de la proyección (mínimo 1) | Sí | Es requerido si existe el objeto _metadata.projection_ |
