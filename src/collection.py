@@ -327,19 +327,6 @@ class Collection:
                 "proj:epsg"
             )
 
-        # Get spatial resolution from existing items
-        if existing_items:
-            for item in existing_items:
-                if "raster:bands" in item.get("assets", {}).get(
-                    list(item["assets"].keys())[0], {}
-                ):
-                    band_info = item["assets"][list(item["assets"].keys())[0]][
-                        "raster:bands"
-                    ][0]
-                    if "spatial_resolution" in band_info:
-                        band_info["spatial_resolution"]
-                        break
-
         # Get and validate data type from collection metadata
         collection_data_type = None
         if (
