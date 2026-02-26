@@ -55,9 +55,9 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
 <details>
 <summary>Preparación de los insumos</summary>
 
-Para cargar una nueva colección (incluyendo los items de la misma), lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en el archivo [collection.md](spec/collection.md).
+Para cargar una nueva colección (incluyendo los items de la misma), lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en la [documentación](https://pem-humboldt.github.io/stac-data-tools/specification/).
 
-El archivo [collection.example.json](spec/collection.example.json) sirve como ejemplo y como punto de partida.
+El archivo [collection.example.json](docs/collection.example.json) sirve como ejemplo y como punto de partida.
 
 </details>
 

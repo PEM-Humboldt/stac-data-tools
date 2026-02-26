@@ -1,11 +1,15 @@
 from argparse import ArgumentParser
+from datetime import datetime
 from json import load
 from os import getcwd
 from sys import exit as sysexit
 
+from pystac import Collection as PySTACCollection
+
 from collection import Collection, update_collection_json_inplace
-from utils import spec
+from utils import raster, spec
 from utils.auth import authenticate
+from utils.constants import DOCS_URL
 from utils.logging_config import logger
 
 
@@ -96,6 +100,10 @@ def main():
         required=True,
     )
 
+    sub_parsers.add_parser(
+        "list", help="List all collections from STAC server"
+    )
+
     inject_parser = sub_parsers.add_parser(
         "inject",
         help="Inject items into input/<folder>/collection.json from .tif files in that folder (overwrite file)",
@@ -176,6 +184,14 @@ def main():
             collection.remove_collection()
             logger.info("Previous collection removed.")
 
+        collection_json_path = f"{input_folder}/collection.json"
+        with open(collection_json_path, "r", encoding="utf-8") as f:
+            collection_data = load(f)
+        spec.validate_pre_upload(collection_data, collection_json_path)
+        logger.info(
+            "Pre-upload validation passed: formatting, encoding, and standard compliance verified."
+        )
+
         output_dir = f"{getcwd()}/output/{args.folder}"
 
         collection.convert_layers(input_folder, output_dir)
@@ -202,6 +218,22 @@ def main():
         collection.remove_collection(args.collection)
         sysexit("Collection removed successfully.")
 
+    elif args.command == "list":
+        collection_ids = collection.list_collections_from_server()
+        print("\n" + "=" * 50)
+        print("Colecciones en el servidor STAC:")
+        print("=" * 50)
+        if collection_ids:
+            for col_id in collection_ids:
+                print(f"  - {col_id}")
+            print(f"\nTotal: {len(collection_ids)} colecciones")
+        else:
+            print(
+                "No se encontraron colecciones en el servidor o hubo un error al consultarlas."
+            )
+        print("=" * 50 + "\n")
+        return
+
     elif args.command == "inject":
 
         input_folder = f"input/{args.folder}"
@@ -222,9 +254,6 @@ def main():
         sysexit("Items injected and collection.json overwritten successfully.")
 
     elif args.command == "add-item":
-        from datetime import datetime
-
-        from utils import raster
 
         # Get collection and existing items from server
         collection_data, existing_items = (
@@ -271,8 +300,6 @@ def main():
         )
 
         # Use existing collection from server (convert dict to PySTAC Collection)
-        from pystac import Collection as PySTACCollection
-
         collection.stac_collection = PySTACCollection.from_dict(
             collection_data
         )
@@ -305,7 +332,8 @@ def main():
                 f"Failed to add item {item_id} to collection {args.collection}"
             )
             sysexit(
-                f"Error: Failed to add item {item_id} to collection {args.collection}"
+                f"Error: Failed to add item {item_id} to collection {args.collection}. "
+                f"Para más información, consulte la documentación: {DOCS_URL}"
             )
 
         if args.delete_local_cog:

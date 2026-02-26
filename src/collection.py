@@ -1,6 +1,8 @@
 import json
 import os
 import re
+import traceback
+import unicodedata
 from copy import deepcopy
 from datetime import datetime, timedelta
 from os import makedirs, path, remove, rmdir
@@ -15,8 +17,30 @@ from pystac.extensions.raster import RasterBand, RasterExtension
 
 from config import get_settings
 from utils import raster, stac_rest, storage
+from utils.constants import DOCS_URL
 from utils.logging_config import logger
+from utils.spec import _normalize_to_pascal_case
 from utils.stac_helpers import map_dtype_to_pystac_datatype
+
+
+def _normalize_text(text):
+    """
+    Normalize text by removing accents to avoid encoding issues with STAC server.
+    Uses Unicode normalization (NFD) and removes combining diacritical marks.
+    Converts characters like á, é, í, ó, ú, ñ to a, e, i, o, u, n.
+    """
+    if not isinstance(text, str):
+        return text
+
+    # Normalize to NFD (decomposed form) and remove combining diacritical marks
+    normalized = unicodedata.normalize("NFD", text)
+    normalized = "".join(
+        char
+        for char in normalized
+        if unicodedata.category(char) != "Mn"  # Mn = Nonspacing Mark
+    )
+
+    return normalized
 
 
 class Collection:
@@ -98,7 +122,8 @@ class Collection:
 
             if epsg is None:
                 raise ValueError(
-                    f"Missing proj:epsg for item {item_data['id']} (file: {file_path}, CRS: {item_data['crs']})"
+                    f"Missing proj:epsg for item {item_data['id']} (file: {file_path}, CRS: {item_data['crs']}). "
+                    f"Para más información, consulte la documentación: {DOCS_URL}"
                 )
 
             self.items.append(item_data)
@@ -138,6 +163,8 @@ class Collection:
             if collection_name is not None
             else collection_data["id"]
         )
+
+        collection_id = _normalize_to_pascal_case(collection_id)
 
         if "projection" not in collection_data["metadata"] and self.items:
             first_item = self.items[0]
@@ -183,7 +210,8 @@ class Collection:
             for item_data in self.items:
                 if "proj:epsg" not in item_data["properties"]:
                     raise ValueError(
-                        f"Item {item_data['id']} is missing proj:epsg"
+                        f"Item {item_data['id']} is missing proj:epsg. "
+                        f"Para más información, consulte la documentación: {DOCS_URL}"
                     )
 
                 item = pystac.Item(
@@ -241,6 +269,36 @@ class Collection:
 
         return collection_data, items_data
 
+    def list_collections_from_server(self):
+        """
+        List all collections from STAC server.
+        Returns a list of collection IDs.
+        """
+        collections_url = f"{self.stac_url}/collections"
+        logger.info("Fetching all collections from server")
+
+        try:
+            response = stac_rest.get(collections_url)
+            collections_data = response.json()
+
+            if isinstance(collections_data, dict):
+                collection_ids = [
+                    col.get("id")
+                    for col in collections_data.get("collections", [])
+                ]
+            elif isinstance(collections_data, list):
+                collection_ids = [col.get("id") for col in collections_data]
+            else:
+                collection_ids = []
+
+            logger.info(f"Found {len(collection_ids)} collections on server")
+            return collection_ids
+        except Exception as e:
+            logger.error(f"Error fetching collections from server: {e}")
+
+            logger.error(traceback.format_exc())
+            return []
+
     def validate_item_against_collection(
         self, new_item_data, collection_metadata, existing_items
     ):
@@ -269,20 +327,6 @@ class Collection:
                 "proj:epsg"
             )
 
-        # Get spatial resolution from existing items
-        collection_resolution = None
-        if existing_items:
-            for item in existing_items:
-                if "raster:bands" in item.get("assets", {}).get(
-                    list(item["assets"].keys())[0], {}
-                ):
-                    band_info = item["assets"][list(item["assets"].keys())[0]][
-                        "raster:bands"
-                    ][0]
-                    if "spatial_resolution" in band_info:
-                        collection_resolution = band_info["spatial_resolution"]
-                        break
-
         # Get and validate data type from collection metadata
         collection_data_type = None
         if (
@@ -290,41 +334,49 @@ class Collection:
             and "data_type" in collection_metadata.get("metadata", {})
         ):
             collection_data_type = collection_metadata["metadata"]["data_type"]
-            
+
             # Validate that item dtype is compatible with collection data_type
             item_dtype = new_item_data.get("dtype", "").lower()
-            is_integer_type = item_dtype in ("uint8", "ubyte", "uint16", "uint32", "int16", "int32")
-            is_float_type = item_dtype in ("float32", "float", "float64", "double")
-            
+            is_integer_type = item_dtype in (
+                "uint8",
+                "ubyte",
+                "uint16",
+                "uint32",
+                "int16",
+                "int32",
+            )
+            is_float_type = item_dtype in (
+                "float32",
+                "float",
+                "float64",
+                "double",
+            )
+
             if collection_data_type == "Clasificada" and not is_integer_type:
                 raise ValueError(
                     f"Data type mismatch: collection is 'Clasificada' (requires integer dtype), "
-                    f"but item has dtype '{item_dtype}'"
+                    f"but item has dtype '{item_dtype}'. "
+                    f"Para más información, consulte la documentación: {DOCS_URL}"
                 )
             elif collection_data_type == "Continua" and not is_float_type:
                 raise ValueError(
                     f"Data type mismatch: collection is 'Continua' (requires float dtype), "
-                    f"but item has dtype '{item_dtype}'"
+                    f"but item has dtype '{item_dtype}'. "
+                    f"Para más información, consulte la documentación: {DOCS_URL}"
                 )
-            logger.info(f"Data type validated: collection '{collection_data_type}', item dtype '{item_dtype}'")
+            logger.info(
+                f"Data type validated: collection '{collection_data_type}', item dtype '{item_dtype}'"
+            )
 
         # Validate projection
         new_epsg = new_item_data.get("properties", {}).get("proj:epsg")
         if collection_projection and new_epsg != collection_projection:
             raise ValueError(
                 f"Projection mismatch: collection uses EPSG:{collection_projection}, "
-                f"but item uses EPSG:{new_epsg}"
+                f"but item uses EPSG:{new_epsg}. "
+                f"Para más información, consulte la documentación: {DOCS_URL}"
             )
         logger.info(f"Projection validated: EPSG:{new_epsg}")
-
-        # Validate resolution (optional, if available)
-        if collection_resolution:
-            new_resolution = new_item_data.get("resolution")
-            if new_resolution and new_resolution != collection_resolution:
-                logger.warning(
-                    f"Resolution mismatch: collection {collection_resolution}m, "
-                    f"item {new_resolution}m"
-                )
 
         logger.info("Item validation successful")
         return True
@@ -340,7 +392,10 @@ class Collection:
         ):
             collection_id = self.stac_collection.id
         if collection_id is None:
-            raise RuntimeError("Missing collection id to remove")
+            raise RuntimeError(
+                "Missing collection id to remove. "
+                f"Para más información, consulte la documentación: {DOCS_URL}"
+            )
 
         collection_url = f"{self.stac_url}/collections/{collection_id}"
         logger.info(f"Attempting to remove collection {collection_id}")
@@ -360,7 +415,10 @@ class Collection:
 
         except Exception as e:
             logger.error(f"Error removing collection from server: {e}")
-            raise RuntimeError(f"Error removing collection from server: {e}")
+            raise RuntimeError(
+                f"Error removing collection from server: {e}. "
+                f"Para más información, consulte la documentación: {DOCS_URL}"
+            )
 
     def upload_single_item(self, item_data, asset_href=None):
         """
@@ -446,9 +504,15 @@ class Collection:
                 f"Uploading collection: {self.stac_collection.to_dict()}"
             )
 
+            collection_dict = self.stac_collection.to_dict()
+
+            collection_json_str = json.dumps(
+                collection_dict, ensure_ascii=False
+            )
+            collection_dict = json.loads(collection_json_str)
             stac_rest.post_or_put(
                 parse.urljoin(self.stac_url, "/collections"),
-                self.stac_collection.to_dict(),
+                collection_dict,
             )
             logger.info(
                 f"Collection {self.stac_collection.id} uploaded successfully"
@@ -479,7 +543,10 @@ class Collection:
                         f"Error cleaning up uploaded file {url}: {cleanup_error}"
                     )
 
-            raise RuntimeError(f"Failed to upload collection: {e}")
+            raise RuntimeError(
+                f"Failed to upload collection: {e}. "
+                f"Para más información, consulte la documentación: {DOCS_URL}"
+            )
 
     def convert_layers(self, input_dir, output_dir):
         """
@@ -687,9 +754,7 @@ def update_collection_json_inplace(
     target_path = output_path or template_path
 
     if make_backup and path.isfile(template_path):
-        from datetime import datetime as _dt
-
-        ts = _dt.now().strftime("%Y%m%d-%H%M%S")
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
 
         if backup_dir:
             dest_dir = backup_dir

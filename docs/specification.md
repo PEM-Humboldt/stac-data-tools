@@ -4,9 +4,9 @@ La descripción de las colecciones a cargar se debe hacer siguiendo la siguiente
 
 | Atributo | Tipo | Descripción | Es requerido? | Observaciones |
 |---:|:---:|---|:---:|---|
-| id | string | Identificador de la colección | Sí | Debe ser un año o periodo |
-| title | string | Título de la colección | Sí | |
-| description | string | Descripción de la colección | Sí | |
+| id | string | Identificador de la colección | Sí | Debe estar en PascalCase (primera letra de cada palabra en mayúscula, sin espacios, guiones bajos ni guiones). Se normaliza automáticamente si no cumple con este formato. Ejemplos: `HuellaHumanaClasificada`, `ForestNonForestColombia`, `GSIColombia2024` |
+| title | string | Título de la colección | Sí | Se normaliza automáticamente quitando tildes y caracteres especiales para evitar problemas de codificación UTF-8 en el servidor STAC |
+| description | string | Descripción de la colección | Sí | Se normaliza automáticamente quitando tildes y caracteres especiales para evitar problemas de codificación UTF-8 en el servidor STAC |
 | metadata | object | Objeto con información o datos extra relacionados con todos los items de la colección | Sí | |
 | metadata.data_type | string | Tipo de datos de la colección (`Clasificada` o `Continua`) | Sí | Determina el tipo de colección, de acuerdo al formato y lectura de sus propiedades |
 | metadata.projection | object | Información sobre la proyección de la colección | No | Solo si se necesita especificar la proyección de la colección |
@@ -26,3 +26,9 @@ La descripción de las colecciones a cargar se debe hacer siguiendo la siguiente
 | _[item].properties.[otro]_ | array | tupla con [otro] datos para complementar la interpretación de los valores que pueden existir en el raster de cada item | No | |
 | _[item].assets_ |  object | Información de los assets del item | Sí | Hace referencia principalmente a los archivos asociados al item |
 | _[item].assets.input_file_ | string | nombre del archivo del raster correspondiente al item | Sí | |
+
+## Ejemplo
+
+A continuación se presenta un ejemplo de la descripción de una colección, siguiendo la especificación establecida. Este también puede consultarse en el archivo [collection.example.json](collection.example.json).
+
+{{ render_json("collection.example.json") }}
