@@ -105,11 +105,22 @@ class S3Storage(Storage):
         if endpoint_url:
             client_config = Config(s3={"addressing_style": "path"})
 
+        # Pass explicit credentials only when provided in the config;
+        # otherwise let boto3 resolve them (env vars, shared config, IAM
+        # role).
+        creds = {}
+        if settings.aws_access_key_id and settings.aws_secret_access_key:
+            creds["aws_access_key_id"] = settings.aws_access_key_id
+            creds["aws_secret_access_key"] = settings.aws_secret_access_key
+            if settings.aws_session_token:
+                creds["aws_session_token"] = settings.aws_session_token
+
         self.client = boto3.client(
             "s3",
             region_name=self.region or None,
             endpoint_url=endpoint_url,
             config=client_config,
+            **creds,
         )
 
         if settings.s3_public_url_base:

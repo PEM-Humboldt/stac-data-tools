@@ -440,8 +440,6 @@ class Collection:
                 properties=item_data["properties"],
             )
 
-            # Use provided asset_href or build one through the storage
-            # backend so Azure and S3 produce consistent hrefs.
             if asset_href is None:
                 asset_href = self.storage.build_object_url(
                     f"{self.stac_collection.id}/{item_data['input_file']}"

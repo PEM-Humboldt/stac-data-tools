@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     # Optional public base URL for asset hrefs (CloudFront / custom domain).
     # When empty, the virtual-hosted S3 URL is used.
     s3_public_url_base: str = ""
+    # AWS credentials. If left empty, boto3 falls back to its own chain
+    # (environment variables, shared config, IAM role). aws_session_token
+    # is only needed for temporary credentials (AWS SSO / STS).
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_session_token: str = ""
 
     auth_url: str = "/auth/token"
     username_auth: str = "admin"
