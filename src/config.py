@@ -15,11 +15,6 @@ class Settings(BaseSettings):
     asset_base_url: str = "https://staccatalog.blob.core.windows.net"
 
     # --- AWS S3 ---
-    # Credentials (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
-    # AWS_SESSION_TOKEN) are NOT declared here on purpose: boto3 reads them
-    # straight from the environment / the standard AWS credential chain, so
-    # the same code works with static keys locally and with an IAM role in
-    # production without changes.
     s3_bucket: str = ""
     s3_region: str = "us-east-1"
     # Override the S3 endpoint (e.g. LocalStack: http://host:4566).

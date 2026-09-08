@@ -10,7 +10,7 @@ COG_CONTENT_TYPE = "image/tiff; application=geotiff; profile=cloud-optimized"
 class Storage(ABC):
     """
     Abstract storage backend. Each cloud provider is implemented as a
-    concrete subclass. Backends must never be mixed inside a single class.
+    concrete subclass..
     """
 
     @abstractmethod
