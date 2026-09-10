@@ -6,25 +6,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     stac_url: str = "http://localhost:8082"
 
-    # Storage backend selection: "azure" or "aws"
     storage_backend: str = "azure"
 
-    # --- Azure Blob Storage ---
     abs_string: str = ""
     abs_container: str = "cog-test"
     asset_base_url: str = "https://staccatalog.blob.core.windows.net"
 
-    # --- AWS S3 ---
     s3_bucket: str = ""
     s3_region: str = "us-east-1"
-    # Override the S3 endpoint (e.g. LocalStack: http://host:4566).
     aws_endpoint_url: str = ""
-    # Optional public base URL for asset hrefs (CloudFront / custom domain).
-    # When empty, the virtual-hosted S3 URL is used.
     s3_public_url_base: str = ""
-    # AWS credentials. If left empty, boto3 falls back to its own chain
-    # (environment variables, shared config, IAM role). aws_session_token
-    # is only needed for temporary credentials (AWS SSO / STS).
     aws_access_key_id: str = ""
     aws_secret_access_key: str = ""
     aws_session_token: str = ""
