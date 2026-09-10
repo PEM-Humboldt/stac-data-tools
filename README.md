@@ -40,7 +40,7 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
 1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
    ```
    STAC_URL="" # URL del servidor del STAC
-   STORAGE_BACKEND="azure" # Servicio de almacenamiento para los COG: "azure" o "s3"
+   STORAGE_BACKEND="azure" # Servicio de almacenamiento para los COG: "azure" o "aws"
    AUTH_URL="" # Path de la ruta de la url para autenticar, la cual seria "/auth/token"
    USERNAME_AUTH:"" # Nombre de usuario para autenticación.
    PASSWORD_AUTH:"" # Contraseña para autenticación.
@@ -54,7 +54,7 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
      ABS_STRING="" # Cadena de conexión a Azure Blob Storage
      ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
      ```
-   - **`s3`**:
+   - **`aws`**:
      ```
      S3_BUCKET="" # Nombre del bucket
      S3_REGION="us-east-1"

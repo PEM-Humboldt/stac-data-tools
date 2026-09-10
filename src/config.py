@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     stac_url: str = "http://localhost:8082"
 
-    # Storage backend selection: "azure" or "s3"
+    # Storage backend selection: "azure" or "aws"
     storage_backend: str = "azure"
 
     # --- Azure Blob Storage ---

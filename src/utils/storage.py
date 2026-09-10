@@ -202,13 +202,13 @@ def get_storage() -> Storage:
             )
         return AzureBlobStorage()
 
-    if backend == "s3":
+    if backend == "aws":
         if not settings.s3_bucket:
             raise ValueError(
-                "STORAGE_BACKEND=s3 requires S3_BUCKET to be set."
+                "STORAGE_BACKEND=aws requires S3_BUCKET to be set."
             )
         return S3Storage()
 
     raise ValueError(
-        f"Unsupported STORAGE_BACKEND {backend!r}. Use 'azure' or 's3'."
+        f"Unsupported STORAGE_BACKEND {backend!r}. Use 'azure' or 'aws'."
     )
