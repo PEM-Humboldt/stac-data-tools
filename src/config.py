@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -6,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     stac_url: str = "http://localhost:8082"
 
-    storage_backend: str = "azure"
+    storage_backend: Literal["azure", "aws"] = "azure"
 
     abs_string: str = ""
     abs_container: str = "cog-test"

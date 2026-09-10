@@ -8,14 +8,6 @@ def get_storage() -> Storage:
     """
     Build the storage backend selected by STORAGE_BACKEND.
     """
-    backend = get_settings().storage_backend.lower()
-
-    if backend == "azure":
+    if get_settings().storage_backend == "azure":
         return AzureBlobStorage()
-
-    if backend == "aws":
-        return AWSS3Storage()
-
-    raise ValueError(
-        f"Unsupported STORAGE_BACKEND {backend!r}. Use 'azure' or 'aws'."
-    )
+    return AWSS3Storage()
