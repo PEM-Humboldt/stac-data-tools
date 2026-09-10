@@ -7,7 +7,6 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 from os import makedirs, path, remove, rmdir
 from sys import exit as sysexit
-from urllib import parse
 
 import pystac
 import rasterio
@@ -21,6 +20,7 @@ from utils.constants import DOCS_URL
 from utils.logging_config import logger
 from utils.spec import _normalize_to_pascal_case
 from utils.stac_helpers import map_dtype_to_pystac_datatype
+from utils.url import build_url
 
 
 def _normalize_text(text):
@@ -471,7 +471,7 @@ class Collection:
             # Upload the item
             item_dict = item.to_dict()
             item_response = stac_rest.post_or_put(
-                parse.urljoin(
+                build_url(
                     self.stac_url,
                     f"/collections/{self.stac_collection.id}/items",
                 ),
@@ -511,7 +511,7 @@ class Collection:
             )
             collection_dict = json.loads(collection_json_str)
             stac_rest.post_or_put(
-                parse.urljoin(self.stac_url, "/collections"),
+                build_url(self.stac_url, "/collections"),
                 collection_dict,
             )
             logger.info(
@@ -521,7 +521,7 @@ class Collection:
             for item in self.stac_items:
                 item_dict = item.to_dict()
                 item_response = stac_rest.post_or_put(
-                    parse.urljoin(
+                    build_url(
                         self.stac_url,
                         f"/collections/{self.stac_collection.id}/items",
                     ),
