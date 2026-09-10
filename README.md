@@ -53,13 +53,15 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
      ```
      ABS_STRING="" # Cadena de conexión a Azure Blob Storage
      ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
+     ASSET_BASE_URL="" # Opcional: base publica de los href. Si se deja vacia se usa el endpoint de la cuenta
      ```
    - **`aws`**:
      ```
-     S3_BUCKET="" # Nombre del bucket
+     S3_BUCKET="" # Nombre del bucket (unica variable obligatoria)
      S3_REGION="us-east-1"
-     AWS_ACCESS_KEY_ID="" # Credenciales AWS (las lee boto3 del entorno)
+     AWS_ACCESS_KEY_ID="" # Credenciales AWS. Si se dejan vacias, boto3 las resuelve del entorno / rol IAM
      AWS_SECRET_ACCESS_KEY=""
+     AWS_SESSION_TOKEN="" # Solo para credenciales temporales (AWS SSO / STS)
      AWS_ENDPOINT_URL="" # Opcional: endpoint alterno para LocalStack (ej: http://localhost:4566)
      S3_PUBLIC_URL_BASE="" # Opcional: base publica de los href (CloudFront / dominio propio)
      ```
