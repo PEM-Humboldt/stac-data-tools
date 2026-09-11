@@ -40,13 +40,31 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
 1. Crear un archivo .env réplica de env.sample y actualizar los valores de la variables existentes.
    ```
    STAC_URL="" # URL del servidor del STAC
-   ABS_STRING="" # Cadena de conexión a Azure Blob Storage
-   ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
+   STORAGE_BACKEND="azure" # Servicio de almacenamiento para los COG: "azure" o "aws"
    AUTH_URL="" # Path de la ruta de la url para autenticar, la cual seria "/auth/token"
    USERNAME_AUTH:"" # Nombre de usuario para autenticación.
    PASSWORD_AUTH:"" # Contraseña para autenticación.
    ```
    (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
+
+   Según el valor de `STORAGE_BACKEND` se necesitan además:
+
+   - **`azure`**:
+     ```
+     ABS_STRING="" # Cadena de conexión a Azure Blob Storage
+     ABS_CONTAINER="" # Nombre del contenedor en Azure Blob Storage
+     ASSET_BASE_URL="" # Opcional: base publica de los href. Si se deja vacia se usa el endpoint de la cuenta
+     ```
+   - **`aws`**:
+     ```
+     S3_BUCKET="" # Nombre del bucket (unica variable obligatoria)
+     S3_REGION="us-east-1"
+     AWS_ACCESS_KEY_ID="" # Credenciales AWS. Si se dejan vacias, boto3 las resuelve del entorno / rol IAM
+     AWS_SECRET_ACCESS_KEY=""
+     AWS_SESSION_TOKEN="" # Solo para credenciales temporales (AWS SSO / STS)
+     AWS_ENDPOINT_URL="" # Opcional: endpoint alterno para LocalStack (ej: http://localhost:4566)
+     S3_PUBLIC_URL_BASE="" # Opcional: base publica de los href (CloudFront / dominio propio)
+     ```
 
 ## Uso
 
