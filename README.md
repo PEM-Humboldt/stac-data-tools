@@ -71,7 +71,6 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
 
 
 Ver la documentación para el uso de los comandos y la preparación de los insumos aquí: [Documentación](https://pem-humboldt.github.io/stac-data-tools/)
----
 
 ## Revisión y formato de estilos para el código
 
