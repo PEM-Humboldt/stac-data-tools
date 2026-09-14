@@ -60,6 +60,7 @@ class AWSS3Storage(Storage):
             file_name,
             ExtraArgs={"ContentType": COG_CONTENT_TYPE},
         )
+        self.client.head_object(Bucket=self.bucket, Key=file_name)
         return self.build_object_url(file_name)
 
     def build_object_url(self, file_name):
