@@ -18,6 +18,14 @@ class AWSS3Storage(Storage):
             raise ValueError(
                 "STORAGE_BACKEND=aws requires S3_BUCKET to be set."
             )
+        if (
+            not settings.aws_access_key_id
+            or not settings.aws_secret_access_key
+        ):
+            raise ValueError(
+                "STORAGE_BACKEND=aws requires AWS_ACCESS_KEY_ID and "
+                "AWS_SECRET_ACCESS_KEY to be set."
+            )
         region = settings.s3_region
         endpoint_url = settings.aws_endpoint_url or None
 
@@ -31,19 +39,14 @@ class AWSS3Storage(Storage):
         if endpoint_url:
             client_config = Config(s3={"addressing_style": "path"})
 
-        creds = {}
-        if settings.aws_access_key_id and settings.aws_secret_access_key:
-            creds["aws_access_key_id"] = settings.aws_access_key_id
-            creds["aws_secret_access_key"] = settings.aws_secret_access_key
-            if settings.aws_session_token:
-                creds["aws_session_token"] = settings.aws_session_token
-
         self.client = boto3.client(
             "s3",
             region_name=region,
             endpoint_url=endpoint_url,
             config=client_config,
-            **creds,
+            aws_access_key_id=settings.aws_access_key_id,
+            aws_secret_access_key=settings.aws_secret_access_key,
+            aws_session_token=settings.aws_session_token or None,
         )
 
     def upload_file(self, file_name, file_path):
