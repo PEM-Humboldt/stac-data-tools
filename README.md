@@ -67,7 +67,8 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
      S3_PUBLIC_URL_BASE="" # Opcional: base publica de los href (CloudFront / dominio propio)
      ```
 
-## Uso
+## Uso    
+
 
 Ver la documentación para el uso de los comandos y la preparación de los insumos aquí: [Documentación](https://pem-humboldt.github.io/stac-data-tools/)
 ---
