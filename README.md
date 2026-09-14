@@ -46,6 +46,7 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
    PASSWORD_AUTH:"" # Contraseña para autenticación.
    ```
    (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
+   **NOTA IMPORTANTE:** Tener presente la URL del STAC que se está usando porque contamos con dos servidores y cada uno tiene credenciales diferentes, consultar en la documentación interna o con los compañeros las credenciales de cada servidor stac al que se quiera apuntar.
 
    Según el valor de `STORAGE_BACKEND` se necesitan además:
 
@@ -57,32 +58,18 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
      ```
    - **`aws`**:
      ```
-     S3_BUCKET="" # Nombre del bucket (unica variable obligatoria)
+     S3_BUCKET="" # Nombre del bucket
      S3_REGION="us-east-1"
-     AWS_ACCESS_KEY_ID="" # Credenciales AWS. Si se dejan vacias, boto3 las resuelve del entorno / rol IAM
-     AWS_SECRET_ACCESS_KEY=""
-     AWS_SESSION_TOKEN="" # Solo para credenciales temporales (AWS SSO / STS)
+     AWS_ACCESS_KEY_ID="" # Credenciales AWS
+     AWS_SECRET_ACCESS_KEY="" # Credenciales AWS  
+     AWS_SESSION_TOKEN="" # Obligatoria solo con credenciales temporales (AWS SSO / STS)
      AWS_ENDPOINT_URL="" # Opcional: endpoint alterno para LocalStack (ej: http://localhost:4566)
      S3_PUBLIC_URL_BASE="" # Opcional: base publica de los href (CloudFront / dominio propio)
      ```
 
 ## Uso
 
-### Preparacion
-
-<details>
-<summary>Preparación de los insumos</summary>
-
-Para cargar una nueva colección (incluyendo los items de la misma), lo primero que hay que hacer es describir toda la información que se desea cargar a la nueva colección, esto se hace por medio de un archivo `.json`, siguiendo la especificación descrita en la [documentación](https://pem-humboldt.github.io/stac-data-tools/specification/).
-
-El archivo [collection.example.json](docs/collection.example.json) sirve como ejemplo y como punto de partida.
-
-</details>
-
-Para crear una colección siga los siguientes pasos:
-
-1. Cargar la carpeta de la colección en el directorio `input`, esta carpeta debe contar con los archivos correpondientes a las capas (.tif) y el archivo mencionado previamente en la sección `Preparación de los insumos` que describe la colección en formato JSON y siempre debe ser nombrado `collection.json`.
-
+Ver la documentación para el uso de los comandos y la preparación de los insumos aquí: [Documentación](https://pem-humboldt.github.io/stac-data-tools/)
 ---
 
 ## Revisión y formato de estilos para el código
