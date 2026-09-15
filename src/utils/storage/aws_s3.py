@@ -53,14 +53,21 @@ class AWSS3Storage(Storage):
         """
         Upload an object to AWS S3
         """
-
         self.client.upload_file(
             file_path,
             self.bucket,
             file_name,
             ExtraArgs={"ContentType": COG_CONTENT_TYPE},
         )
-        self.client.head_object(Bucket=self.bucket, Key=file_name)
+
+        try:
+            self.client.head_object(Bucket=self.bucket, Key=file_name)
+        except Exception as e:
+            raise RuntimeError(
+                f"There was an error while uploading {file_name} to "
+                f"S3 bucket {self.bucket!r}: {e}"
+            )
+
         return self.build_object_url(file_name)
 
     def build_object_url(self, file_name):
