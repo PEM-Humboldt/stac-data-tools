@@ -42,11 +42,10 @@ Antes de usar la herramienta asegurese de realizar lo siguiente:
    STAC_URL="" # URL del servidor del STAC
    STORAGE_BACKEND="azure" # Servicio de almacenamiento para los COG: "azure" o "aws"
    AUTH_URL="" # Path de la ruta de la url para autenticar, la cual seria "/auth/token"
-   USERNAME_AUTH:"" # Nombre de usuario para autenticación.
-   PASSWORD_AUTH:"" # Contraseña para autenticación.
+   USERNAME_AUTH:"" # Nombre de usuario para autenticación al servidor stac.
+   PASSWORD_AUTH:"" # Contraseña para autenticación al servidor stac.
    ```
    (Es posible que la variable de STAC_URL no reconozca la ruta: "localhost:8082", entonces se recomienda agregar la siguiente:STAC_URL="http://localhost:8082")
-   **NOTA IMPORTANTE:** Tener presente la URL del STAC que se está usando porque contamos con dos servidores y cada uno tiene credenciales diferentes, consultar en la documentación interna o con los compañeros las credenciales de cada servidor stac al que se quiera apuntar.
 
    Según el valor de `STORAGE_BACKEND` se necesitan además:
 
