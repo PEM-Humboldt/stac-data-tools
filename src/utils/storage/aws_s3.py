@@ -14,16 +14,13 @@ class AWSS3Storage(Storage):
         settings = get_settings()
 
         self.bucket = settings.s3_bucket
-        if not self.bucket:
-            raise ValueError(
-                "STORAGE_BACKEND=aws requires S3_BUCKET to be set."
-            )
         if (
-            not settings.aws_access_key_id
+            not self.bucket
+            or not settings.aws_access_key_id
             or not settings.aws_secret_access_key
         ):
             raise ValueError(
-                "STORAGE_BACKEND=aws requires AWS_ACCESS_KEY_ID and "
+                "STORAGE_BACKEND=aws requires S3_BUCKET, AWS_ACCESS_KEY_ID and "
                 "AWS_SECRET_ACCESS_KEY to be set."
             )
         region = settings.s3_region
@@ -80,7 +77,7 @@ class AWSS3Storage(Storage):
         prefix = f"{self.public_base}/"
 
         if file_path.startswith(prefix):
-            file_path = file_path[len(prefix):]
+            file_path = file_path[len(prefix) :]
 
         response = self.client.list_objects_v2(
             Bucket=self.bucket, Prefix=file_path, MaxKeys=1
