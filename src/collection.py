@@ -54,7 +54,7 @@ class Collection:
         self.stac_collection: pystac.Collection
         self.stac_items = []
         self.stac_url = get_settings().stac_url
-        self.storage = storage.Storage()
+        self.storage = storage.get_storage()
 
     def load_items(self, folder, raw_items):
         """
@@ -440,11 +440,8 @@ class Collection:
                 properties=item_data["properties"],
             )
 
-            # Use provided asset_href or construct default one
             if asset_href is None:
-                settings = get_settings()
-                asset_href = (
-                    f"{settings.asset_base_url}/{settings.abs_container}/"
+                asset_href = self.storage.build_object_url(
                     f"{self.stac_collection.id}/{item_data['input_file']}"
                 )
 

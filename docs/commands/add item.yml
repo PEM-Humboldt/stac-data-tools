@@ -37,7 +37,7 @@ notes:
     description: |
       - Obtiene la información de la colección desde el servidor STAC.
       - Convierte el archivo TIF a formato COG.
-      - Sube el archivo a Azure Blob Storage.
+      - Sube el archivo al servidor de almacenamiento configurado (Azure Blob Storage o AWS S3, segun `STORAGE_BACKEND`).
       - Crea el item STAC con metadatos apropiados.
       - Agrega el item a la colección en el servidor.
       - Opcionalmente elimina el COG local después de subirlo.

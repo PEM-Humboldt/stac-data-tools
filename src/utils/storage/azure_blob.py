@@ -4,18 +4,25 @@ from azure.storage.blob import BlobServiceClient
 
 from config import get_settings
 from utils.logging_config import logger
+from utils.storage.base import Storage
 
 
-class Storage:
+class AzureBlobStorage(Storage):
 
     def __init__(self):
         settings = get_settings()
+        if not settings.abs_string:
+            raise ValueError(
+                "STORAGE_BACKEND=azure requires ABS_STRING to be set."
+            )
         blob_service = BlobServiceClient.from_connection_string(
             settings.abs_string
         )
         self.container_client = blob_service.get_container_client(
             settings.abs_container
         )
+        base = settings.asset_base_url or blob_service.url
+        self.public_base = f"{base.rstrip('/')}/{settings.abs_container}"
 
     def upload_file(self, file_name, file_path):
         """
@@ -27,6 +34,9 @@ class Storage:
                 file_name, data, overwrite=True, max_concurrency=4
             )
             return blob_client.url
+
+    def build_object_url(self, file_name):
+        return f"{self.public_base}/{file_name}"
 
     def remove_file(self, file_path):
         """
